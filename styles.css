@@ -1,0 +1,281 @@
+/* ======================= FONTS ======================= */
+@import url('https://fonts.cdnfonts.com/css/optician-sans');
+@import url('https://fonts.cdnfonts.com/css/sft-schrifted-sans');
+
+/* ======================= THEME / TOKENS ======================= */
+:root{
+  --glass-bg: rgba(255,255,255,0.7);
+  --glass-brd: #e5e7eb;
+
+  --shadow-soft: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-neo: 6px 6px 14px rgba(0,0,0,0.06), -6px -6px 14px rgba(255,255,255,0.9);
+  --shadow-inset: inset 4px 4px 10px rgba(0,0,0,0.06), inset -4px -4px 10px rgba(255,255,255,0.9);
+
+  --range-grad: linear-gradient(90deg,#FF6F61 0%,#FFC94A 33%,#5ABEFF 66%,#9BE15D 100%);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; }
+body{
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  color:#0f172a;
+  background: linear-gradient(180deg,#ffffff,#f7f8fa);
+}
+h1{
+  font-family:'Optician Sans',sans-serif;
+  text-transform:uppercase; letter-spacing:.06em; font-size:20px; margin:0;
+}
+
+.glass{ background:var(--glass-bg); border:1px solid var(--glass-brd); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:var(--shadow-soft); border-radius:16px; }
+.hidden{ display:none !important; }
+.muted{ color:#6b7280; }
+
+/* ======================= HEADER & TABS ======================= */
+header{ position:relative; z-index:10; display:flex; align-items:center; gap:16px; padding:12px 16px; }
+header > *:first-child{ margin-right:auto; }
+.tabs{ display:flex; gap:8px; align-items:center; }
+.tabs .tab-btn, .tabs .info-btn{
+  appearance:none; border:0; border-radius:999px; padding:8px 14px;
+  font: 600 13px/1.2 system-ui, sans-serif; background:#f2f4f7; color:#0f172a;
+  cursor:pointer; transition: box-shadow .15s ease, background .15s ease, color .15s ease;
+}
+.tabs .tab-btn:hover, .tabs .info-btn:hover{ box-shadow: 0 4px 14px rgba(15,23,42,.12); }
+.tabs .tab-btn.active{ background:#0f172a; color:#fff; }
+.tabs .info-btn{ background:#eef2ff; }
+
+/* ======================= LAYOUT ======================= */
+.filters{
+  position:fixed; left:12px; top:70px; bottom:12px; width:300px;
+  padding:12px; display:flex; flex-direction:column;
+  z-index:5;
+}
+.filters-scroll{ flex:1 1 auto; overflow:auto; padding-right:4px; }
+
+main{ margin-left:324px; height:calc(100vh - 58px); position:relative; padding:12px 12px 12px 0; }
+.view{ position:absolute; inset:0; display:none; z-index:0; }
+.view.active{ display:block; z-index:1; }
+
+/* ======================= SIDEBAR UI ======================= */
+.filter{ display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+.filter label{
+  font-family:'Optician Sans',sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:12px;
+}
+.filter input{
+  font-family:'SFT Schrifted Sans',sans-serif; font-size:13px;
+  padding:10px 12px; border:0; outline:0; background:#fff; border-radius:12px; box-shadow:var(--shadow-inset);
+}
+.filter input::placeholder{ color:#98a2b3; }
+
+.acc{ border-top:1px solid rgba(0,0,0,.04); padding-top:8px; margin-top:8px; }
+.acc > summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+  font-family:'Optician Sans',sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:12px;
+}
+.acc > summary::-webkit-details-marker{ display:none; }
+.acc[open] .acc-caret{ transform: rotate(0deg); }
+.acc .acc-caret{ transform: rotate(-90deg); transition: transform .15s ease; }
+
+.checkbox-list label{
+  display:flex; align-items:center; gap:8px; padding:6px 8px; margin:4px 0; line-height:1.2; font-size:.9em;
+  border-radius:10px; background:rgba(255,255,255,0.7); border:1px solid var(--glass-brd); backdrop-filter: blur(4px);
+  font-family:'Optician Sans',sans-serif; text-transform:uppercase; letter-spacing:.05em;
+}
+.checkbox-list input[type="checkbox"]{ width:14px; height:14px; margin-right:6px; accent-color:#111827; }
+
+.btn-group{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.btn-group .pill-btn{
+  padding:6px 10px; border-radius:999px; border:1px solid var(--glass-brd);
+  background:rgba(255,255,255,.85); box-shadow:var(--shadow-neo);
+  font-family:'Optician Sans',sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:12px;
+  cursor:pointer; user-select:none;
+}
+.btn-group .pill-btn.active{ background:#111827; color:#fff; border-color:#111827; box-shadow:none; }
+
+#clearFilters{
+  position:sticky; bottom:8px; width:calc(100% - 24px);
+  margin:14px 12px 0; padding:12px 16px;
+  border:0; border-radius:999px; cursor:pointer;
+  font-family:'Optician Sans',sans-serif; text-transform:uppercase; letter-spacing:.05em; font-size:13px;
+  color:#111827; background:#ffffff;
+  box-shadow: inset 0 0 0 1px rgba(17,24,39,0.10), 0 4px 12px rgba(17,24,39,0.10);
+  transition: background .2s, box-shadow .2s, transform .15s;
+  z-index:5;
+}
+#clearFilters:hover{
+  background:linear-gradient(145deg,#f9fafb,#eef1f5);
+  box-shadow: inset 0 0 0 1px rgba(17,24,39,0.18), 0 12px 26px rgba(17,24,39,0.28), 0 3px 8px rgba(17,24,39,0.12);
+  transform: translateY(-2px);
+}
+
+/* ======================= MAP ======================= */
+#map{ position:relative; height:100%; }
+#map .map-wrap{
+  position:absolute; inset:12px; border-radius:16px;
+  background: rgba(255,255,255,0.4); border:1px solid var(--glass-brd);
+  backdrop-filter: blur(6px); box-shadow: var(--shadow-soft);
+}
+#mapSvg{ position:absolute; inset:0; width:100%; height:100%; display:block; background:transparent; }
+
+.zoom-ui{
+  position:absolute; top:12px; right:12px; display:flex; gap:8px; z-index:6;
+}
+.zoom-btn{
+  width:36px; height:36px; border-radius:999px; border:0;
+  background:#0f172a; color:#fff; font-weight:600; box-shadow:0 4px 14px rgba(0,0,0,.18); cursor:pointer;
+}
+
+#map .map-footer{
+  position:absolute; left:12px; right:12px; bottom:12px; z-index:2;
+  padding:18px 24px 20px; background:var(--glass-bg); border:1px solid var(--glass-brd);
+  border-radius:14px; backdrop-filter:blur(10px); box-shadow:var(--shadow-soft);
+}
+#mapAxis{ display:block; width:100%; height:48px; }
+
+/* range UI */
+#map .map-controls{ display:flex; flex-direction:column; gap:10px; }
+#map .map-range{ --track-h:6px; position:relative; height:44px; --selLeftPx:16px; --selRightPx:calc(100% - 16px); }
+#map .map-range::before{
+  content:""; position:absolute; left:16px; right:16px; top:50%; transform:translateY(-50%);
+  height:var(--track-h); border-radius:calc(var(--track-h)/2); background:#E5E7EB; pointer-events:none; z-index:1;
+}
+#map .map-range::after{
+  content:""; position:absolute; left:var(--selLeftPx); right:calc(100% - var(--selRightPx)); top:50%; transform:translateY(-50%);
+  height:var(--track-h); border-radius:calc(var(--track-h)/2); background:var(--range-grad); pointer-events:none; z-index:2;
+}
+#map .map-range input[type="range"]{
+  -webkit-appearance:none; appearance:none;
+  position:absolute; left:14px; right:14px; top: calc(50% - 12px);
+  width:calc(100% - 32px); height:0; background:transparent; outline:0; border:0; pointer-events:none; z-index:3;
+}
+#map .map-range input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:#fff;
+  border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(0,0,0,.15); pointer-events:auto;
+}
+#map .map-range-readout{ margin-top:6px; display:flex; justify-content:space-between; font-size:14px; color:#555; }
+
+/* ======================= CARD ======================= */
+.card{
+  position:fixed; left:-9999px; top:-9999px; width:380px; max-width:92vw;
+  background:var(--glass-bg); border:1px solid var(--glass-brd);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-radius:16px; box-shadow:var(--shadow-soft); padding:14px;
+  max-height:72vh; overflow:hidden; display:flex; flex-direction:column;
+  z-index:4000; isolation:isolate;
+}
+.card.hidden{ display:none; }
+.card .thumb{
+  width:96px; height:96px; border-radius:50%; margin-bottom:8px;
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  border:2px solid rgba(255,255,255,.8); box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+.card-header h2{ margin:6px 0 2px; font-size:18px; }
+.card-header .meta{ color:#475569; font-size:13px; margin:0 0 8px; }
+.card-content{ flex:1 1 auto; min-height:0; padding-top:4px; overflow:auto; -webkit-overflow-scrolling:touch; }
+.card-content p{ margin:8px 0 0; line-height:1.35; }
+#cardImage{ display:none; width:100%; height:auto; margin-top:10px; border-radius:8px; border:1px solid var(--glass-brd); }
+#closeCard{
+  position:absolute; right:8px; top:6px; width:28px; height:28px; border-radius:50%;
+  border:1px solid var(--glass-brd); background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  cursor:pointer; font-size:18px; line-height:26px;
+}
+
+/* ======================= CONSTELLATION ======================= */
+#constellation{ position:relative; height:100%; }
+#constellationSvg{ position:absolute; inset:12px; width:calc(100% - 24px); height:calc(100% - 24px); display:block; }
+
+/* ======================= MODAL ======================= */
+.info-modal.hidden{ display:none; }
+.info-modal{ position:fixed; inset:0; z-index:1000; }
+.info-backdrop{ position:absolute; inset:0; background:rgba(3,7,18,0.35); backdrop-filter:blur(2px); }
+.info-dialog{
+  position:absolute; inset:0; margin:auto; max-width:820px; max-height:80vh; width:calc(100% - 40px);
+  background:rgba(255,255,255,0.9); border-radius:16px; box-shadow:0 20px 80px rgba(0,0,0,0.2);
+  display:grid; grid-template-rows:auto 1fr auto; overflow:hidden;
+}
+.info-header{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid rgba(0,0,0,0.06); }
+.info-close{ appearance:none; border:0; background:#0f172a; color:#fff; width:32px; height:32px; border-radius:999px; cursor:pointer; line-height:32px; text-align:center; }
+.info-body{ padding:16px 20px; overflow:auto; }
+.info-footer{ padding:12px 20px 16px; display:flex; justify-content:flex-end; gap:8px; border-top:1px solid rgba(0,0,0,0.06); }
+
+/* ======================= SVG NODES ======================= */
+.node{ cursor:pointer; opacity:.98; }
+.node:hover{ filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+/* ===== Collapsible Sidebar ===== */
+body { transition: margin-left .25s ease; }
+
+.sidebar-toggle{
+  position:fixed; left:316px; top:78px; z-index:6;
+  width:28px; height:36px; border:0; cursor:pointer;
+  border-radius:999px;
+  background:rgba(17,24,39,0.9); color:#fff; font-weight:700;
+  box-shadow:0 6px 16px rgba(0,0,0,0.18);
+  display:flex; align-items:center; justify-content:center;
+  transition: left .25s ease, transform .25s ease,;
+}
+.sidebar-toggle:hover{ transform: translateX(1px); }
+
+/* default (expanded) */
+#sidebar{ transform: translateX(0); transition: transform .25s ease; }
+main{ transition: margin-left .25s ease; }
+
+
+/* keep your existing glass + layout rules */
+/* Mini map fills its panel with a tidy 2:1 ratio */
+.miniMapWrap{
+  width: 100%;
+  height: clamp(200px, 28vh, 360px);  /* min 200px, prefer 28% of viewport height, max 360px */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+#detailsMapSvg{
+  width: 100%;
+  height: 100%;
+  display: block;
+  aspect-ratio: 2 / 1; /* Ensures correct aspect */
+}
+
+/* ======================= DEBUG BADGE ======================= */
+#debugBadge {
+  position: fixed;
+  top: 42px;
+  right: 12px;
+  background: rgba(0,0,0,0.75);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 8px;
+  z-index: 9999; /* ensures it sits above the slider and map */
+  pointer-events: none; /* so it doesn’t block clicks */
+}
+
+/* Add to your <style> block in details.html or styles.css */
+.media-gallery {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.media-gallery img, .media-gallery video {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s;
+}
+.media-gallery img.active, .media-gallery video.active {
+  border: 2px solid #7C3AED;
+}
+
+.node.spiderfied {
+  filter: drop-shadow(0 2px 8px #7C3AED88);
+  z-index: 10;
+}

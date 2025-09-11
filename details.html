@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title id="docTitle">Details • Time Stories</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="./details.js"></script>
+  <style>
+    .hide{display:none;}
+    .muted{color:#6b7280;}
+    .panel{background:#f6f8fb;border:1px solid #e5e7eb;border-radius:14px;padding:16px;}
+    .hstack{display:flex;gap:10px;align-items:center;}
+    .btn{background:#0f172a;color:#fff;padding:8px 14px;border-radius:12px;text-decoration:none;display:inline-block}
+    .btn.secondary{background:#e5e7eb;color:#111827}
+    .twocol{display:grid;grid-template-columns: minmax(0,1fr) 360px; gap:16px;}
+    .sections h3{margin: 1.2rem 0 .4rem}
+    dt{font-weight:600} dd{margin:0 0 .5rem 0}
+    .error{background:#fff1f2;border:1px solid #fecdd3;color:#be123c;padding:10px;border-radius:10px;font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="panel" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;padding:12px 16px 0">
+    <a href="index.html" class="muted">← Back to map</a>
+    <span class="muted">/</span>
+    <span id="crumbCategory" class="muted">Time Devices</span>
+  </div>
+
+  <main id="itemRoot" class="panel" style="margin:8px 16px;">
+    <h1 id="title" style="margin:0 0 6px 0">Details • Time Stories</h1>
+    <div id="subtitle" class="muted" style="margin-bottom:14px"></div>
+
+    <div class="twocol">
+      <!-- Left: content -->
+      <section class="panel" style="min-height:340px;">
+        <img id="heroImg" alt="" style="max-width:100%;border-radius:10px;display:none;margin-bottom:10px"/>
+        <!-- People sections -->
+        <div id="peopleSections" class="sections hide">
+          <h3>BIO</h3><div data-key="BIO"></div>
+          <h3>WHAT</h3><div data-key="WHAT"></div>
+          <h3>WHY</h3><div data-key="WHY"></div>
+        </div>
+        <!-- Device sections -->
+        <div id="deviceSections" class="sections hide">
+          <h3>DESCRIPTION</h3><div data-key="DESCRIPTION"></div>
+          <h3>FUNCTION</h3><div data-key="FUNCTION"></div>
+          <h3>PERSPECTIVE</h3><div data-key="PERSPECTIVE"></div>
+          <h3>INNOVATION</h3><div data-key="INNOVATION"></div>
+        </div>
+        <!-- Story sections -->
+        <div id="storySections" class="sections hide">
+          <h3>STORY+</h3><div data-key="STORY+"></div>
+        </div>
+        <!-- Fallback plain text -->
+        <div id="desc" class="hide"></div>
+        <!-- Inline error (shows paths tried) -->
+        <div id="mdError" class="error hide"></div>
+      </section>
+
+      <!-- Right: meta + mini map + media -->
+      <aside style="display:flex;flex-direction:column;gap:16px;">
+        <div class="panel">
+          <div class="hstack" style="justify-content:space-between;margin-bottom:8px">
+            <a id="viewOnMap" class="btn" href="#">View on map</a>
+            <a href="index.html" class="btn secondary">Back</a>
+          </div>
+          <dl id="metaList" style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0"></dl>
+        </div>
+
+        <div class="panel">
+          <div class="miniMapWrap">
+            <svg id="detailsMapSvg" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="panel">
+          <strong>Media</strong>
+          <div id="mediaList" class="muted" style="margin-top:8px">—</div>
+          <div id="mediaGallery" class="media-gallery"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Shown when ?id doesn't resolve -->
+  <div id="emptyState" class="panel hide" style="margin:16px">
+    We couldn’t find that item. Check the <code>?id=</code> in the URL or the <code>slug</code>/<code>id</code> in your CSV.
+  </div>
+
+  <script src="details.js"></script>
+</body>
+</html>

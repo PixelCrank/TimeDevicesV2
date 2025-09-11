@@ -1,0 +1,55 @@
+{
+  "title": "Time Stories — Devices & Ideas (Demo)",
+  "data": {
+    "items": "data/items.csv",
+    "timeline": "data/timeline.csv"
+  },
+  "mapping": {
+    "id": "id",
+    "title": "title",
+    "year": "year",
+    "image": "image",
+    "thumbnail": "thumb",
+    "latitude": "lat",
+    "longitude": "lon"
+  },
+  "facets": [
+    {
+      "key": "time_context",
+      "label": "Time Context"
+    },
+    {
+      "key": "mechanism_type",
+      "label": "Mechanism"
+    },
+    {
+      "key": "purpose",
+      "label": "Purpose"
+    },
+    {
+      "key": "scale",
+      "label": "Scale"
+    },
+    {
+      "key": "sensory_mode",
+      "label": "Sensory"
+    },
+    {
+      "key": "accuracy_level",
+      "label": "Accuracy"
+    },
+    {
+      "key": "portability",
+      "label": "Portability"
+    },
+    {
+      "key": "region_group",
+      "label": "Region"
+    }
+  ],
+  "views": {
+    "timeline": true,
+    "similarity": true,
+    "map": true
+  }
+}

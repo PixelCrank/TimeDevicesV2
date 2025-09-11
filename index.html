@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Time Stories — Map & Timeline</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <!-- KnightLab only if you use the Linear Timeline tab -->
+  <script defer src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css"/>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header>
+    <h1>Time Measuring Devices</h1>
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="map" type="button">Map</button>
+      <button class="tab-btn" data-view="kl_timeline" type="button">Linear Timeline</button>
+      <button class="tab-btn" data-view="constellation" type="button">Constellation</button>
+      <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
+    </nav>
+  </header>
+
+  <!-- ===== COLLAPSIBLE GLASS SIDEBAR ===== -->
+  <aside id="sidebar" class="filters glass" aria-label="Filters">
+    <div class="filters-scroll">
+      <!-- Search -->
+      <div class="filter">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="type to search…" autocomplete="off"/>
+      </div>
+
+      <!-- Category -->
+      <details class="acc" open>
+        <summary>
+          Category
+          <span class="acc-caret" aria-hidden="true">▾</span>
+        </summary>
+        <div id="f_category_group" class="checkbox-list"></div>
+      </details>
+
+      <!-- Eras -->
+      <details class="acc" open>
+        <summary>
+          Eras
+          <span class="acc-caret" aria-hidden="true">▾</span>
+        </summary>
+        <div id="eraPills" class="btn-group"></div>
+        <p class="muted" style="margin-top:6px">Click an era to set the year range. Click again to clear.</p>
+      </details>
+    </div>
+
+    <button id="clearFilters" type="button">Clear filters</button>
+  </aside>
+
+  <!-- Main content -->
+  <main>
+    <!-- Timeline (optional SVG placeholder) -->
+    <section id="timeline" class="view" aria-label="Timeline">
+      <svg id="timelineSvg" width="100%" height="100%"></svg>
+    </section>
+
+    <!-- Map (default active) -->
+    <section id="map" class="view active" aria-label="Map">
+      <div class="map-wrap">
+        <svg id="mapSvg" width="100%" height="100%"></svg>
+        <!-- Zoom controls -->
+        <div class="zoom-ui">
+          <button class="zoom-btn" id="zoomIn"  title="Zoom in">+</button>
+          <button class="zoom-btn" id="zoomOut" title="Zoom out">−</button>
+          <button class="zoom-btn" id="zoomReset" title="Reset">⤾</button>
+        </div>
+      </div>
+
+      <!-- Footer: axis + year-range -->
+      <div class="map-footer">
+        <svg id="mapAxis" width="100%" height="48"></svg>
+        <div class="map-controls">
+          <div class="map-range">
+            <input id="mapYearStart" type="range"/>
+            <input id="mapYearEnd"   type="range"/>
+          </div>
+          <div class="map-range-readout">
+            <span id="mapYearStartVal"></span> – <span id="mapYearEndVal"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Constellation -->
+    <section id="constellation" class="view" aria-label="Constellation">
+      <svg id="constellationSvg" width="100%" height="100%"></svg>
+    </section>
+
+    <!-- KnightLab Linear timeline -->
+    <section id="kl_timeline" class="view" aria-label="Linear timeline">
+      <div id="klContainer" class="kl-wrap"></div>
+    </section>
+  </main>
+
+  <!-- Floating card -->
+  <div id="card" class="card hidden" role="dialog" aria-modal="true">
+    <button id="closeCard" aria-label="Close">×</button>
+    <div class="thumb" id="cardThumb" aria-hidden="true"></div>
+
+    <div class="card-header">
+      <h2 id="cardTitle"></h2>
+      <p class="meta" id="cardMeta"></p>
+    </div>
+
+    <div class="card-content" id="cardContent">
+      <p id="cardCaption"></p>
+      <p id="cardExtra1" class="muted"></p>
+      <p id="cardExtra2" class="muted"></p>
+      <img id="cardImage" alt=""/>
+      <a id="cardOpen" class="pill-btn" href="#" style="margin-top:8px">Open full page</a>
+    </div>
+  </div>
+
+  <!-- INFO Modal -->
+  <div id="infoModal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="info-backdrop" data-close="1"></div>
+    <div class="info-dialog glass" role="document" tabindex="-1">
+      <header class="info-header">
+        <h2 id="infoTitle">How to use this site</h2>
+        <button id="infoClose" class="info-close" aria-label="Close">×</button>
+      </header>
+      <div class="info-body">
+        <p><strong>Time Measuring Devices</strong> lets you explore artefacts, places, and ideas about measuring time across history. Use the sidebar, switch views on the top-right, and click any node to open a rich card.</p>
+      </div>
+      <footer class="info-footer">
+        <button class="pill-btn" data-close="1">Got it</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+  <div id="debugBadge">DEBUG</div>
+  <script>
+    window.timeline = new TL.Timeline('klContainer', timelineDataOrUrl);
+  </script>
+</body>
+</html>
