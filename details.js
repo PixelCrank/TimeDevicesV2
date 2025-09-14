@@ -223,7 +223,10 @@ function renderHeaderAndMeta(d){
   const hero = $('#heroImg');
   const url = nodeImageURL(d);
   if (url){
-    hero.src = url; hero.alt = d.title || ''; hero.style.display = 'block';
+    hero.src = url;
+    hero.alt = d.title || '';
+    hero.style.display = 'block';
+    hero.style.maxHeight = '320px'; // or up to 800px if you want for large screens
     hero.onerror = () => {
       const cat = (d.category||'').toLowerCase();
       hero.src =
@@ -260,35 +263,71 @@ function renderHeaderAndMeta(d){
 function renderMiniMap(item) {
   const svg = document.getElementById('detailsMapSvg');
   if (!svg) return;
-  svg.innerHTML = '';  const mdPath = item.markdown;
+  svg.innerHTML = '';
 
-  // Use consistent world bounds
-  const W = 600, H = 300;
-  const LON_MIN = -180, LON_MAX = 180;
-  const LAT_MIN = -95,  LAT_MAX = 85;
+  // Responsive sizing: use the actual SVG size
+  const rect = svg.getBoundingClientRect();
+  const W = rect.width || 320;
+  const H = rect.height || 160;
+  const aspect = 2 / 1;
+  // Maintain aspect ratio
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-  // Draw world map background
-  ensureBaseMap(svg);
+  // Draw world map background (stretched to fit)
+  let img = document.createElementNS(NS, 'image');
+  img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'assets/world_light.svg');
+  img.setAttribute('href', 'assets/world_light.svg');
+  img.setAttribute('x', 0);
+  img.setAttribute('y', 0);
+  img.setAttribute('width', W);
+  img.setAttribute('height', H);
+  img.setAttribute('opacity', '0.22');
+  svg.appendChild(img);
 
   // Project lon/lat to SVG coordinates
   function proj(lon, lat) {
+    // Equirectangular projection
+    const LON_MIN = -180, LON_MAX = 180;
+    const LAT_MIN = -95, LAT_MAX = 85;
     const x = ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * W;
     const y = ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * H;
     return [x, y];
   }
 
-  // Draw marker if coordinates exist
-  if (Number.isFinite(item.lon) && Number.isFinite(item.lat)) {
-    const [x, y] = projEquirect(Number(item.lon), Number(item.lat), svg);
+  let lat = Number.isFinite(item.lat) ? item.lat : null;
+  let lon = Number.isFinite(item.lon) ? item.lon : null;
+
+  // If lat/lon missing, try to geocode from location string
+  if ((lat === null || lon === null) && item.origin_location) {
+    const coords = geocodePlace(item.origin_location);
+    if (coords) {
+      lat = coords[0];
+      lon = coords[1];
+    }
+  }
+
+  if (lat !== null && lon !== null) {
+    const [x, y] = proj(Number(lon), Number(lat));
     const marker = document.createElementNS(NS, 'circle');
     marker.setAttribute('cx', x);
     marker.setAttribute('cy', y);
-    marker.setAttribute('r', 12);
+    marker.setAttribute('r', Math.max(10, Math.min(W, H) * 0.06));
     marker.setAttribute('fill', '#7C3AED');
     marker.setAttribute('stroke', '#fff');
     marker.setAttribute('stroke-width', 4);
     marker.setAttribute('filter', 'drop-shadow(0 2px 6px rgba(0,0,0,0.18))');
     svg.appendChild(marker);
+  } else {
+    // If still no coordinates, show a faded world map and a message
+    const text = document.createElementNS(NS, 'text');
+    text.setAttribute('x', W/2);
+    text.setAttribute('y', H/2 + 8);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-size', '18');
+    text.setAttribute('fill', '#bbb');
+    text.textContent = 'No coordinates';
+    svg.appendChild(text);
   }
 }
 
@@ -310,7 +349,7 @@ function fillSectionsFromMarkdown(item, md){
     order = ['BIO','WHAT','WHY'];
   } else if (item.category === 'story') {
     show($('#storySections'));
-    order = ['STORY+'];
+    order = ['DESCRIPTION', 'FUNCTION', 'PERSPECTIVE', 'INNOVATION', 'STORY+'];
   }
 
   let filled = 0;
@@ -497,3 +536,103 @@ if ('ResizeObserver' in window && mm) {
 }
 
 document.addEventListener('DOMContentLoaded', main);
+
+/* ===================== Geo Lookup ===================== */
+const GEO_LOOKUP = {
+  // ——— Cities / regions
+  'kaifeng':[34.797,114.307], 'athens':[37.984,23.727], 'paris':[48.857,2.352],
+  'geneva':[46.204,6.143], 'la chaux-de-fonds':[47.099,6.825], 'le brassus':[46.611,6.321],
+  'neuchâtel':[46.992,6.931], 'neuchatel':[46.992,6.931], 'padua':[45.407,11.875],
+  'the hague':[52.080,4.311], 'yorkshire':[53.991,-1.541], 'london':[51.507,-0.127],
+  'greenwich':[51.482,0.000], 'washington d.c.':[38.907,-77.037], 'washington dc':[38.907,-77.037],
+  'bern':[46.948,7.447], 'prague':[50.075,14.437], 'florence':[43.769,11.255],
+  'milan':[45.464,9.190], 'montreal':[45.501,-73.567], 'new york':[40.712,-74.006],
+  'cairo':[30.044,31.236], 'basra':[30.509,47.783], 'baghdad':[33.315,44.366],
+  'damascus':[33.513,36.292], 'alexandria':[31.200,29.918], 'istanbul':[41.009,28.966],
+  'nuremberg':[49.454,11.077], 'vienna':[48.208,16.373], 'prague':[50.075,14.437],
+  'venice':[45.440,12.315], 'pisa':[43.717,10.401], 'oxford':[51.752,-1.258],
+  'leiden':[52.160,4.497], 'rotterdam':[51.924,4.479], 'zurich':[47.376,8.541],
+  'basel':[47.559,7.588], 'lyon':[45.764,4.835], 'besançon':[47.238,6.024],
+  'besancon':[47.238,6.024], 'birmingham':[52.486,-1.890], 'bristol':[51.454,-2.587],
+  'lisbon':[38.722,-9.139], 'madrid':[40.416,-3.703], 'cordoba':[37.888,-4.779],
+  'toledo':[39.862,-4.027], 'seville':[37.389,-5.984], 'kyoto':[35.011,135.768],
+  'edo':[35.689,139.692], 'tokyo':[35.689,139.692], 'nagoya':[35.181,136.906],
+  'nagaski':[32.750,129.877], 'nagasaki':[32.750,129.877],
+
+  // ——— Countries / broad regions
+  'china':[35.861,104.195], 'switzerland':[46.818,8.227], 'france':[46.227,2.213],
+  'england':[52.355,-1.174], 'uk':[54.0,-2.0], 'united kingdom':[54.0,-2.0],
+  'italy':[41.871,12.567], 'netherlands':[52.132,5.291], 'denmark':[56.263,9.501],
+  'poland':[51.919,19.145], 'usa':[39.828,-98.579], 'united states':[39.828,-98.579],
+  'japan':[36.204,138.253], 'mediterranean':[35.0,18.0], 'spain':[40.463,-3.749],
+  'portugal':[39.399,-8.224], 'germany':[51.166,10.452], 'austria':[47.516,14.550],
+  'turkey':[38.964,35.243], 'egypt':[26.820,30.802], 'iraq':[33.223,43.679],
+  'syria':[34.802,38.996], 'greece':[39.074,21.824], 'morocco':[31.792,-7.093]
+};
+
+function geocodePlace(place) {
+  if (!place) return null;
+  const key = place.trim().toLowerCase();
+  // Try exact match
+  if (GEO_LOOKUP[key]) return GEO_LOOKUP[key];
+  // Try first word (for "Fes, Morocco" etc)
+  const first = key.split(/[ ,/]/)[0];
+  if (GEO_LOOKUP[first]) return GEO_LOOKUP[first];
+  return null;
+}
+
+/* ===================== Geo JSON ===================== */
+const _VISIBLE = [];
+const _HIDDEN = [];
+
+function updateVisibleItems() {
+  const now = Date.now();
+  const oneHour = 60 * 60 * 1000;
+
+  // Filter items that are not in the visible range
+  _VISIBLE.length = 0;
+  _HIDDEN.length = 0;
+  for (const item of window._ALL_ITEMS) {
+    // Skip if no coordinates
+    if (!item.lat || !item.lon) continue;
+
+    // Check if the item's time range is within the last 24 hours
+    const itemDate = new Date(item.year, 0, 1).getTime();
+    if (now - itemDate <= oneHour) {
+      _VISIBLE.push(item);
+    } else {
+      _HIDDEN.push(item);
+    }
+  }
+
+  // Update the UI or map with the new visible items
+  renderVisibleItems();
+}
+
+function renderVisibleItems() {
+  const features = _VISIBLE.map(d => ({
+    type: "Feature",
+    properties: { ...d },
+    geometry: { type: "Point", coordinates: [d.lon, d.lat] }
+  }));
+
+  // Here you would typically update a map layer with the new features
+  // For example, if using Mapbox GL JS:
+  // map.getSource('your-source-id').setData({
+  //   type: 'FeatureCollection',
+  //   features: features
+  // });
+}
+
+/* ===================== Debugging ===================== */
+function debugVisibleItems() {
+  const list = document.getElementById('visibleItemsList');
+  if (!list) return;
+
+  list.innerHTML = '';
+  _VISIBLE.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.title} (${item.year}) - ${item.lat}, ${item.lon}`;
+    list.appendChild(li);
+  });
+}

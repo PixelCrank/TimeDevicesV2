@@ -4,88 +4,275 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title id="docTitle">Details • Time Stories</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="details.css"/>
   <script src="./details.js"></script>
+  <script src="https://unpkg.com/supercluster@7.1.5/dist/supercluster.min.js"></script>
   <style>
-    .hide{display:none;}
-    .muted{color:#6b7280;}
-    .panel{background:#f6f8fb;border:1px solid #e5e7eb;border-radius:14px;padding:16px;}
-    .hstack{display:flex;gap:10px;align-items:center;}
-    .btn{background:#0f172a;color:#fff;padding:8px 14px;border-radius:12px;text-decoration:none;display:inline-block}
-    .btn.secondary{background:#e5e7eb;color:#111827}
-    .twocol{display:grid;grid-template-columns: minmax(0,1fr) 360px; gap:16px;}
-    .sections h3{margin: 1.2rem 0 .4rem}
-    dt{font-weight:600} dd{margin:0 0 .5rem 0}
-    .error{background:#fff1f2;border:1px solid #fecdd3;color:#be123c;padding:10px;border-radius:10px;font-size:14px}
+    body {
+      background: linear-gradient(180deg,#ffffff,#f7f8fa);
+      min-height: 100vh;
+    }
+    .breadcrumb {
+      margin: 24px auto 0 auto;
+      max-width: 1200px;
+      padding: 0 24px;
+      font-size: 1em;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .details-shell {
+      max-width: 1200px;
+      margin: 32px auto 32px auto;
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      padding: 0 24px;
+    }
+    .details-main-content {
+      flex: 2 1 0;
+      background: var(--glass-bg, rgba(255,255,255,0.8));
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft), 0 8px 32px rgba(124,58,237,0.07);
+      padding: 40px 48px 40px 48px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .details-hero-img {
+      display: block;
+      max-width: 100%;
+      max-height: 320px;
+      margin: 0 auto 24px auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px rgba(124,58,237,0.09), var(--shadow-soft);
+      background: #fff;
+      object-fit: contain;
+    }
+    .details-title {
+      font-family: 'Optician Sans', sans-serif;
+      font-size: 2.2em;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin: 0 0 0.2em 0;
+    }
+    .details-subtitle {
+      font-size: 1.1em;
+      color: #6b7280;
+      margin-bottom: 1.2em;
+    }
+    .sections {
+      padding-bottom: 12px;
+    }
+    .sections h3 {
+      margin: 2.2em 0 0.7em 0;
+      font-size: 1.1em;
+      color: #7C3AED;
+      letter-spacing: .04em;
+    }
+    .sections > div {
+      margin-bottom: 1.2em;
+    }
+    .details-sidebar {
+      flex: 1 1 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: var(--glass-bg, rgba(255,255,255,0.88));
+      border-radius: 22px;
+      box-shadow: var(--shadow-soft), 0 8px 32px rgba(124,58,237,0.07);
+      padding: 38px 26px 32px 26px;
+      min-width: 270px;
+      max-width: 370px;
+    }
+    .sidebar-block {
+      background: rgba(255,255,255,0.93);
+      border-radius: 16px;
+      box-shadow: var(--shadow-neo);
+      padding: 22px 18px 18px 18px;
+      margin-bottom: 22px;
+      transition: box-shadow .18s, background .18s;
+    }
+    .miniMapWrap {
+      width: 100%;
+      min-height: 220px;
+      height: clamp(260px, 32vh, 400px);
+      aspect-ratio: 2 / 1;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.92);
+      border: 1.5px solid #e5e7eb;
+      box-shadow: 0 6px 32px 0 rgba(124,58,237,0.08), var(--shadow-neo);
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      margin-bottom: 8px;
+      position: relative;
+      transition: box-shadow .18s, background .18s;
+    }
+    #detailsMapSvg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      aspect-ratio: 2 / 1;
+      background: transparent;
+      border-radius: 0;
+    }
+    .details-meta {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 12px;
+      margin: 0;
+      font-size: 1em;
+    }
+    .media-gallery {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .media-gallery img, .media-gallery video {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.2s;
+    }
+    .media-gallery img.active, .media-gallery video.active {
+      border: 2px solid #7C3AED;
+    }
+    .hstack {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .btn {
+      background: #0f172a;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .error {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #be123c;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px) {
+      .details-shell {
+        flex-direction: column;
+        gap: 0;
+        padding: 0 8px;
+      }
+      .details-main-content {
+        padding: 18px 8px 18px 8px;
+      }
+      .details-sidebar {
+        max-width: 100%;
+        padding: 14px 0 0 0;
+        border-radius: 0 0 18px 18px;
+      }
+      .miniMapWrap {
+        max-width: 100%;
+        min-height: 180px;
+        height: clamp(160px, 24vh, 260px);
+        padding: 2px;
+        border-radius: 12px;
+      }
+    }
+    @media (max-width: 600px) {
+      .details-shell {
+        padding: 0 2px;
+      }
+      .details-main-content, .details-sidebar {
+        padding: 8px 0 0 0;
+        border-radius: 0;
+      }
+      .details-hero-img {
+        max-height: 180px;
+        margin: 12px 0 0 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="panel" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;padding:12px 16px 0">
+  <nav class="breadcrumb">
     <a href="index.html" class="muted">← Back to map</a>
-    <span class="muted">/</span>
+    <span>/</span>
     <span id="crumbCategory" class="muted">Time Devices</span>
-  </div>
-
-  <main id="itemRoot" class="panel" style="margin:8px 16px;">
-    <h1 id="title" style="margin:0 0 6px 0">Details • Time Stories</h1>
-    <div id="subtitle" class="muted" style="margin-bottom:14px"></div>
-
-    <div class="twocol">
-      <!-- Left: content -->
-      <section class="panel" style="min-height:340px;">
-        <img id="heroImg" alt="" style="max-width:100%;border-radius:10px;display:none;margin-bottom:10px"/>
-        <!-- People sections -->
-        <div id="peopleSections" class="sections hide">
-          <h3>BIO</h3><div data-key="BIO"></div>
-          <h3>WHAT</h3><div data-key="WHAT"></div>
-          <h3>WHY</h3><div data-key="WHY"></div>
-        </div>
-        <!-- Device sections -->
-        <div id="deviceSections" class="sections hide">
-          <h3>DESCRIPTION</h3><div data-key="DESCRIPTION"></div>
-          <h3>FUNCTION</h3><div data-key="FUNCTION"></div>
-          <h3>PERSPECTIVE</h3><div data-key="PERSPECTIVE"></div>
-          <h3>INNOVATION</h3><div data-key="INNOVATION"></div>
-        </div>
-        <!-- Story sections -->
-        <div id="storySections" class="sections hide">
-          <h3>STORY+</h3><div data-key="STORY+"></div>
-        </div>
-        <!-- Fallback plain text -->
-        <div id="desc" class="hide"></div>
-        <!-- Inline error (shows paths tried) -->
-        <div id="mdError" class="error hide"></div>
-      </section>
-
-      <!-- Right: meta + mini map + media -->
-      <aside style="display:flex;flex-direction:column;gap:16px;">
-        <div class="panel">
-          <div class="hstack" style="justify-content:space-between;margin-bottom:8px">
-            <a id="viewOnMap" class="btn" href="#">View on map</a>
-            <a href="index.html" class="btn secondary">Back</a>
-          </div>
-          <dl id="metaList" style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0"></dl>
-        </div>
-
-        <div class="panel">
-          <div class="miniMapWrap">
-            <svg id="detailsMapSvg" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet"></svg>
-          </div>
-        </div>
-        <div class="panel">
-          <strong>Media</strong>
-          <div id="mediaList" class="muted" style="margin-top:8px">—</div>
-          <div id="mediaGallery" class="media-gallery"></div>
-        </div>
-      </aside>
-    </div>
-  </main>
-
-  <!-- Shown when ?id doesn't resolve -->
-  <div id="emptyState" class="panel hide" style="margin:16px">
+  </nav>
+  <div id="emptyState" class="error" style="display:none;">
     We couldn’t find that item. Check the <code>?id=</code> in the URL or the <code>slug</code>/<code>id</code> in your CSV.
   </div>
-
+  <main id="itemRoot" class="details-shell">
+    <section class="details-main-content glass">
+      <div class="details-flex-row">
+        <div class="details-hero-col">
+          <img id="heroImg" alt="" class="details-hero-img" />
+          <div class="media-gallery-block">
+            <strong>Media</strong>
+            <div id="mediaList" class="muted" style="margin-top:8px">—</div>
+            <div id="mediaGallery" class="media-gallery"></div>
+          </div>
+        </div>
+        <div class="details-text-col">
+          <h1 id="title" class="details-title"></h1>
+          <div id="subtitle" class="details-subtitle"></div>
+          <!-- People sections -->
+          <div id="peopleSections" class="sections hide">
+            <h3>BIO</h3><div data-key="BIO"></div>
+            <h3>WHAT</h3><div data-key="WHAT"></div>
+            <h3>WHY</h3><div data-key="WHY"></div>
+          </div>
+          <!-- Device sections -->
+          <div id="deviceSections" class="sections hide">
+            <h3>DESCRIPTION</h3><div data-key="DESCRIPTION"></div>
+            <h3>FUNCTION</h3><div data-key="FUNCTION"></div>
+            <h3>PERSPECTIVE</h3><div data-key="PERSPECTIVE"></div>
+            <h3>INNOVATION</h3><div data-key="INNOVATION"></div>
+          </div>
+          <!-- Story sections -->
+          <div id="storySections" class="sections hide">
+            <h3>DESCRIPTION</h3><div data-key="DESCRIPTION"></div>
+            <h3>FUNCTION</h3><div data-key="FUNCTION"></div>
+            <h3>PERSPECTIVE</h3><div data-key="PERSPECTIVE"></div>
+            <h3>INNOVATION</h3><div data-key="INNOVATION"></div>
+            <h3>STORY+</h3><div data-key="STORY+"></div>
+          </div>
+          <div id="desc" class="hide"></div>
+          <div id="mdError" class="error hide"></div>
+        </div>
+      </div>
+      <!-- Meta and Map below -->
+      <div class="details-meta-row">
+        <div class="details-meta-block">
+          <dl id="metaList" class="details-meta"></dl>
+        </div>
+        <div class="miniMapWrap">
+          <svg id="detailsMapSvg" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+      </div>
+    </section>
+    <div id="markdownSections"></div>
+  </main>
   <script src="details.js"></script>
 </body>
 </html>

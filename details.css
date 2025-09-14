@@ -1,0 +1,292 @@
+/* ======================= FONTS ======================= */
+@import url('https://fonts.cdnfonts.com/css/optician-sans');
+@import url('https://fonts.cdnfonts.com/css/sft-schrifted-sans');
+
+/* ======================= THEME / TOKENS ======================= */
+:root{
+  --glass-bg: rgba(255,255,255,0.7);
+  --glass-brd: #e5e7eb;
+  --shadow-soft: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-neo: 6px 6px 14px rgba(0,0,0,0.06), -6px -6px 14px rgba(255,255,255,0.9);
+}
+
+/* ======================= BASE ======================= */
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; }
+body{
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  color:#0f172a;
+  background: linear-gradient(180deg,#ffffff,#f7f8fa);
+  min-height: 100vh;
+}
+h1, .details-title {
+  font-family:'Optician Sans',sans-serif;
+  text-transform:uppercase; letter-spacing:.06em; font-size:2.2em; margin:0 0 0.2em 0;
+}
+.muted{ color:#6b7280; }
+.glass{ background:var(--glass-bg); border:1px solid var(--glass-brd); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:var(--shadow-soft); border-radius:16px; }
+.error {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 18px;
+}
+.error:empty { display: none; }
+
+/* ======================= BREADCRUMB ======================= */
+.breadcrumb {
+  margin: 24px auto 0 auto;
+  max-width: 1200px;
+  padding: 0 24px;
+  font-size: 1em;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ======================= LAYOUT ======================= */
+.details-shell {
+  max-width: 1200px;
+  margin: 32px auto 32px auto;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 0 24px;
+}
+.details-main-content {
+  flex: 2 1 0;
+  background: var(--glass-bg, rgba(255,255,255,0.8));
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft), 0 8px 32px rgba(124,58,237,0.07);
+  padding: 40px 48px 40px 48px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.details-flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: flex-start;
+}
+.details-hero-col {
+  flex: 0 0 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+}
+.details-hero-img,
+.miniMapWrap {
+  width: 320px;
+  max-width: 100%;
+}
+.details-hero-img {
+  max-height: 320px;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(124,58,237,0.09), var(--shadow-soft);
+  background: #fff;
+  object-fit: contain;
+}
+.details-text-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.details-title {
+  font-family: 'Optician Sans', sans-serif;
+  font-size: 2.2em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin: 0 0 0.2em 0;
+  margin-top: 0;
+  margin-bottom: 0.1em;
+}
+.details-subtitle {
+  font-size: 1.1em;
+  color: #6b7280;
+  margin-bottom: 1.2em;
+}
+.details-years {
+  font-size: 1.1em;
+  color: #7C3AED;
+  margin-bottom: 0.2em;
+  font-weight: 600;
+}
+.details-location,
+.details-coordinates {
+  font-size: 1em;
+  color: #6b7280;
+  margin-bottom: 0.1em;
+}
+.details-back-btn {
+  margin-bottom: 12px;
+  align-self: flex-end;
+}
+
+/* ======================= MARKDOWN SECTIONS ======================= */
+.sections {
+  padding-bottom: 12px;
+}
+.sections h3 {
+  margin: 2.2em 0 0.7em 0;
+  font-size: 1.1em;
+  color: #7C3AED;
+  letter-spacing: .04em;
+}
+.sections > div {
+  margin-bottom: 1.2em;
+}
+
+/* ======================= SIDEBAR ======================= */
+
+.details-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  margin: 0;
+  font-size: 1em;
+}
+.details-meta-row {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: flex-start;
+  margin-top: 32px;
+}
+.details-meta-block {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: flex-start;
+  margin-bottom: 18px;
+}
+.hstack {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.btn {
+  background: #0f172a;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* ======================= MINI MAP ======================= */
+.miniMapWrap {
+  width: 320px;
+  max-width: 100%;
+  aspect-ratio: 2 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+#detailsMapSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  aspect-ratio: 2 / 1;
+  background: transparent;
+  border-radius: 0;
+}
+
+/* ======================= MEDIA GALLERY ======================= */
+.media-gallery {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.media-gallery img, .media-gallery video {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s;
+}
+.media-gallery img.active, .media-gallery video.active {
+  border: 2px solid #7C3AED;
+}
+.details-hero-col .media-gallery-block {
+  margin-top: 18px;
+  width: 100%;
+  text-align: left;
+}
+
+/* ======================= RESPONSIVE ======================= */
+@media (max-width: 900px) {
+  .details-shell {
+    flex-direction: column;
+    gap: 0;
+    padding: 0 8px;
+  }
+  .details-main-content {
+    padding: 18px 8px 18px 8px;
+  }
+  .details-flex-row {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .details-hero-col,
+  .details-hero-img,
+  .miniMapWrap {
+    width: 100%;
+    max-width: 100%;
+  }
+  .details-hero-img {
+    max-height: 220px;
+  }
+  .details-sidebar {
+    max-width: 100%;
+    padding: 14px 0 0 0;
+    border-radius: 0 0 18px 18px;
+  }
+  .miniMapWrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 8px;
+  }
+}
+@media (max-width: 600px) {
+  .details-shell {
+    padding: 0 2px;
+  }
+  .details-main-content, .details-sidebar {
+    padding: 8px 0 0 0;
+    border-radius: 0;
+  }
+  .details-hero-img {
+    max-height: 180px;
+    margin: 12px 0 0 0;
+  }
+}

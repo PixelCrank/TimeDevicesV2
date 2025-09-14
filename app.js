@@ -681,7 +681,14 @@ function drawMap(items){
   });
   dbg('drawMap geo:', geo.length, 'noGeo:', noGeo.length);
 
-  // separate exact overlaps and draw
+  // Before offsetOverlaps:
+geo.forEach(d => {
+  const [x, y] = projEquirect(d.lon, d.lat, svg);
+  d._orig_px = x;
+  d._orig_py = y;
+});
+
+// separate exact overlaps and draw
   const positioned = offsetOverlaps(geo, svg);
   positioned.forEach(({d, x, y}) => {
     drawImageNode(scene, x, y, 12, d);
@@ -741,9 +748,27 @@ if (!scene._hoverWired){
     });
   }
 
+  // Add after your single click event in drawMap
+  scene.addEventListener('dblclick', (e) => {
+    const svgEl = scene.ownerSVGElement;
+    const node = e.target.closest('.node');
+    if (!node || !scene.contains(node)) return;
+
+    const x = +node.dataset.x;
+    const y = +node.dataset.y;
+
+    // Use _orig_px/_orig_py for overlap detection
+    const overlapNodes = _VISIBLE.filter(d => {
+      return Math.abs(d._orig_px - x) < 2 && Math.abs(d._orig_py - y) < 2;
+    });
+
+    if (overlapNodes.length > 1) {
+      showOverlapPopup(x, y, overlapNodes, svgEl);
+    }
+  });
+
   // After projecting all nodes:
   const overlapMap = new Map();
-
 _VISIBLE.forEach(d => {
   const [x, y] = projEquirect(d.lon, d.lat, svg);
   d._px = x;
@@ -752,6 +777,16 @@ _VISIBLE.forEach(d => {
   if (!overlapMap.has(key)) overlapMap.set(key, []);
   overlapMap.get(key).push(d);
 });
+const points = _VISIBLE.map(d => ({
+  type: "Feature",
+  properties: { ...d },
+  geometry: { type: "Point", coordinates: [d.lon, d.lat] }
+}));
+const clusterIndex = new Supercluster({
+  radius: 40, // adjust for your SVG scale
+  maxZoom: 6  // adjust as needed
+});
+clusterIndex.load(points);
 }
 
 // ------- View switch (tabs) -------
@@ -759,18 +794,18 @@ function switchView(name){
   $$('.view').forEach(v => v.classList.toggle('active', v.id === name));
   $$('.tab-btn[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === name));
   requestAnimationFrame(()=> render());
+  if (name === 'gallery') renderGallery();
 }
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
+// Example tab switching logic
+document.querySelectorAll('.tab-btn').forEach (btn => {
   btn.addEventListener('click', e => {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
     const view = btn.dataset.view;
-    document.getElementById(view).classList.add('active');
-    if (view === 'kl_timeline') {
-      showKnightlabTimeline();
-    }
+    document.querySelectorAll('.view').forEach(v => {
+      v.style.display = (v.id === view) ? '' : 'none';
+    });
+    if (view === 'gallery') renderGallery();
+    // ...other view logic...
   });
 });
 
@@ -805,7 +840,12 @@ function render(){
   updateDebugBadge({ shown:_VISIBLE.length, noGeo:noGeo.length, outYear:0, filtered: totalFilteredOut });
 
 }
-function requestRender(){ requestAnimationFrame(render); }
+function requestRender() {
+  requestAnimationFrame(() => {
+    render();
+    if ($('#gallery').classList.contains('active')) renderGallery();
+  });
+}
 
 // ------- Bootstrap -------
 async function main(){
@@ -945,31 +985,73 @@ function centerMapOn(lat, lon, zoom = 2) {
 // spiderfy: show all overlapping nodes at once
 function spiderfyNodesAt(x, y, nodes) {
   const N = nodes.length;
-  const radius = 36 + 8 * N;
+  const radius = 36 + 8 * N; // Distance from center
+  const svg = document.getElementById('mapSvg');
+  const scene = document.getElementById('mapScene');
+  const k = svg?._zoom?.k || 1;
+
+  // Arrange nodes in a ring, much smaller
   nodes.forEach((d, i) => {
     const angle = (2 * Math.PI * i) / N;
     const nx = x + Math.cos(angle) * radius;
     const ny = y + Math.sin(angle) * radius;
     const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
     if (nodeEl) {
-      nodeEl.setAttribute('transform', `translate(${nx},${ny}) scale(1.35)`);
+      // 0.33 is a third of the normal size
+      nodeEl.setAttribute('transform', `translate(${nx},${ny}) scale(${0.33})`);
       nodeEl.classList.add('spiderfied');
+      // Allow card opening as usual
+      nodeEl.onclick = (evt) => {
+        evt.stopPropagation();
+        const d = _VISIBLE.find(x => x.slug === nodeEl.dataset.id);
+        if (d) showCard(d, nodeEl);
+      };
     }
   });
 
+  // Add or update the label at the center, much smaller
+  let label = document.getElementById('spiderLabel');
+  if (!label) {
+    label = document.createElementNS(NS, 'text');
+    label.id = 'spiderLabel';
+    label.setAttribute('text-anchor', 'middle');
+    scene.appendChild(label);
+  }
+  label.textContent = nodes[0].origin_location || nodes[0].title || 'Cluster';
+  label.setAttribute('x', x);
+  label.setAttribute('y', y + 4);
+  label.setAttribute('font-size', '18'); // SVG font size, but will be scaled down
+  label.setAttribute('font-weight', 'bold');
+  label.setAttribute('fill', '#7C3AED');
+  label.setAttribute('transform', `scale(0.33)`);
+
+  // Double-click label to close spiderfy
+  label.ondblclick = (evt) => {
+    evt.stopPropagation();
+    collapseSpiderfy();
+  };
+
+  // Remove label and reset nodes when spiderfy collapses
   function collapseSpiderfy() {
     nodes.forEach(d => {
       const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
       if (nodeEl) {
         nodeEl.setAttribute('transform', `translate(${d._px},${d._py}) scale(1)`);
         nodeEl.classList.remove('spiderfied');
+        nodeEl.onclick = null;
       }
     });
-    document.removeEventListener('click', collapseSpiderfy, true);
+    label.remove();
+    window.removeEventListener('wheel', onZoomOut, true);
   }
-  setTimeout(() => {
-    document.addEventListener('click', collapseSpiderfy, true);
-  }, 0);
+
+  // Close spiderfy on zoom out
+  function onZoomOut(e) {
+    if (svg._zoom && svg._zoom.k < 8) { // adjust threshold as needed
+      collapseSpiderfy();
+    }
+  }
+  window.addEventListener('wheel', onZoomOut, true);
 }
 
 // knightlab timeline
@@ -981,4 +1063,170 @@ function showKnightlabTimeline() {
   // OR use a local JSON file:
   const url = 'data/timeline.json'; // Make sure this exists and is in KnightLab format
   window.timeline = new TL.Timeline('klContainer', url);
+}
+
+// ------- Gallery -------
+let gallerySort = 'az'; // 'az', 'za', 'time'
+
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  // Use the same filters as the map
+  const f = currentFilters();
+  let items = _ALL_ITEMS.filter(d =>
+    (f.cats.length === 0 || f.cats.includes(d.category)) &&
+    itemInYearRange(d, mapYearStart, mapYearEnd) &&
+    itemMatchesSearch(d, f.search)
+  );
+
+  // Sort
+  if (gallerySort === 'az') {
+    items.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+  } else if (gallerySort === 'za') {
+    items.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+  } else if (gallerySort === 'time') {
+    items.sort((a, b) => (+a.year || 0) - (+b.year || 0));
+  }
+
+  items.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'gallery-card glass';
+    card.style.width = '320px';
+    card.style.margin = '0 auto 24px auto';
+    card.innerHTML = `
+      <div class="thumb" style="background-image:url('${nodeImageURL(d)}');height:140px;background-size:cover;border-radius:12px 12px 0 0;"></div>
+      <div class="card-header" style="padding:12px;">
+        <h3 style="margin:0 0 4px 0;font-size:1.1em;">${d.title || ''}</h3>
+        <div class="meta" style="font-size:0.95em;color:#888;">
+          ${(d.year || '')}${d.year_end ? ('–' + d.year_end) : ''}${d.origin_location ? (' • ' + d.origin_location) : ''}
+        </div>
+      </div>
+      <div class="card-content" style="padding:0 12px 12px 12px;">
+        <p style="font-size:0.97em;">${d.caption || ''}</p>
+        <a class="pill-btn" href="details.html?id=${encodeURIComponent(d.slug)}" style="margin-top:8px;display:inline-block;">Open full page</a>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// Sorting button logic
+document.getElementById('sortBySelect')?.addEventListener('change', (e) => {
+  gallerySort = e.target.value;
+  renderGallery();
+});
+
+// Show popup for overlapping nodes
+function showOverlapPopup(x, y, nodes, svg) {
+  const popup = document.getElementById('overlapPopup');
+  // Project SVG (x, y) to screen coordinates
+  const pt = svg.createSVGPoint();
+  pt.x = x; pt.y = y;
+  const screen = pt.matrixTransform(svg.getScreenCTM());
+
+  // Remove any previous count node
+  let countNode = document.getElementById('overlapPopupCountNode');
+  if (countNode) countNode.remove();
+
+  // Build the popup content with image node on the left
+  popup.innerHTML = `
+    <button id="overlapPopupClose" style="position:absolute;top:8px;right:10px;background:none;border:none;font-size:18px;line-height:1;color:#888;cursor:pointer;">×</button>
+    <div style="font-weight:bold;margin-bottom:10px;margin-top:2px;">${nodes[0].origin_location || 'Overlapping items'}</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      ${nodes.map(d => {
+        const imgUrl = nodeImageURL(d);
+        return `
+          <div class="popup-item" data-id="${d.slug}" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 0;">
+            <span style="display:inline-block;width:32px;height:32px;flex-shrink:0;">
+              <img src="${imgUrl}" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 1px 4px #0001;">
+            </span>
+            <span style="font-size:1em;">${d.title}</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+  popup.style.display = 'block';
+  popup.style.position = 'absolute';
+  popup.style.zIndex = 1000;
+  popup.style.minWidth = '220px';
+  popup.style.maxWidth = '340px';
+  popup.style.boxShadow = '0 2px 16px #0002';
+  popup.style.background = '#fff';
+  popup.style.borderRadius = '10px';
+  popup.style.padding = '18px 18px 12px 14px';
+  popup.style.border = '1.5px solid #e5e7eb';
+
+  // --- Position popup so its top left is centered on the anchor (node) ---
+  // Wait for popup to render so we can get its size
+  setTimeout(() => {
+    const rect = popup.getBoundingClientRect();
+    // Center the popup over the anchor point
+    popup.style.left = (screen.x + window.scrollX - rect.width / 2) + 'px';
+    popup.style.top  = (screen.y + window.scrollY - rect.height / 2) + 'px';
+
+    // Now, place the count node at the top left corner of the popup
+    let countNode = document.getElementById('overlapPopupCountNode');
+    if (countNode) countNode.remove();
+    countNode = document.createElement('div');
+    countNode.id = 'overlapPopupCountNode';
+    countNode.style.position = 'absolute';
+    countNode.style.left = (rect.left + window.scrollX - 18) + 'px';
+    countNode.style.top = (rect.top + window.scrollY - 18) + 'px';
+    countNode.style.width = '36px';
+    countNode.style.height = '36px';
+    countNode.style.borderRadius = '50%';
+    countNode.style.background = '#7C3AED';
+    countNode.style.border = '3px solid #fff';
+    countNode.style.boxShadow = '0 2px 8px #0002';
+    countNode.style.display = 'flex';
+    countNode.style.alignItems = 'center';
+    countNode.style.justifyContent = 'center';
+    countNode.style.fontWeight = 'bold';
+    countNode.style.fontSize = '1.1em';
+    countNode.style.color = '#fff';
+    countNode.style.zIndex = 1001;
+    countNode.style.pointerEvents = 'none';
+    countNode.textContent = nodes.length;
+    document.body.appendChild(countNode);
+  }, 0);
+
+  // Hide overlapping nodes on the map
+  nodes.forEach(d => {
+    const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
+    if (nodeEl) nodeEl.style.display = 'none';
+  });
+
+  // Click handler for items
+  popup.querySelectorAll('.popup-item').forEach(el => {
+    el.onclick = (evt) => {
+      const d = _VISIBLE.find(x => x.slug === el.dataset.id);
+      if (d) showCard(d, document.querySelector(`.node[data-id="${d.slug}"]`));
+      evt.stopPropagation();
+    };
+  });
+
+  // Only close on (x) or zoom in/out
+  const closeBtn = document.getElementById('overlapPopupClose');
+  function closePopup() {
+    popup.style.display = 'none';
+    // Remove the count node
+    let countNode = document.getElementById('overlapPopupCountNode');
+    if (countNode) countNode.remove();
+    // Restore overlapping nodes
+    nodes.forEach(d => {
+      const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
+      if (nodeEl) nodeEl.style.display = '';
+    });
+    window.removeEventListener('wheel', onZoom, true);
+  }
+  if (closeBtn) closeBtn.onclick = closePopup;
+
+  // Close popup on zoom in/out
+  function onZoom(e) {
+    closePopup();
+  }
+  window.addEventListener('wheel', onZoom, true);
 }

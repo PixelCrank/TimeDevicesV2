@@ -17,7 +17,7 @@
     <nav class="tabs">
       <button class="tab-btn active" data-view="map" type="button">Map</button>
       <button class="tab-btn" data-view="kl_timeline" type="button">Linear Timeline</button>
-      <button class="tab-btn" data-view="constellation" type="button">Constellation</button>
+      <button class="tab-btn" data-view="gallery" type="button">Gallery</button>
       <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
     </nav>
   </header>
@@ -97,6 +97,19 @@
     <section id="kl_timeline" class="view" aria-label="Linear timeline">
       <div id="klContainer" class="kl-wrap"></div>
     </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="view" aria-label="Gallery" style="display:none">
+      <div class="gallery-header">
+        <label for="sortBySelect" style="margin-right:8px;font-weight:600;">Sort by:</label>
+        <select id="sortBySelect" class="glass sort-dropdown">
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="time">By Time</option>
+        </select>
+      </div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
   </main>
 
   <!-- Floating card -->
@@ -134,6 +147,8 @@
       </footer>
     </div>
   </div>
+
+  <div id="overlapPopup" style="display:none;position:absolute;z-index:1000;background:#fff;border-radius:10px;box-shadow:0 2px 16px #0002;padding:10px 14px;min-width:180px;"></div>
 
   <script src="./app.js"></script>
   <div id="debugBadge">DEBUG</div>
