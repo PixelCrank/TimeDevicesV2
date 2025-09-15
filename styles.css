@@ -174,7 +174,7 @@ main{ margin-left:324px; height:calc(100vh - 58px); position:relative; padding:1
 .card-content p{ margin:8px 0 0; line-height:1.35; }
 #cardImage{ display:none; width:100%; height:auto; margin-top:10px; border-radius:8px; border:1px solid var(--glass-brd); }
 #closeCard{
-  position:absolute; right:8px; top=6px; width:28px; height:28px; border-radius:50%;
+  position:absolute; right:8px; top:6px; width:28px; height:28px; border-radius:50%;
   border:1px solid var(--glass-brd); background:var(--glass-bg);
   -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
   cursor:pointer; font-size:18px; line-height:26px;
@@ -302,185 +302,83 @@ main{ transition: margin-left .25s ease; }
   padding: 16px 24px 0 24px;
 }
 .gallery-card {
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  transition: box-shadow 0.2s;
-  cursor: pointer;
   background: var(--glass-bg, #fff);
   border: 1px solid var(--glass-brd);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--shadow-soft);
-  margin-right: 20px; /* Add this line */
-}
-
-.sort-dropdown {
-  appearance: none;
-  border: 1px solid var(--glass-brd);
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 999px;
-  padding: 8px 32px 8px 14px;
-  font: 600 13px/1.2 system-ui, sans-serif;
-  color: #0f172a;
-  box-shadow: var(--shadow-soft);
-  outline: none;
+  transition: box-shadow 0.2s;
   cursor: pointer;
-  transition: box-shadow .15s, background .15s, color .15s;
-  margin-left: 0;
-  margin-right: 0;
-  position: relative;
-}
-.sort-dropdown:focus {
-  box-shadow: 0 0 0 2px #7C3AED33;
-  background: rgba(255,255,255,0.85);
-}
-.sort-dropdown option {
-  background: #fff;
-  color: #0f172a;
-}
-
-.details-main {
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
-  border-radius: 24px;
-  box-shadow: var(--shadow-soft), 0 8px 32px rgba(124,58,237,0.07);
-  background: var(--glass-bg, rgba(255,255,255,0.7));
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.details-hero-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background: linear-gradient(180deg,rgba(255,255,255,0.7),rgba(247,248,250,0.8));
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 2px 24px rgba(124,58,237,0.05);
-  padding: 0;
-}
-
-
-/* ===== Sidebar and Block Tweaks for Balance ===== */
-.details-sidebar {
-  flex: 1 1 340px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  background: var(--glass-bg, rgba(255,255,255,0.88));
-  border-radius: 22px;
-  box-shadow: var(--shadow-soft), 0 8px 32px rgba(124,58,237,0.07);
-  padding: 38px 26px 32px 26px;
-  min-width: 270px;
-  max-width: 370px;
-}
-.sidebar-block {
-  background: rgba(255,255,255,0.93);
-  border-radius: 16px;
-  box-shadow: var(--shadow-neo);
-  padding: 22px 18px 18px 18px;
-  margin-bottom: 22px;
-  transition: box-shadow .18s, background .18s;
-}
-
-.sections {
-  padding-bottom: 12px;
-}
-.sections h3 {
-  margin: 2.2em 0 0.7em 0;
-  font-size: 1.1em;
-  color: #7C3AED;
-  letter-spacing: .04em;
-}
-.sections > div {
-  margin-bottom: 1.2em;
-}
-
-.details-sidebar {
-  flex: 1 1 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  background: var(--glass-bg, rgba(255,255,255,0.8));
-  border-radius: 18px;
-  box-shadow: var(--shadow-soft);
-  padding: 32px 24px;
-  min-width: 260px;
-  max-width: 340px;
-}
-
-.sidebar-block {
-  background: rgba(255,255,255,0.85);
-  border-radius: 14px;
-  box-shadow: var(--shadow-neo);
+  align-items: center;
   padding: 18px 16px;
-  margin-bottom: 18px;
+  height: 340px;           /* Set a fixed height */
+  max-width: 380px;        /* Optional: match .card width */
+  min-width: 260px;
+  box-sizing: border-box;
 }
 
-.details-content h1 {
-  font-size: 2.1em;
-  margin-bottom: 0.2em;
+/* Thumbnail image style */
+.gallery-thumb {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  background: #f3f4f6;
+  border: 2px solid rgba(255,255,255,.8);
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+/* Title and meta styling */
+.gallery-card h3 {
+  margin: 6px 0 2px 0;
+  font-size: 18px;
   font-family: 'Optician Sans', sans-serif;
-  letter-spacing: .04em;
+  text-align: center;
 }
 
-.details-subtitle {
-  font-size: 1.1em;
-  margin-bottom: 1.2em;
+.gallery-card .meta {
+  color: #475569;
+  font-size: 13px;
+  margin: 0 0 8px 0;
+  text-align: center;
 }
 
-.details-meta {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 6px 12px;
-  margin: 0;
-  font-size: 1em;
+.gallery-card .caption {
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+  flex: 1 1 auto;
+  overflow: auto;
 }
 
-.error:empty {
-  display: none;
+.read-more-btn {
+  display: inline-block;
+  margin-top: auto;
+  margin-bottom: 8px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.75);
+  border: 1px solid var(--glass-brd);
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08);
+  font-family: 'Optician Sans', sans-serif;
+  font-size: 14px;
+  color: #7C3AED;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.read-more-btn:hover {
+  background: #7C3AED;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.18);
+  text-decoration: none;
 }
 
-@media (max-width: 900px) {
-  .details-content-wrap {
-    flex-direction: column;
-    gap: 0;
-    padding: 18px;
-  }
-  .details-sidebar {
-    max-width: 100%;
-    padding: 14px 0 0 0;
-    border-radius: 0 0 18px 18px;
-  }
-  .details-content {
-    padding: 18px 0 0 0;
-  }
-  .miniMapWrap {
-    max-width: 100%;
-    min-height: 180px;
-    height: clamp(160px, 24vh, 260px);
-    padding: 2px;
-    border-radius: 12px;
-  }
-}
-@media (max-width: 600px) {
-  .details-main {
-    margin: 0;
-    border-radius: 0;
-  }
-  .details-hero {
-    max-height: 180px;
-    margin: 12px 0 0 0;
-  }
-  .details-content-wrap {
-    padding: 8px;
-  }
-  .details-sidebar, .details-content {
-    padding: 8px 0 0 0;
-    border-radius: 0;
-  }
-}

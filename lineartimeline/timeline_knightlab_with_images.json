@@ -1,602 +1,1251 @@
 {
   "title": {
     "text": {
-      "headline": "Time Stories — Device Highlights",
-      "text": "Key milestones in the history of measuring time."
-    }
+      "headline": "TIME STORIES",
+      "text": "Exploration study on time measurement devices and key narrative elements, inventions & people."    }
   },
+  
   "events": [
-  {
-    "start_date": {
-    "year": -1500
-      },
+    {
+      "start_date": { "year": 1020 },
+      "end_date": { "year": 1101 },
       "text": {
-        "headline": "Egyptian Sundial",
-        "text": "Test A sundial is a stick that makes a shadow on a marked surface. As the Sun moves, the shadow moves and shows the time during daylight. Priests and workers in ancient Egypt used it to plan rituals and daily tasks. It’s simple: no gears or batteries—just sunlight and the shadow’s position."
+        "headline": "Su Song",
+        "text": "Su Song was a Chinese scholar of the Northern Song dynasty, active at the imperial court. He was an astronomer, pharmacologist, engineer, poet, and diplomat, embodying the encyclopedic scholarly tradition of medieval China."
       },
-       "media": {
-    "url": "images/dev_2026_image.png",
-    "thumbnail": "images/dev_2026_thumb.png", 
-    "caption": "Credit / caption if you want"
-     }
-   },
-   {
-    "start_date": {
-    "year": -1300
-      },
+"group": "person",
+      "media": {
+        "url": "images/people/su_song_thumb.jpg",
+        "thumbnail": "images/people/su_song_thumb.jpg",
+        "caption": "Kaifeng, China"
+      }
+    },
+    {
+      "start_date": { "year": 1136 },
+      "end_date": { "year": 1206 },
       "text": {
-        "headline": "Ancient Times",
-        "text": "Test A sundial is a stick that makes a shadow on a marked surface. As the Sun moves, the shadow moves and shows the time during daylight. Priests and workers in ancient Egypt used it to plan rituals and daily tasks. It’s simple: no gears or batteries—just sunlight and the shadow’s position."
+        "headline": "Al-Jazari",
+        "text": "A 12th‑century engineer from the Islamic world famous for inventive machines. He designed playful yet accurate water clocks and early automata, mixing art and engineering to measure time. His illustrated treatise spread these ideas widely"
       },
-       "background": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Ada_Lovelace_portrait.jpg/713px-Ada_Lovelace_portrait.jpg",
-    "color": "#000000",        
-    "opacity": 30                
-    }
-   },
+"group": "person",
+      "media": {
+        "url": "images/people/al_jazari_thumb.jpg",
+        "thumbnail": "images/people/al_jazari_thumb.jpg",
+        "caption": "Diyarbakır, Turkey"
+      }
+    },
+    {
+      "start_date": { "year": 1318 },
+      "end_date": { "year": 1389 },
+      "text": {
+        "headline": "Giovanni de’ Dondi",
+        "text": "Giovanni Dondi, originally from Padua in Italy, came from a family of clockmakers: his father was one of the first creators of mechanical clocks. He trained at a very young age in this context of technical innovation at the dawn of European clockmaking."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/Giovanni_dondi_dall_orologio_thumb.jpg",
+        "thumbnail": "images/people/Giovanni_dondi_dall_orologio_thumb.jpg",
+        "caption": "Padua, Italy"
+      }
+    },
+    {
+      "start_date": { "year": 1629 },
+      "end_date": { "year": 1695 },
+      "text": {
+        "headline": "Christiaan Huygens",
+        "text": "A Dutch scientist from a cultured family in The Hague. Educated at the University of Leiden in law and mathematics. Supported by his father Constantijn Huygens, he quickly turned toward science and engineering"
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/christiaan_huygens_thumb.jpg",
+        "thumbnail": "images/people/christiaan_huygens_thumb.jpg",
+        "caption": "The Hague, Netherlands"
+      }
+    },
+    {
+      "start_date": { "year": 1714 },
+      "end_date": { "year": 1796 },
+      "text": {
+        "headline": "Jean Romilly",
+        "text": "A Geneva-born clockmaker established in Paris, Jean Romilly became a recognized figure in the technical and intellectual world of the 18th century. A friend of Jean-Jacques Rousseau and close to encyclopedist circles, he integrated into the Enlightenment network while remaining an innovative craftsman"
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/jean_romilly_thumb.jpg",
+        "thumbnail": "images/people/jean_romilly_thumb.jpg",
+        "caption": "Paris, France"
+      }
+    },
+    {
+      "start_date": { "year": 1712 },
+      "end_date": { "year": 1778 },
+      "text": {
+        "headline": "Jean Jacques Rousseau",
+        "text": "A philosopher, writer, and musician from Geneva. The son and grandson of clockmakers, Rousseau grew up in an artisanal environment before becoming one of the major figures of the Enlightenment. Exiled, a traveler, and a marginal figure both at court and in the salons."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/jean_jacques_rousseau_thumb.jpg",
+        "thumbnail": "images/people/jean_jacques_rousseau_thumb.jpg",
+        "caption": "Geneva, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1720 },
+      "end_date": { "year": 1814 },
+      "text": {
+        "headline": "Jean-Antoine Lépine",
+        "text": "Born in Challex (Pays de Gex) and trained by a Geneva clockmaker, Jean-Antoine Lépine settled in Paris at the age of 24. In 1756, he married the daughter of André-Charles Caron, clockmaker to the king, which introduced him to the royal court. Close to Enlightenment circles, he was also Beaumarchais’s brother-in-law and active within the intellectual milieu."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/jean_antoine_lepine_thumb.jpg",
+        "thumbnail": "images/people/jean_antoine_lepine_thumb.jpg",
+        "caption": "Challex, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1725 },
+      "end_date": { "year": 1797 },
+      "text": {
+        "headline": "Josiah Emery",
+        "text": "Josiah Emery, born in the Canton of Vaud (Switzerland), settled in London where he became a precision clockmaker specializing in the refinement of the lever escapement recently invented by Thomas Mudge."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/josiah_emery_thumb.jpg",
+        "thumbnail": "images/people/josiah_emery_thumb.jpg",
+        "caption": "Vaud, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1787 },
+      "end_date": { "year": 1878 },
+      "text": {
+        "headline": "Pierre Frederic Ingold",
+        "text": "A Swiss clockmaker born in La Chaux-de-Fonds, he trained with Breguet in Paris, where he learned his methods and traveled on his behalf. After several failures in Switzerland, France, England, and the United States, he remained an isolated visionary, too far ahead of his time."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/pierre_frederic_ingold_thumb.jpg",
+        "thumbnail": "images/people/pierre_frederic_ingold_thumb.jpg",
+        "caption": "Cret du Locle, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1752 },
+      "end_date": { "year": 1791 },
+      "text": {
+        "headline": "Henri-Louis Jaquet-Droz",
+        "text": "The son of Pierre Jaquet-Droz, a Swiss clockmaker, Henri-Louis Jaquet-Droz grew up between Neuchâtel and Nancy, where he was trained in mathematics and precision mechanics. He ran a workshop in London, undertook numerous business trips, and then settled in Geneva to found a watchmaking manufacture."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/henri_louis_jacquet_droz_thumb.jpg",
+        "thumbnail": "images/people/henri_louis_jacquet_droz_thumb.jpg",
+        "caption": "Neuchâtel, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1717 },
+      "end_date": { "year": 1794 },
+      "text": {
+        "headline": "Thomas Mudge",
+        "text": "The son of a pastor from Exeter, Thomas Mudge was noticed at a very young age for his dexterity. He was sent to London as an apprentice to George Graham, Tompion’s direct successor. He later became an exceptional independent clockmaker, highly esteemed at the English court."
+      },
+"group": "person",
+      "media": {
+        "url": "images/people/thomas_mudge_thumb.jpg",
+        "thumbnail": "images/people/thomas_mudge_thumb.jpg",
+        "caption": "Exeter, England"
+      }
+    },
+    {
+      "start_date": { "year": 1630 },
+      "end_date": { "year": 1706 },
+      "text": {
+        "headline": "Isaac Thuret",
+        "text": "A renowned Parisian clockmaker, established from 1686 under the Grand Gallery of the Louvre, in the former residence of the painter Charles Errard. His lodging was granted by royal patent — proof of his prestige within the court and scientific circles."
+      },
+      "group": "person",
+      "media": {
+        "url": "images/people/isaac_thuret_thumb.jpg",
+        "thumbnail": "images/people/isaac_thuret_thumb.jpg",
+        "caption": "Paris, France"
+      }
+    },
     
     {
-      "start_date": {
-        "year": -1450
-      },
+      "start_date": { "year": -1500 },
       "text": {
-        "headline": "Karnak Temple Clepsydra (Temple of Amun)",
-        "text": "This water clock was a large bowl with a tiny hole and marks inside. As water dripped out, the falling level showed the hours, even at night. Temple priests used it to time ceremonies and stargazing when the Sun wasn’t visible. It’s one of the first “weather‑proof” clocks in history."
+        "headline": "Egyptian Calendar",
+        "text": "The ancient Egyptian civil calendar, described notably by the Greek historian Herodotus, comprised 365 days divided into 12 months of 30 days, to which 5 additional days called epagomenal days were added each year. From the New Kingdom (around 1550–1070 BC), the months were no longer designated by numbers, but by names linked to religious festivals celebrated mainly in Thebes."
       },
+  "group": "device",
       "media": {
-    "url": "images/dev_0001_image.png",
-    "thumbnail": "images/dev_0001_image.png", 
-    "caption": "Credit / caption if you want"
-     }
-    },
-       {
-  "start_date": { "year": -100 },
-  "text": {
-    "headline": "Anticythère Mechanism",
-    "text": "The Antikythera Mechanism is a hand‑turned bronze computer from ancient Greece. Inside are many gears that predict the Sun, Moon, eclipses, and even festival dates. Scientists and sailors likely used it to plan and learn about the sky. Turn the handle and the pointers show the future dance of the heavens."
-    },
-    "media": {
-    "url": "https://commons.wikimedia.org/wiki/File:NAMA_Machine_d%27Anticyth%C3%A8re_1.jpg",
-    "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Ada_Lovelace_portrait.jpg/713px-Ada_Lovelace_portrait.jpg", 
-    "caption": "National Archaeological Museum, Athens (Wikimedia Commons)"
-    }
-   
-  },
-    {
-      "start_date": {
-        "year": -400
-      },
-      "text": {
-        "headline": "Greek Clepsydras (Water Clocks)",
-        "text": "Greek clepsydras were drip‑water timers used in public life. Courts used them to time speeches, and games used them to time events. Engineers like Ctesibius added a steady tank and gears so the flow stayed regular. They turned flowing water into a readable measure of time."
-      },
-      "media": {
-     "url": "images/dev_2027_image.png",
-    "thumbnail": "images/dev_2027_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/calendrier_egyptien.jpg",
+        "thumbnail": "images/devices/calendrier_egyptien.jpg",
+        "caption": "Ancient Egypt (Thebes)"
+      }
     },
     {
-      "start_date": {
-        "year": -250
-      },
+      "start_date": { "year": -2000 },
+      "end_date": { "year": -500 },
       "text": {
-        "headline": "Archimedes’ Clock",
-        "text": "This hydraulic clock, linked to Archimedes’ tradition, used water power to move parts and amaze viewers. It likely served learning and courtly entertainment as much as timekeeping. By turning steady flow into motion, it showed how clever mechanics could model time. It’s a bridge between water clocks and later mechanical shows."
+        "headline": "Early Solar Indicators — Gnomons",
+        "text": "Around 3000 BC, the Egyptians were already using the first solar indicators, consisting of a simple vertical rod called a gnomon planted in the ground. The shadow cast by the sun indicated the time by its length and its position on the ground. From this period onward, the Egyptians could measure time with precision by dividing the day between dawn and dusk into 12 equal periods, thus adapting the measurements to seasonal variations"
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2032_image.png",
-    "thumbnail": "images/dev_2032_thumb.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Cadran_solaire_portable_Europe_Japon2.jpg",
+        "thumbnail": "images/devices/Cadran_solaire_portable_Europe_Japon2.jpg",
+        "caption": "Ancient Egypt"
+      }
     },
     {
-      "start_date": {
-        "year": -200
-      },
+      "start_date": { "year": -1800 },
+      "end_date": { "year": -500 },
       "text": {
-        "headline": "Anaphoric Clock",
-        "text": "An anaphoric clock is a show‑and‑tell sky clock. A patterned plate of the stars turns behind a grid so you can see which constellations rise and the time. Scholars used it to teach and track the heavens. It’s like a mechanical star map that also tells the hour."
+        "headline": "Babylonian Gnomons",
+        "text": "Between 3000 and 2000 BC, the Sumerians of Mesopotamia, and later the Babylonians, developed a system of hours in which day and night were each divided into twelve hours. Each hour was itself divided into 60 sexagesimal units, a numerical base still used today to measure time. The length of the hours varied according to the season and latitude, since time was measured by observing the sun, particularly with the use of sundials."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2004_image.png",
-    "thumbnail": "images/dev_2004_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Gnomos_babyloniens.jpg",
+        "thumbnail": "images/devices/Gnomos_babyloniens.jpg",
+        "caption": "Babylon (Mesopotamia)"
+      }
     },
     {
-      "start_date": {
-        "year": -100
-      },
+      "start_date": { "year": -1000 },
+      "end_date": { "year": -200 },
       "text": {
-        "headline": "Anticythère",
-        "text": "The Antikythera Mechanism is a hand‑turned bronze computer from ancient Greece. Inside are many gears that predict the Sun, Moon, eclipses, and even festival dates. Scientists and sailors likely used it to plan and learn about the sky. Turn the handle and the pointers show the future dance of the heavens."
+        "headline": "Chinese Gnomons",
+        "text": "The earliest Chinese astronomical gnomons probably date back to the second millennium BC, although tradition attributes the origin of the Chinese calendar to the Yellow Emperor in 2637 BC. It was under the Xia dynasty (22nd century BC?) that the legendary astronomers Xi and He were mentioned, observing the length of the shadow cast by a gnomon during the summer solstice. Gnomons between 1.6 and 2 meters high were used to carry out precise measurements as early as 1100 BC"
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2000_image.png",
-    "thumbnail": "images/dev_2000_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Gnomon_Chine_ancienne.jpg",
+        "thumbnail": "images/devices/Gnomon_Chine_ancienne.jpg",
+        "caption": "Chang'an (Xi’an), China"
+      }
     },
     {
-      "start_date": {
-        "year": -100
+      "start_date": { "year": -200 },
+      "text": {
+        "headline": "Greek Gnomon",
+        "text": "A vertical rod used to read the sun’s altitude and mark time, seasons, and geographic latitude. The gnomon helped Greek astronomers quantify the heavens with geometry."
       },
+"group": "device",    
+      "media": {
+        "url": "images/devices/Gnomon_egypte_antique.jpg",
+        "thumbnail": "images/devices/Gnomon_egypte_antique.jpg",
+        "caption": "Athens, Greece"
+      }
+    },
+    {
+      "start_date": { "year": -1600 },
+      "end_date": { "year": -300 },
+      "text": {
+        "headline": "Water Clock (Clepsydra)",
+        "text": "Using the steady flow of water, these clocks divided the day into measurable hours long before mechanical gears existed. Found in Egypt, Mesopotamia, and later Greece, they served in temples, courts, and observatories. The water clock was the first truly universal device for tracking continuous time."
+      },
+"group": "device",
+      "media": {
+        "url": "images/devices/Horloge_eau_Clepsydre_Karnak.jpg",
+        "thumbnail": "images/devices/Horloge_eau_Clepsydre_Karnak.jpg",
+        "caption": "Alexandria, Egypt"
+      }
+    },
+    {
+      "start_date": { "year": -1400 },
+      "end_date": { "year": -500 },
+      "text": {
+        "headline": "Babylonian Water Clock (Clepsydra)",
+        "text": "A regulated flow of water measured equal intervals independent of sunlight. Clepsydrae timed rituals, legal proceedings, and astronomical work in ancient Mesopotamia."
+      },
+"group": "device",
+      "media": {
+        "url": "images/devices/Sablier_premier.recense.jpg",
+        "thumbnail": "images/devices/Sablier_premier.recense.jpg",
+        "caption": "Babylon (near Baghdad), Iraq"
+      }
+    },
+    {
+      "start_date": { "year": -500 },
+      "end_date": { "year": -200 },
+      "text": {
+        "headline": "Greek Clepsydras",
+        "text": "These water clocks became central to public life in ancient Athens, where they timed speeches in court and rituals in civic ceremonies. Their name, meaning “water thief,” captured the poetic image of time slipping away drop by drop. By regulating social life, clepsydras brought discipline and fairness to democratic practice."
+      },
+"group": "device",
+      "media": {
+        "url": "images/devices/Horloge_eau_Clepsydre_grecque_Agora_Athen.jpg",
+        "thumbnail": "images/devices/Horloge_eau_Clepsydre_grecque_Agora_Athen.jpg",
+        "caption": "Athens, Greece"
+      }
+    },
+    {
+      "start_date": { "year": -270 },
+      "end_date": { "year": -200 },
+      "text": {
+        "headline": "Ctesibius’s Clocks",
+        "text": "The Alexandrian engineer Ctesibius transformed the humble clepsydra into an intricate machine with gears, floats, and moving dials. His innovations made water clocks not only practical but spectacular, decorated with artistry and often designed as public attractions. These devices represent the first true step toward mechanized timekeeping."
+      },
+"group": "device",
+      "media": {
+        "url": "images/devices/Horloge_eau_Ctesibius.jpg",
+        "thumbnail": "images/devices/Horloge_eau_Ctesibius.jpg",
+        "caption": "Alexandria, Egypt"
+      }
+    },
+    {
+      "start_date": { "year": -300 },
+      "end_date": { "year": -200 },
+      "text": {
+        "headline": "“Archimedes’ Clock” (attributed)",
+        "text": "Though partly legendary, this device is credited to Archimedes as an early fusion of mathematics and spectacle. Said to combine flowing water with geared mechanisms, it likely displayed celestial movements while entertaining audiences. Whether myth or reality, the “Archimedes” clock symbolizes the imagination and genius of Greek engineering."
+      },
+"group": "device",
+      "media": {
+        "url": "images/devices/Horloge_eau_Archimede.jpg",
+        "thumbnail": "images/devices/Horloge_eau_Archimede.jpg",
+        "caption": "Syracuse, Sicily"
+      }
+    },
+    {
+      "start_date": { "year": -200 },
+      "end_date": { "year": 300 },
       "text": {
         "headline": "Roman Sundials",
-        "text": "Roman sundials stood in public places to give people a rough idea of the hour. They used the Sun’s shadow like other sundials but were set up around towns and forums. Citizens, officials, and shopkeepers checked them to time meetings and markets. They weren’t very precise, but they kept city life in rhythm."
+        "text": "Carved in stone or cast in bronze, sundials spread across the Roman Empire, bringing standardized hours to public squares and private gardens. Romans carried portable versions as luxury items, while monumental dials reinforced imperial control over time. They turned solar time into a shared civic experience."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2026_image.png",
-    "thumbnail": "images/dev_2026_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Cadran_solaire_romain.jpg",
+        "thumbnail": "images/devices/Cadran_solaire_romain.jpg",
+        "caption": "Rome, Italy"
+      }
     },
     {
-      "start_date": {
-        "year": -50
-      },
+      "start_date": { "year": -10 },
       "text": {
-        "headline": "Tower of the Winds (Andronikos)",
-        "text": "The Tower of the Winds in Athens was an all‑in‑one weather and time station. Sundials on the walls, a water clock inside, and a wind vane on top told people the hour and the winds. Traders and townsfolk used it near the market to plan their day. It brought science into the street in a way everyone could see."
+        "headline": "Augustus’s Horologium (Obelisk Sundial)",
+        "text": "This monumental sundial, anchored by an Egyptian obelisk in Rome, projected the emperor’s power across the city. At noon on the equinox, its shadow aligned with Augustus’ mausoleum, binding personal legacy to celestial order. It was both a scientific marvel and a political statement in stone."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2024_image.png",
-    "thumbnail": "images/dev_2024_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horologium_Auguste.jpg",
+        "thumbnail": "images/devices/Horologium_Auguste.jpg",
+        "caption": "Rome, Italy"
+      }
     },
     {
-      "start_date": {
-        "year": -10
-      },
+      "start_date": { "year": 500 },
+      "end_date": { "year": 599 },
       "text": {
-        "headline": "Horologium of Augustus (gnomon)",
-        "text": "The Horologium of Augustus was a giant obelisk used as a Sun pointer in ancient Rome. Its long shadow fell on lines on the ground to mark noon and the seasons. The city linked public life to the sky and showed the emperor’s power. Think of it as a huge, shared sundial for the capital."
+        "headline": "Gaza Public Clock",
+        "text": "This monumental Islamic water clock, built in Palestine around the 13th century, combined precise hydraulic engineering with visual spectacle. Figures and automata marked the passing of hours in ways that awed observers. More than a timekeeper, it was a civic display of technological mastery and cultural prestige."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2015_image.png",
-    "thumbnail": "images/dev_2015_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_monumentale_Gaza.jpg",
+        "thumbnail": "images/devices/Horloge_monumentale_Gaza.jpg",
+        "caption": "Gaza, Byzantine Empire"
+      }
     },
     {
-      "start_date": {
-        "year": 500
+      "start_date": { "year": 790 },
+      "end_date": { "year": 810 },
+      "text": {
+        "headline": "Charlemagne’s Water Clock",
+        "text": "Given to the emperor in the 9th century, this clock symbolized the fusion of mechanical craft with imperial authority. It marked time in ways that reinforced Charlemagne’s role as ruler of both earth and heavens. The gift exemplified how clocks could serve as instruments of diplomacy and power."
       },
+"group": "device",
+      "media": {
+        "url": "images/devices/Horloge_automate_Charlemagne.jpg",
+        "thumbnail": "images/devices/Horloge_automate_Charlemagne.jpg",
+        "caption": "Aachen, Frankish Empire"
+      }
+    },
+    {
+      "start_date": { "year": 520 },
+      "end_date": { "year": 1700 },
+      "text": {
+        "headline": "Candle Clocks",
+        "text": "Simple but ingenious, these clocks measured time by burning wax at a steady pace. Marks on the candle’s shaft indicated passing hours, turning firelight into a time scale. They were widely used for nighttime or indoor timing before mechanical alternatives spread."
+      },
+      "group": "device",
+      "media": {
+        "url": "images/devices/Horloge_bougie_simple.jpg",
+        "thumbnail": "images/devices/Horloge_bougie_simple.jpg",
+        "caption": "Medieval Europe"
+      }
+    },
+    {
+      "start_date": { "year": 500 },
+      "end_date": { "year": 600 },
       "text": {
         "headline": "Chinese Fire Clock",
-        "text": "A fire clock burns incense or thread to measure time. When the flame reaches a string, a tiny weight drops with a ping to mark an hour. Homes and temples used them for prayers, daily tasks, and medicine schedules. It’s a timer you can smell and hear, not just see."
+        "text": "Using slow-burning powders or sticks, fire clocks measured time through controlled combustion. Ash and scent revealed the hours, while their steady glow symbolized endurance. They were both functional and ceremonial, embodying the fusion of time, ritual, and sensory experience."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2011_image.png",
-    "thumbnail": "images/dev_2011_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_feu_chinoise.jpg",
+        "thumbnail": "images/devices/Horloge_feu_chinoise.jpg",
+        "caption": "Xi’an, China"
+      }
     },
     {
-      "start_date": {
-        "year": 520
-      },
+      "start_date": { "year": 700 },
+      "end_date": { "year": 1200 },
       "text": {
-        "headline": "Candle Clock (simple)",
-        "text": "A candle clock is a candle with time marks, sometimes with clever add‑ons. As it burns down, each mark shows time passing, and pins can drop to make a sound. Monks, scholars, and families used them for prayers and nighttime chores. It’s a quiet, dependable way to tell time after dark."
+        "headline": "Japanese Incense Clock (Jōban/Jokoban)",
+        "text": "Delicate and ritualistic, these clocks measured time through the slow burning of intricate incense trails. Different scents marked different hours, filling spaces with both fragrance and structure. They embodied a uniquely Japanese way of fusing aesthetics, spirituality, and precision in daily life."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2030_image.png",
-    "thumbnail": "images/dev_2030_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_encens_japonaise.jpg",
+        "thumbnail": "images/devices/Horloge_encens_japonaise.jpg",
+        "caption": "Nara, Japan"
+      }
     },
     {
-      "start_date": {
-        "year": 807
-      },
-      "text": {
-        "headline": "Charlemagne’s Clock",
-        "text": "Charlemagne received a spectacular water‑powered clock as a royal gift. Metal balls fell and figures appeared to mark each hour—more wonder than wristwatch. It showed the skill of craftsmen from the Islamic world and impressed the emperor’s court. This was timekeeping used to display power and friendship between rulers."
-      },
-      "media": {
-     "url": "images/dev_2017_image.png",
-    "thumbnail": "images/dev_2017_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 900
-      },
-      "text": {
-        "headline": "Japanese Incense Clock",
-        "text": "Japanese incense clocks used lines of scented powder that burned at a steady speed. People watched the glowing track or smelled changes to know the time during rituals. Monks and noble families favored them for quiet, night‑time timing. They turned fragrance into a soft, reliable clock."
-      },
-      "media": {
-     "url": "images/dev_0013_image.png",
-    "thumbnail": "images/dev_0013_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-  
-    {
-      "start_date": {
-        "year": 1000
-      },
-      "text": {
-        "headline": "Oil Clock",
-        "text": "An oil clock is a lamp with a clear reservoir marked like a ruler. As the oil level drops while it burns, the marks show how much time has passed. Households and monasteries used them where sunlight or bells were not enough. It’s an easy, low‑tech way to keep time indoors."
-      },
-      "media": {
-     "url": "images/dev_2012_image.png",
-    "thumbnail": "images/dev_2012_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 1092
-      },
+      "start_date": { "year": 1092 },
+      "end_date": { "year": 1094 },
       "text": {
         "headline": "Su Song’s Astronomical Clock Tower",
-        "text": "Su Song’s tower in China was a huge water‑powered clock with moving models of the heavens. It used an early escapement to keep steady time and showed both civil hours and sky motions. Court astronomers kept it running to guide the empire’s calendar. It was like a building‑sized planetarium that also told time."
+        "text": "The Chinese scholar Su Song designed a monumental astronomical clock 12 meters high, powered by a waterwheel and composed of about 400 parts. A true cosmic machine, it did more than indicate the time: it represented the movements of the stars, the Earth, and the heavens in a coherent system."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_0012_image.png",
-    "thumbnail": "images/dev_0012_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_eau_astronomique_su-song.jpg",
+        "thumbnail": "images/devices/Horloge_eau_astronomique_su-song.jpg",
+        "caption": "Kaifeng, China"
+      }
     },
     {
-      "start_date": {
-        "year": 1200
-      },
+      "start_date": { "year": 1190 },
+      "end_date": { "year": 1210 },
       "text": {
-        "headline": "Clock of Gaza (Ridwan)",
-        "text": "The Gaza public clock was a big showpiece that marked hours for the town. Doors opened, lights glowed, and balls dropped with sounds to count day and night. It helped citizens follow prayer times and daily routines. It was part timekeeper, part theater—time you could watch and hear."
+        "headline": "Al‑Jazari’s Astronomical Clock",
+        "text": "Built in the 13th century, Al-Jazari’s clock featured a richly decorated facade where zodiac signs, moons, and mechanical figures animated the heavens. Driven by water and weights, it was both scientific instrument and spectacular showpiece. It reflects the inventive spirit of the Islamic Golden Age, where art and mechanics intertwined."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2008_image.png",
-    "thumbnail": "images/dev_2008_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_astronomique_al-jazari.jpg",
+        "thumbnail": "images/devices/Horloge_astronomique_al-jazari.jpg",
+        "caption": "Diyarbakır, Türkiye"
+      }
     },
     {
-      "start_date": {
-        "year": 1206
-      },
+      "start_date": { "year": 1200 },
+      "end_date": { "year": 1210 },
       "text": {
-        "headline": "Al-Jazari’s Candle Clock",
-        "text": "A candle clock is a candle with time marks, sometimes with clever add‑ons. As it burns down, each mark shows time passing, and pins can drop to make a sound. Monks, scholars, and families used them for prayers and nighttime chores. It’s a quiet, dependable way to tell time after dark."
+        "headline": "Ridwan’s Astronomical Clock",
+        "text": "Constructed in 14th-century Damascus, Ridwan’s clock loomed above a mosque entrance, with doors that opened to reveal figures as time passed. Combining religious symbolism with technical sophistication, it structured communal worship and daily life. This monumental device underscored the cultural prestige of public timekeeping."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2030_image.png",
-    "thumbnail": "images/dev_2030_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_astronomique_Ridwan.jpg",
+        "thumbnail": "images/devices/Horloge_astronomique_Ridwan.jpg",
+        "caption": "Damascus, Syria"
+      }
     },
     {
-      "start_date": {
-        "year": 1300
-      },
+      "start_date": { "year": 1300 },
+      "end_date": { "year": 1450 },
       "text": {
-        "headline": "Sand Hourglass",
-        "text": "An hourglass has two glass bulbs with sand flowing through a tiny opening. When the top empties, a set amount of time has passed. Sailors, cooks, and teachers used them to measure turns, chores, or lessons. They’re sturdy, portable, and don’t mind waves or weather."
+        "headline": "Mechanical Foliot Clock",
+        "text": "Emerging in medieval Europe, these weight-driven clocks used a foliot bar to regulate time. Though imprecise by modern standards, they marked the birth of true mechanical timekeeping. Their invention transformed monasteries, cities, and daily rhythms forever."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2029_image.png",
-    "thumbnail": "images/dev_2029_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_mecanique_foliot_1350.jpg",
+        "thumbnail": "images/devices/Horloge_mecanique_foliot_1350.jpg",
+        "caption": "Europe"
+      }
     },
     {
-      "start_date": {
-        "year": 1300
-      },
+      "start_date": { "year": 1357 },
+      "end_date": { "year": 1400 },
       "text": {
-        "headline": "Mechanical Tower Clock with Foliot",
-        "text": "Early tower clocks used a seesaw bar called a foliot to tick in steps. They had no hands—just bells to ring the hours for towns and churches. People heard time instead of seeing it on a dial. These machines made time public, even if they weren’t very precise."
+        "headline": "The Clocks of Fes (Dar al‑Magana)",
+        "text": "A striking example within this tradition, the Fez clock combined architectural beauty with precise engineering. Visible to all, it organized prayer times, market life, and civic rhythms. Its presence reflected the importance of shared time in Islamic urban culture."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2009_image.png",
-    "thumbnail": "images/dev_2009_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_publique_Fes_1357_Maroc.jpg",
+        "thumbnail": "images/devices/Horloge_publique_Fes_1357_Maroc.jpg",
+        "caption": "Fes, Morocco"
+      }
     },
-    
     {
-      "start_date": {
-        "year": 1357
-      },
+      "start_date": { "year": 1364 },
+      "end_date": { "year": 1380 },
       "text": {
-        "headline": "Public Clock of Fez",
-        "text": "Fez had a famous public clock at the Bou Inania madrasa. Balls fell into bowls and doors opened to show the passing hours, with lights for night time. It guided prayers, trade, and city life for everyone nearby. It joined sound, movement, and light to make time easy to follow."
+        "headline": "Giovanni Dondi’s Astrarium",
+        "text": "Built in 14th-century Italy, Dondi’s astrarium was a masterpiece of geared astronomy. It modeled planetary motions with extraordinary accuracy, housed in a beautifully crafted case. The device symbolized the Renaissance union of science, craftsmanship, and intellectual ambition."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2018_image.png",
-    "thumbnail": "images/dev_2018_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Astrarium_Giovanni_Dondi_1365_Italie.jpg",
+        "thumbnail": "images/devices/Astrarium_Giovanni_Dondi_1365_Italie.jpg",
+        "caption": "Padua, Italy"
+      }
     },
     {
-      "start_date": {
-        "year": 1364
-      },
-      "text": {
-        "headline": "Astrarium of Giovanni Dondi",
-        "text": "Dondi’s Astrarium is a mechanical model of the sky. Wheels and dials show the paths of planets, the Sun, and the Moon along with the time. Scholars used it to study the heavens and teach astronomy. It’s like a handmade planetarium that also keeps time."
-      },
-      "media": {
-     "url": "images/dev_2001_image.png",
-    "thumbnail": "images/dev_2001_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 1410
-      },
-      "text": {
-        "headline": "Prague Astronomical Clock (Orloj)",
-        "text": "Prague’s Astronomical Clock is a city‑center time show. It shows the hour, the Sun and Moon’s paths, and a calendar, with little figures that move every hour. Citizens and travelers gather to watch and check the time. It mixes science, art, and theater on a tower wall."
-      },
-      "media": {
-     "url": "images/dev_0010_image.png",
-    "thumbnail": "images/dev_0010_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 1500
-      },
-      "text": {
-        "headline": "Portable Sundials",
-        "text": "Portable sundials were pocket tools for telling time outdoors. You pointed them north with a tiny compass and read the shadow on a small dial. Travelers and villagers used them when church bells or town clocks were far away. They made personal timekeeping cheaper and easier before watches were common."
-      },
-      "media": {
-     "url": "images/dev_2025_image.png",
-    "thumbnail": "images/dev_2025_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 1600
-      },
+      "start_date": { "year": 1600 },
+      "end_date": { "year": 1620 },
       "text": {
         "headline": "Jost Bürgi’s Rotating Sphere",
-        "text": "Jost Bürgi built precision clocks and a spinning celestial sphere for princes and scientists. His improved mechanisms could even show seconds, which was rare then. Astronomers used this accuracy for star work and calendars. He helped turn clockmaking into true scientific instruments."
+        "text": "Bürgi’s ingenious sphere simulated celestial rotation with unprecedented precision in the 16th century. It was designed to aid astronomical study while dazzling audiences with its craftsmanship. This device bridged the world of scientific instruments and decorative art."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2016_image.png",
-    "thumbnail": "images/dev_2016_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Sphere_tournante_jost_burgi_1580_Allemagne.jpg",
+        "thumbnail": "images/devices/Sphere_tournante_jost_burgi_1580_Allemagne.jpg",
+        "caption": "Prague, Bohemia"
+      }
     },
     {
-      "start_date": {
-        "year": 1641
-      },
+      "start_date": { "year": 1500 },
+      "end_date": { "year": 1800 },
       "text": {
-        "headline": "Galileo’s Clock",
-        "text": "Near the end of his life, Galileo drew plans to improve clock mechanisms. His ideas inspired later designs that led to the anchor escapement. The goal was a smoother, steadier tick for better science and navigation. Even unfinished, his vision pushed clockmaking forward."
+        "headline": "Portable Sundials",
+        "text": "Small enough to carry, these personal sundials brought timekeeping into the hands of individuals. Travelers, merchants, and scholars used them to stay aligned with the sun’s rhythm wherever they went. They mark the transition from monumental public devices to intimate, everyday instruments of time."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2007_image.png",
-    "thumbnail": "images/dev_2007_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Cadran_solaire_portable_Europe_Japon.jpg",
+        "thumbnail": "images/devices/Cadran_solaire_portable_Europe_Japon.jpg",
+        "caption": "Europe"
+      }
     },
     {
-      "start_date": {
-        "year": 1656
-      },
+      "start_date": { "year": 1602 },
+      "end_date": { "year": 1642 },
       "text": {
-        "headline": "Huygens’ Pendulum Clocks",
-        "text": "Huygens added the swinging pendulum to clocks to make them much more accurate. A steady swing controls the gears so each tick is the same length. Scientists and cities could now trust minutes, not just rough hours. This leap powered better astronomy, mapping, and daily schedules."
+        "headline": "Galileo’s ‘Clock’ (Pendulum Insight)",
+        "text": "Galileo’s studies of pendulum motion laid the groundwork for a new era of precision timekeeping. Though he never built a functioning clock himself, his designs inspired others to harness the pendulum’s steady swing. This concept revolutionized accuracy and reshaped science, navigation, and daily life."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2014_image.png",
-    "thumbnail": "images/dev_2014_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_Galilee_1641_Italie.jpg",
+        "thumbnail": "images/devices/Horloge_Galilee_1641_Italie.jpg",
+        "caption": "Pisa/Florence, Italy"
+      }
     },
     {
-      "start_date": {
-        "year": 1670
-      },
+      "start_date": { "year": 1656 },
+      "end_date": { "year": 1695 },
       "text": {
-        "headline": "Anchor Escapement Era",
-        "text": "The anchor escapement made clocks tick more smoothly with a swinging pendulum. It wastes less energy than older verge mechanisms, so clocks ran longer and kept better time. This helped create reliable wall and longcase clocks for homes and towns. Better ticks meant life could be planned to the minute."
+        "headline": "Huygens’s Clocks (Pendulum & Spring)",
+        "text": "Christiaan Huygens realized Galileo’s vision, constructing the first working pendulum clocks in the 17th century. His inventions improved accuracy tenfold, making precise navigation and astronomical observation possible. Huygens’ work stands as a turning point in humanity’s control over time."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_0034b_image.png",
-    "thumbnail": "images/dev_0034b_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_Huygens_1673_Pays-Bas.jpg",
+        "thumbnail": "images/devices/Horloge_Huygens_1673_Pays-Bas.jpg",
+        "caption": "The Hague/Paris"
+      }
     },
     {
-      "start_date": {
-        "year": 1695
-      },
+      "start_date": { "year": 1695 },
+      "end_date": { "year": 1750 },
       "text": {
         "headline": "Cylinder Escapement",
-        "text": "The cylinder escapement is a compact, quiet way to make a watch tick. A thin cylinder lets the escape wheel teeth pass gently, controlling the balance. It helped slim down pocket watches in the 1700s and 1800s. It wasn’t perfect, but it made watches smaller and smoother."
+        "text": "This mechanism refined watchmaking by reducing friction and increasing portability. It allowed slimmer, more elegant watches to be made while maintaining reliability. The cylinder escapement reflects the merging of fashion, precision, and innovation."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2020_image.png",
-    "thumbnail": "images/dev_2020_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Echappement_cylindre_1695_Angleterre.jpg",
+        "thumbnail": "images/devices/Echappement_cylindre_1695_Angleterre.jpg",
+        "caption": "London, England"
+      }
     },
     {
-      "start_date": {
-        "year": 1761
-      },
+      "start_date": { "year": 1750 },
+      "end_date": { "year": 1800 },
       "text": {
-        "headline": "Marine Chronometer (H4)",
-        "text": "Harrison’s H4 was a super‑accurate sea watch that helped sailors find longitude. By carrying the exact time from home port, crews could compare it to local noon and know where they were. Its steady balance and temperature tricks kept it precise on rough voyages. It turned ocean navigation from guesswork into math."
+        "headline": "Lever Escapement",
+        "text": "Revolutionizing watches in the 18th century, the lever escapement offered durability and accuracy on a mass scale. It became the standard for portable timepieces, powering millions of watches worldwide. This breakthrough democratized precise timekeeping beyond elites."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_0014_image.png",
-    "thumbnail": "images/dev_0014_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Echappement_lever_1750_Angleterre.jpg",
+        "thumbnail": "images/devices/Echappement_lever_1750_Angleterre.jpg",
+        "caption": "London, England"
+      }
     },
     {
-      "start_date": {
-        "year": 1761
-      },
+      "start_date": { "year": 1762 },
+      "end_date": { "year": 1765 },
       "text": {
-        "headline": "John Harrison’s H4 Marine Chronometer",
-        "text": "Harrison’s H4 was a super‑accurate sea watch that helped sailors find longitude. By carrying the exact time from home port, crews could compare it to local noon and know where they were. Its steady balance and temperature tricks kept it precise on rough voyages. It turned ocean navigation from guesswork into math."
+        "headline": "John Harrison’s H‑4 Chronometer",
+        "text": "Built in the 18th century, Harrison’s H-4 solved the centuries-old problem of determining longitude at sea. With remarkable accuracy, it saved countless lives and transformed navigation. The H-4 represents one of the greatest triumphs of human ingenuity over nature’s challenges."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2028_image.png",
-    "thumbnail": "images/dev_2028_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Chronometre_H4_johnharrison_1762_Angleterre.jpg",
+        "thumbnail": "images/devices/Chronometre_H4_johnharrison_1762_Angleterre.jpg",
+        "caption": "Greenwich, London"
+      }
     },
     {
-      "start_date": {
-        "year": 1801
-      },
-      "text": {
-        "headline": "Tourbillon (Breguet)",
-        "text": "Breguet’s tourbillon is a tiny spinning cage for a watch’s balance wheel. By slowly turning, it evens out gravity’s pull in different positions. Elite watchmakers used it to squeeze more accuracy from pocket watches. It’s a clever fix for a very small but important problem."
-      },
-      "media": {
-     "url": "images/dev_0031_image.png",
-    "thumbnail": "images/dev_0031_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 1850
-      },
+      "start_date": { "year": 1785 },
+      "end_date": { "year": 1860 },
       "text": {
         "headline": "Swiss Lever Escapement",
-        "text": "The Swiss lever escapement is the heart of most modern mechanical watches. A fork and balance wheel lock and unlock the gear teeth with each swing. It’s robust, accurate, and easy to service, so watchmakers everywhere adopted it. If your watch ticks, this is likely the reason why."
+        "text": "Invented in the 19th century, this mechanism combined precision with resilience, securing Switzerland’s dominance in watchmaking. Its efficiency and reliability made it the heart of modern wristwatches. The Swiss escapement is still celebrated as a pinnacle of horological engineering."
       },
+      "group": "device",
       "media": {
-     "url": "images/dev_2019_image.png",
-    "thumbnail": "images/dev_2019_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Echappement_suisse_1850_Suisse.jpg",
+        "thumbnail": "images/devices/Echappement_suisse_1850_Suisse.jpg",
+        "caption": "La Chaux-de-Fonds, Switzerland"
+      }
     },
     {
-      "start_date": {
-        "year": 1851
-      },
+      "start_date": { "year": 1600 },
+      "end_date": { "year": 1868 },
       "text": {
-        "headline": "Man-nen Jimeisho (Variable Hours)",
-        "text": "The Man‑nen Jimeisho is a Japanese clock for “unequal hours,” where day and night were split into six parts that change with the seasons. It used clever gearing to speed up or slow down the hands through the year. Homes and scholars used it to match traditional timekeeping. It shows how clocks can follow culture, not just the Sun."
+        "headline": "Man‑nen Jimeisho — Clock of Temporal Hours",
+        "text": "A Japanese masterpiece, this clock adapted to seasonal changes by dividing daylight into variable hours. It reflects a worldview where time flowed with nature rather than rigid uniformity. The Man-Nen Jimeisho embodies cultural ingenuity, blending mechanics with harmony."
       },
+"group": "device",
       "media": {
-     "url": "images/dev_2021_image.png",
-    "thumbnail": "images/dev_2021_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    
+        "url": "images/devices/Horloge_heures_variables_1851_Japon.jpg",
+        "thumbnail": "images/devices/Horloge_heures_variables_1851_Japon.jpg",
+        "caption": "Edo (Tokyo), Japan"
+      }
     },
     {
-      "start_date": {
-        "year": 1914
-      },
+      "start_date": { "year": 1927 },
+      "end_date": { "year": 1960 },
       "text": {
-        "headline": "Early Wristwatch (Trench Watch)",
-        "text": "Early wristwatches started as practical tools for soldiers in World War I. Straps were added to pocket watches so hands were free and time was easy to check. Soon everyone wanted them for everyday life. They turned personal timekeeping into a quick glance at the wrist."
+        "headline": "Quartz Clock & Frequency Standard",
+        "text": "In the 20th century, quartz oscillations ushered in unprecedented accuracy, transforming both science and daily life. Quartz became the backbone of communications, navigation, and consumer watches alike. It symbolized the leap from mechanical rhythm to electronic precision."
       },
-      "media": {
-     "url": "images/dev_0039_image.png",
-    "thumbnail": "images/dev_0039_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+"group": "device",      
+"media": {
+        "url": "images/devices/Horloge_Quartz_1927_USA.jpg",
+        "thumbnail": "images/devices/Horloge_Quartz_1927_USA.jpg",
+        "caption": "Philadelphia/New York"
+      }
     },
     {
-      "start_date": {
-        "year": 1927
-      },
+      "start_date": { "year": 1960 },
+      "end_date": { "year": 1975 },
       "text": {
-        "headline": "Quartz Clock",
-        "text": "A quartz clock uses a crystal that vibrates very fast when electricity runs through it. Counting those tiny vibrations gives an even, steady tick. Labs and industry used early quartz clocks as new standards of time. They were far more accurate than old mechanical clocks."
+        "headline": "Tuning Fork Watch",
+        "text": "Popular in the mid-20th century, these watches vibrated a tiny fork at high frequency to regulate time. Their humming sound and smooth sweeping hands became iconic. They represented a stylish and technical step between mechanical and quartz eras."
       },
-      "media": {
-     "url": "images/dev_2013_image.png",
-    "thumbnail": "images/dev_2013_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+"group": "device",      "media": {
+        "url": "images/devices/Montre_diapason_1960_USA.jpg",
+        "thumbnail": "images/devices/Montre_diapason_1960_USA.jpg",
+        "caption": "New York (Bulova)"
+      }
     },
     {
-      "start_date": {
-        "year": 1949
-      },
+      "start_date": { "year": 1955 },
+      "end_date": { "year": 2025 },
       "text": {
         "headline": "Atomic Clock",
-        "text": "An atomic clock keeps time using the natural “heartbeat” of atoms. Microwaves tune to an atom’s exact frequency, and electronics lock to that signal. Scientists use atomic clocks to define seconds and run world time (UTC). They’re the backbone for GPS, the internet, and power grids."
+        "text": "Using vibrations of atoms, these clocks became the ultimate rulers of precision, accurate to billionths of a second. They underpin GPS, global communications, and scientific research. The atomic clock redefined humanity’s mastery of time at a cosmic scale."
       },
-      "media": {
-     "url": "images/dev_2006_image.png",
-    "thumbnail": "images/dev_2006_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+"group": "device",      "media": {
+        "url": "images/devices/Horloge_atomique_1949_USA.jpg",
+        "thumbnail": "images/devices/Horloge_atomique_1949_USA.jpg",
+        "caption": "Washington, D.C., USA"
+      }
     },
     {
-      "start_date": {
-        "year": 1954
-      },
+      "start_date": { "year": 2013 },
+      "end_date": { "year": 2025 },
       "text": {
-        "headline": "Cesium Atomic Clock (NBS/NIST)",
-        "text": "A cesium atomic clock listens to the special frequency of cesium atoms. When the signal is just right, the atoms flip in a predictable way, and the clock locks on. National labs used them to set the official second and keep global time. They make GPS and telecom networks stay in step."
+        "headline": "Smartwatches",
+        "text": "These digital successors combine timekeeping with communication, health tracking, and connectivity. More than clocks, they function as wearable computers, keeping people tethered to both time and information. Smartwatches redefine what a “watch” can mean in the 21st century."
       },
-      "media": {
-     "url": "images/dev_0035_image.png",
-    "thumbnail": "images/dev_0035_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+"group": "device",      "media": {
+        "url": "images/devices/Montre_intelligente_1980_Japon.jpg",
+        "thumbnail": "images/devices/Montre_intelligente_1980_Japon.jpg",
+        "caption": "Cupertino/Seoul/Shenzhen"
+      }
     },
     {
-      "start_date": {
-        "year": 1960
-      },
+      "start_date": { "year": 1000 },
+      "end_date": { "year": 1800 },
       "text": {
-        "headline": "Bulova Accutron (tuning-fork watch)",
-        "text": "The Bulova Accutron uses a tiny vibrating tuning fork instead of a ticking balance. An electronic circuit keeps the fork humming at a steady pitch to drive the hands. People loved its smooth sweep and high accuracy in the 1960s. It was a big step toward modern electronic watches."
-      }, 
+        "headline": "Oil (Lamp) Clocks",
+        "text": "These devices combined lamps and timekeeping, measuring hours by the consumption of oil. They lit the night while quietly marking time, serving both practical and symbolic purposes. Oil clocks represent how illumination and time were historically intertwined."
+      },
+      "group": "device",
       "media": {
-     "url": "images/dev_2002_image.png",
-    "thumbnail": "images/dev_2002_image.png", 
-    "caption": "Credit / caption if you want"
-    }
+        "url": "images/devices/Horloge_lampe_huile.jpg",
+        "thumbnail": "images/devices/Horloge_lampe_huile.jpg",
+        "caption": "Europe & Middle East"
+      }
     },
+    {
+      "start_date": { "year": -1400 },
+      "end_date": { "year": -500 },
+      "text": {
+        "headline": "The First Ones",
+        "text": "TBD"
+      },
+  "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Ancient Near East"
+      }
+    },
+    {
+      "text": {
+        "headline": "The Measurement of Time",
+        "text": "TBD"
+      },
+  "group": "story",
+      "media": {
+        "url": "images/stories/mesure_temps_armee_romaine_thumb.JPG",
+        "thumbnail": "images/stories/mesure_temps_armee_romaine_thumb.JPG",
+        "caption": "Various"
+      }
+    },
+    {
+      "text": {
+        "headline": "Who Invented the First Clock?",
+        "text": "TBD"
+      },
+  "group": "story",
+      "media": {
+        "url": "images/stories/qui_invente_premiere_horloge_thumb.JPG",
+        "thumbnail": "images/stories/qui_invente_premiere_horloge_thumb.JPG",
+        "caption": "Various"
+      }
+    },
+    {
+      "text": {
+        "headline": "From Seasonal Time to Fixed Time",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/temps_publique_temps_fixe.jpg",
+        "thumbnail": "images/stories/temps_publique_temps_fixe.jpg",
+        "caption": "Various"
+      }
+    },
+    {
+      "text": {
+        "headline": "A New Perception of Time",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/nouvelle_perception_temps.JPG",
+        "thumbnail": "images/stories/nouvelle_perception_temps.JPG",
+        "caption": "Europe"
+      }
+    },
+    {
+      "start_date": { "year": 1750 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The System of Établissage",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/etablissage.JPG",
+        "thumbnail": "images/stories/etablissage.JPG",
+        "caption": "Swiss Jura, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1750 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Établisseur (Watch Assembler)",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/etablissage_atelier_doreur_thumb.JPG",
+        "thumbnail": "images/stories/etablissage_atelier_doreur_thumb.JPG",
+        "caption": "Swiss Jura, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1750 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Merchant-Manufacturer",
+        "text": "TBD"
+      },
+     "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Swiss Jura, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Cabinotier (Workshop Watchmaker)",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/cabinotier_thumb.jpg",
+        "thumbnail": "images/stories/cabinotier_thumb.jpg",
+        "caption": "Geneva, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "Learned Mountain Dwellers",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/montagnards_erudits_thumb.jpg",
+        "thumbnail": "images/stories/montagnards_erudits_thumb.jpg",
+        "caption": "Jura Mountains, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1660 },
+      "end_date": { "year": 1741 },
+      "text": {
+        "headline": "The Legend of Jeanrichard",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/legende_jeanrichard_thumb.JPG",
+        "thumbnail": "images/stories/legende_jeanrichard_thumb.JPG",
+        "caption": "La Chaux-de-Fonds, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1900 },
+      "text": {
+        "headline": "The Rise of the Swiss Jura",
+        "text": "TBD"
+      },
+     "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Swiss Jura, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1714 },
+      "text": {
+        "headline": "The Longitude Sea Act",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/longitud_sea_act.jpg",
+        "thumbnail": "images/stories/longitud_sea_act.jpg",
+        "caption": "London, England"
+      }
+    },
+    {
+      "start_date": { "year": 1750 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Chronometer that Built an Empire",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/chronometre_construit_empire_britannique.JPG",
+        "thumbnail": "images/stories/chronometre_construit_empire_britannique.JPG",
+        "caption": "United Kingdom / Global seas"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Barter of Unsold Watches",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland / France"
+      }
+    },
+    {
+      "start_date": { "year": 1650 },
+      "end_date": { "year": 1750 },
+      "text": {
+        "headline": "The English Supremacy",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/suprematie_anglaise_thumb.jpg",
+        "thumbnail": "images/stories/suprematie_anglaise_thumb.jpg",
+        "caption": "England"
+      }
+    },
+    {
+      "start_date": { "year": 1880 },
+      "end_date": { "year": 1920 },
+      "text": {
+        "headline": "The Theft of Time in the Factories",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/vol_du_temps_usines.JPG",
+        "thumbnail": "images/stories/vol_du_temps_usines.JPG",
+        "caption": "USA / UK"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Smuggling of Watches",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland / France"
+      }
+    },
+    {
+      "start_date": { "year": 1770 },
+      "end_date": { "year": 1778 },
+      "text": {
+        "headline": "Voltaire and His Watchmaking Venture",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/voltaire_manufacture_royale.JPG",
+        "thumbnail": "images/stories/voltaire_manufacture_royale.JPG",
+        "caption": "Ferney, France"
+      }
+    },
+    {
+      "start_date": { "year": 1830 },
+      "end_date": { "year": 1880 },
+      "text": {
+        "headline": "The Advent of the Railway",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/avenement_chemin_fer_thumb.JPG",
+        "thumbnail": "images/stories/avenement_chemin_fer_thumb.JPG",
+        "caption": "UK / Europe / USA"
+      }
+    },
+    {
+      "start_date": { "year": 1700 },
+      "end_date": { "year": 1850 },
+      "text": {
+        "headline": "The Drunkard’s Key",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/cle_ivrognes.JPG",
+        "thumbnail": "images/stories/cle_ivrognes.JPG",
+        "caption": "Europe"
+      }
+    },
+    {
+      "start_date": { "year": 1850 },
+      "end_date": { "year": 1920 },
+      "text": {
+        "headline": "The Rise of Mass Production",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/production_montres_machines_wlatham_watch_thumb.JPG",
+        "thumbnail": "images/stories/production_montres_machines_wlatham_watch_thumb.JPG",
+        "caption": "USA"
+      }
+    },
+    {
+      "start_date": { "year": 1850 },
+      "end_date": { "year": 1914 },
+      "text": {
+        "headline": "The Boom of Watchmaking",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland / USA"
+      }
+    },
+    {
+      "start_date": { "year": 1900 },
+      "end_date": { "year": 1960 },
+      "text": {
+        "headline": "Switzerland Dominates the Market",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1850 },
+      "end_date": { "year": 1930 },
+      "text": {
+        "headline": "American Watchmaking",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "USA"
+      }
+    },
+    {
+      "start_date": { "year": 1870 },
+      "end_date": { "year": 1910 },
+      "text": {
+        "headline": "Switzerland Adapts to Competition",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1884 },
+      "text": {
+        "headline": "The Unification of Time",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/stories/unification_temps_greenwich_1884_washington.JPG",
+        "thumbnail": "images/stories/unification_temps_greenwich_1884_washington.JPG",
+        "caption": "Washington D.C. / Greenwich"
+      }
+    },
+    {
+      "start_date": { "year": 1870 },
+      "end_date": { "year": 1960 },
+      "text": {
+        "headline": "The World Championships of Precision",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Neuchâtel / Kew Teddington"
+      }
+    },
+    {
+      "start_date": { "year": 1929 },
+      "end_date": { "year": 1950 },
+      "text": {
+        "headline": "The Decline of Traditional Watchmaking",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "USA / UK"
+      }
+    },
+    {
+      "start_date": { "year": 1950 },
+      "end_date": { "year": 1965 },
+      "text": {
+        "headline": "The Timex Offensive",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "USA"
+      }
+    },
+    {
+      "start_date": { "year": 1960 },
+      "end_date": { "year": 1969 },
+      "text": {
+        "headline": "The Tuning Fork – Prelude to Electronics",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "USA (Bulova Accutron)"
+      }
+    },
+    {
+      "start_date": { "year": 1969 },
+      "end_date": { "year": 1985 },
+      "text": {
+        "headline": "The Advent of Quartz",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Japan / Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1975 },
+      "end_date": { "year": 1985 },
+      "text": {
+        "headline": "Switzerland on the Brink of Collapse",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1890 },
+      "end_date": { "year": 1910 },
+      "text": {
+        "headline": "The Beginnings of the Grande Complication",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1500 },
+      "end_date": { "year": 1800 },
+      "text": {
+        "headline": "The Piguet Family – Among the First Settlers",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Vallée de Joux, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1600 },
+      "end_date": { "year": 1800 },
+      "text": {
+        "headline": "The Audemars Family Facing Adversity",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Vallée de Joux, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1600 },
+      "end_date": { "year": 1800 },
+      "text": {
+        "headline": "The First Watchmakers of the Vallée de Joux",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Vallée de Joux, Switzerland"
+      }
+    },
+    {
+      "start_date": { "year": 1972 },
+      "text": {
+        "headline": "The Royal Oak",
+        "text": "TBD"
+      },
+      "group": "story",
+      "media": {
+        "url": "images/placeholders/story_thumb.png",
+        "thumbnail": "images/placeholders/story_thumb.png",
+        "caption": "Le Brassus / Geneva, Switzerland"
+      }
+    }
+  ],
+ 
+    "eras": [
+      {
+        "start_date": { "year": -1500 },
+        "end_date": { "year": 500 },
+        "text": { "headline": "Ancient", "text": "", "tag":"This is Optional" }
+      },
+      {
+        "start_date": { "year": 500 },
+        "end_date": { "year": 1500 },
+        "text": { "headline": "Medieval", "text": "" }
+      },
+      {
+        "start_date": { "year": 1400 },
+        "end_date": { "year": 1600 },
+        "text": { "headline": "Renaissance", "text": "" }
+      },
+      {
+        "start_date": { "year": 1550 },
+        "end_date": { "year": 1700 },
+        "text": { "headline": "Scientific Revolution", "text": "" }
+      },
+      {
+        "start_date": { "year": 1760 },
+        "end_date": { "year": 1914 },
+        "text": { "headline": "Industrial Revolution", "text": "" }
+      },
+      {
+        "start_date": { "year": 1900 },
+        "end_date": { "year": 2000 },
+        "text": { "headline": "Modern", "text": "" }
+      },
+      {
+        "start_date": { "year": 2000 },
+        "end_date": { "year": 2025 },
+        "text": { "headline": "Contemporary", "text": "" }
+      }
+    ]
   
-    {
-      "start_date": {
-        "year": 1969
-      },
-      "text": {
-        "headline": "Quartz Wristwatch (Seiko Astron)",
-        "text": "The Seiko Astron was the first quartz wristwatch sold to the public. Its crystal kept time so well that it beat most mechanical watches easily. Everyday people could now wear super‑accurate time on their wrists. It started the quartz revolution in watches."
-      },
-      "media": {
-     "url": "images/dev_0034_image.png",
-    "thumbnail": "images/dev_0034_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    },
-    {
-      "start_date": {
-        "year": 2013
-      },
-      "text": {
-        "headline": "Modern Smartwatch",
-        "text": "A smartwatch is a tiny computer on your wrist. It tells time, tracks your steps and heart rate, and talks to your phone. Kids and adults use it for messages, fitness, and alarms. It gets its time from the internet, so it stays perfectly in sync."
-      },
-      "media": {
-     "url": "images/dev_0042_image.png",
-    "thumbnail": "images/dev_0042_image.png", 
-    "caption": "Credit / caption if you want"
-    }
-    }
-  ]
 }

@@ -519,25 +519,23 @@ function showCard(d, nodeEl){
   if (url){ thumb.style.backgroundImage = `url('${url}')`; }
   else { thumb.style.backgroundImage = 'none'; }
 
-  $('#cardOpen').onclick = (e) => {
-    e.preventDefault();
-    // Save current map center/zoom before leaving
-    const svg = document.getElementById('mapSvg');
-    if (svg && svg._zoom) {
-      // You need to compute the current map center in lat/lon
-      const { k, tx, ty } = svg._zoom;
-      // Compute center in SVG coordinates
-      const w = svg.clientWidth, h = svg.clientHeight;
-      const cx = (w/2 - tx) / k;
-      const cy = (h/2 - ty) / k;
-      // Convert SVG center to lat/lon
-      const lon = LON_MIN + (cx / w) * (LON_MAX - LON_MIN);
-      const lat = LAT_MAX - (cy / h) * (LAT_MAX - LAT_MIN);
-      const view = { lat, lon, zoom: k };
-      localStorage.setItem('mapView', JSON.stringify(view));
-    }
-    window.location.href = `details.html?id=${encodeURIComponent(d.slug)}`;
-  };
+  // Remove any existing button
+  const oldBtn = $('#cardOpen');
+  if (oldBtn) oldBtn.remove();
+
+  // Create the glassmorphic "Read More" button
+  const readMore = document.createElement('a');
+  readMore.className = 'read-more-btn';
+  readMore.id = 'cardOpen';
+  readMore.textContent = 'Read More';
+  readMore.href = `details.html?id=${encodeURIComponent(d.slug)}`;
+  readMore.style.display = 'inline-block';
+  readMore.style.marginTop = '18px';
+  readMore.setAttribute('tabindex', '0');
+  readMore.setAttribute('role', 'button');
+
+  // Insert the button at the bottom of the card
+  card.appendChild(readMore);
 
   placeCardNearNode(card, nodeEl);
 }
@@ -775,7 +773,7 @@ _VISIBLE.forEach(d => {
   d._py = y;
   const key = `${Math.round(x)},${Math.round(y)}`;
   if (!overlapMap.has(key)) overlapMap.set(key, []);
-  overlapMap.get(key).push(d);
+  overlapMap.get
 });
 const points = _VISIBLE.map(d => ({
   type: "Feature",
@@ -789,12 +787,90 @@ const clusterIndex = new Supercluster({
 clusterIndex.load(points);
 }
 
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+
+  // Use your filtered items function or fallback to all items
+  let items = typeof filteredItems === 'function' ? filteredItems(_ALL_ITEMS) : (_ALL_ITEMS || []);
+
+  // --- SORTING ---
+  const sortBy = document.getElementById('sortBySelect')?.value || 'az';
+  items = [...items]; // copy array
+
+  if (sortBy === 'az') {
+    items.sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { sensitivity: 'base' }));
+  } else if (sortBy === 'za') {
+    items.sort((a, b) => (b.title || '').localeCompare(a.title || '', undefined, { sensitivity: 'base' }));
+  } else if (sortBy === 'time') {
+    items.sort((a, b) => {
+      const ay = Number(a.year) || 0, by = Number(b.year) || 0;
+      return ay - by;
+    });
+  }
+
+  // Clear previous content
+  grid.innerHTML = '';
+
+  if (!items.length) {
+    grid.innerHTML = '<p class="muted" style="padding:2em;text-align:center;">No items found.</p>';
+    return;
+  }
+
+  items.forEach(d => {
+    // Card container
+    const card = document.createElement('div');
+    card.className = 'gallery-card glass';
+    card.tabIndex = 0;
+
+    // Thumbnail image
+    const img = document.createElement('img');
+    img.src = nodeImageURL ? nodeImageURL(d) : (d.image || '');
+    img.alt = d.title || '';
+    img.className = 'gallery-thumb';
+    card.appendChild(img);
+
+    // Title
+    const title = document.createElement('h3');
+    title.textContent = d.title || '';
+    card.appendChild(title);
+
+    // Meta (year/location)
+    const meta = document.createElement('p');
+    meta.className = 'meta';
+    meta.textContent = `${d.year || ''}${d.year_end ? '–' + d.year_end : ''}${d.origin_location ? ' • ' + d.origin_location : ''}`;
+    card.appendChild(meta);
+
+    // Caption (optional)
+    if (d.caption) {
+      const cap = document.createElement('p');
+      cap.className = 'caption';
+      cap.textContent = d.caption;
+      card.appendChild(cap);
+    }
+
+    // "Read More" button
+    const readMore = document.createElement('a');
+    readMore.className = 'read-more-btn';
+    readMore.textContent = 'Read More';
+    // Adjust the href to match your markdown page URL pattern
+    readMore.href = d.markdown ? d.markdown : `details.html?id=${encodeURIComponent(d.slug)}`;
+    card.appendChild(readMore);
+    grid.appendChild(card);
+  });
+}
 // ------- View switch (tabs) -------
 function switchView(name){
   $$('.view').forEach(v => v.classList.toggle('active', v.id === name));
   $$('.tab-btn[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === name));
   requestAnimationFrame(()=> render());
   if (name === 'gallery') renderGallery();
+  if (name === 'layered_timeline') {
+    renderVisLayeredTimeline();
+  }
+  if (name === 'kl_timeline') {
+    renderKnightlabTimeline();
+  }
 }
 
 // Example tab switching logic
@@ -997,236 +1073,8 @@ function spiderfyNodesAt(x, y, nodes) {
     const ny = y + Math.sin(angle) * radius;
     const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
     if (nodeEl) {
-      // 0.33 is a third of the normal size
-      nodeEl.setAttribute('transform', `translate(${nx},${ny}) scale(${0.33})`);
-      nodeEl.classList.add('spiderfied');
-      // Allow card opening as usual
-      nodeEl.onclick = (evt) => {
-        evt.stopPropagation();
-        const d = _VISIBLE.find(x => x.slug === nodeEl.dataset.id);
-        if (d) showCard(d, nodeEl);
-      };
+      const originalTransform = nodeEl.getAttribute('transform') || '';
+      nodeEl.setAttribute('transform', `${originalTransform} translate(${nx - x}, ${ny - y})`);
     }
   });
-
-  // Add or update the label at the center, much smaller
-  let label = document.getElementById('spiderLabel');
-  if (!label) {
-    label = document.createElementNS(NS, 'text');
-    label.id = 'spiderLabel';
-    label.setAttribute('text-anchor', 'middle');
-    scene.appendChild(label);
-  }
-  label.textContent = nodes[0].origin_location || nodes[0].title || 'Cluster';
-  label.setAttribute('x', x);
-  label.setAttribute('y', y + 4);
-  label.setAttribute('font-size', '18'); // SVG font size, but will be scaled down
-  label.setAttribute('font-weight', 'bold');
-  label.setAttribute('fill', '#7C3AED');
-  label.setAttribute('transform', `scale(0.33)`);
-
-  // Double-click label to close spiderfy
-  label.ondblclick = (evt) => {
-    evt.stopPropagation();
-    collapseSpiderfy();
-  };
-
-  // Remove label and reset nodes when spiderfy collapses
-  function collapseSpiderfy() {
-    nodes.forEach(d => {
-      const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
-      if (nodeEl) {
-        nodeEl.setAttribute('transform', `translate(${d._px},${d._py}) scale(1)`);
-        nodeEl.classList.remove('spiderfied');
-        nodeEl.onclick = null;
-      }
-    });
-    label.remove();
-    window.removeEventListener('wheel', onZoomOut, true);
-  }
-
-  // Close spiderfy on zoom out
-  function onZoomOut(e) {
-    if (svg._zoom && svg._zoom.k < 8) { // adjust threshold as needed
-      collapseSpiderfy();
-    }
-  }
-  window.addEventListener('wheel', onZoomOut, true);
-}
-
-// knightlab timeline
-function showKnightlabTimeline() {
-  // Only initialize once
-  if (window.timeline) return;
-  // Example: Use a Google Sheet or JSON file
-  // const url = 'https://docs.google.com/spreadsheets/d/your-sheet-id/pubhtml';
-  // OR use a local JSON file:
-  const url = 'data/timeline.json'; // Make sure this exists and is in KnightLab format
-  window.timeline = new TL.Timeline('klContainer', url);
-}
-
-// ------- Gallery -------
-let gallerySort = 'az'; // 'az', 'za', 'time'
-
-function renderGallery() {
-  const grid = document.getElementById('galleryGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-
-  // Use the same filters as the map
-  const f = currentFilters();
-  let items = _ALL_ITEMS.filter(d =>
-    (f.cats.length === 0 || f.cats.includes(d.category)) &&
-    itemInYearRange(d, mapYearStart, mapYearEnd) &&
-    itemMatchesSearch(d, f.search)
-  );
-
-  // Sort
-  if (gallerySort === 'az') {
-    items.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-  } else if (gallerySort === 'za') {
-    items.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
-  } else if (gallerySort === 'time') {
-    items.sort((a, b) => (+a.year || 0) - (+b.year || 0));
-  }
-
-  items.forEach(d => {
-    const card = document.createElement('div');
-    card.className = 'gallery-card glass';
-    card.style.width = '320px';
-    card.style.margin = '0 auto 24px auto';
-    card.innerHTML = `
-      <div class="thumb" style="background-image:url('${nodeImageURL(d)}');height:140px;background-size:cover;border-radius:12px 12px 0 0;"></div>
-      <div class="card-header" style="padding:12px;">
-        <h3 style="margin:0 0 4px 0;font-size:1.1em;">${d.title || ''}</h3>
-        <div class="meta" style="font-size:0.95em;color:#888;">
-          ${(d.year || '')}${d.year_end ? ('–' + d.year_end) : ''}${d.origin_location ? (' • ' + d.origin_location) : ''}
-        </div>
-      </div>
-      <div class="card-content" style="padding:0 12px 12px 12px;">
-        <p style="font-size:0.97em;">${d.caption || ''}</p>
-        <a class="pill-btn" href="details.html?id=${encodeURIComponent(d.slug)}" style="margin-top:8px;display:inline-block;">Open full page</a>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-// Sorting button logic
-document.getElementById('sortBySelect')?.addEventListener('change', (e) => {
-  gallerySort = e.target.value;
-  renderGallery();
-});
-
-// Show popup for overlapping nodes
-function showOverlapPopup(x, y, nodes, svg) {
-  const popup = document.getElementById('overlapPopup');
-  // Project SVG (x, y) to screen coordinates
-  const pt = svg.createSVGPoint();
-  pt.x = x; pt.y = y;
-  const screen = pt.matrixTransform(svg.getScreenCTM());
-
-  // Remove any previous count node
-  let countNode = document.getElementById('overlapPopupCountNode');
-  if (countNode) countNode.remove();
-
-  // Build the popup content with image node on the left
-  popup.innerHTML = `
-    <button id="overlapPopupClose" style="position:absolute;top:8px;right:10px;background:none;border:none;font-size:18px;line-height:1;color:#888;cursor:pointer;">×</button>
-    <div style="font-weight:bold;margin-bottom:10px;margin-top:2px;">${nodes[0].origin_location || 'Overlapping items'}</div>
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      ${nodes.map(d => {
-        const imgUrl = nodeImageURL(d);
-        return `
-          <div class="popup-item" data-id="${d.slug}" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 0;">
-            <span style="display:inline-block;width:32px;height:32px;flex-shrink:0;">
-              <img src="${imgUrl}" alt="" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;box-shadow:0 1px 4px #0001;">
-            </span>
-            <span style="font-size:1em;">${d.title}</span>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-  popup.style.display = 'block';
-  popup.style.position = 'absolute';
-  popup.style.zIndex = 1000;
-  popup.style.minWidth = '220px';
-  popup.style.maxWidth = '340px';
-  popup.style.boxShadow = '0 2px 16px #0002';
-  popup.style.background = '#fff';
-  popup.style.borderRadius = '10px';
-  popup.style.padding = '18px 18px 12px 14px';
-  popup.style.border = '1.5px solid #e5e7eb';
-
-  // --- Position popup so its top left is centered on the anchor (node) ---
-  // Wait for popup to render so we can get its size
-  setTimeout(() => {
-    const rect = popup.getBoundingClientRect();
-    // Center the popup over the anchor point
-    popup.style.left = (screen.x + window.scrollX - rect.width / 2) + 'px';
-    popup.style.top  = (screen.y + window.scrollY - rect.height / 2) + 'px';
-
-    // Now, place the count node at the top left corner of the popup
-    let countNode = document.getElementById('overlapPopupCountNode');
-    if (countNode) countNode.remove();
-    countNode = document.createElement('div');
-    countNode.id = 'overlapPopupCountNode';
-    countNode.style.position = 'absolute';
-    countNode.style.left = (rect.left + window.scrollX - 18) + 'px';
-    countNode.style.top = (rect.top + window.scrollY - 18) + 'px';
-    countNode.style.width = '36px';
-    countNode.style.height = '36px';
-    countNode.style.borderRadius = '50%';
-    countNode.style.background = '#7C3AED';
-    countNode.style.border = '3px solid #fff';
-    countNode.style.boxShadow = '0 2px 8px #0002';
-    countNode.style.display = 'flex';
-    countNode.style.alignItems = 'center';
-    countNode.style.justifyContent = 'center';
-    countNode.style.fontWeight = 'bold';
-    countNode.style.fontSize = '1.1em';
-    countNode.style.color = '#fff';
-    countNode.style.zIndex = 1001;
-    countNode.style.pointerEvents = 'none';
-    countNode.textContent = nodes.length;
-    document.body.appendChild(countNode);
-  }, 0);
-
-  // Hide overlapping nodes on the map
-  nodes.forEach(d => {
-    const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
-    if (nodeEl) nodeEl.style.display = 'none';
-  });
-
-  // Click handler for items
-  popup.querySelectorAll('.popup-item').forEach(el => {
-    el.onclick = (evt) => {
-      const d = _VISIBLE.find(x => x.slug === el.dataset.id);
-      if (d) showCard(d, document.querySelector(`.node[data-id="${d.slug}"]`));
-      evt.stopPropagation();
-    };
-  });
-
-  // Only close on (x) or zoom in/out
-  const closeBtn = document.getElementById('overlapPopupClose');
-  function closePopup() {
-    popup.style.display = 'none';
-    // Remove the count node
-    let countNode = document.getElementById('overlapPopupCountNode');
-    if (countNode) countNode.remove();
-    // Restore overlapping nodes
-    nodes.forEach(d => {
-      const nodeEl = document.querySelector(`.node[data-id="${d.slug}"]`);
-      if (nodeEl) nodeEl.style.display = '';
-    });
-    window.removeEventListener('wheel', onZoom, true);
-  }
-  if (closeBtn) closeBtn.onclick = closePopup;
-
-  // Close popup on zoom in/out
-  function onZoom(e) {
-    closePopup();
-  }
-  window.addEventListener('wheel', onZoom, true);
 }

@@ -6,8 +6,8 @@
   <title>Time Stories — Map & Timeline</title>
   <link rel="stylesheet" href="./styles.css"/>
   <!-- KnightLab only if you use the Linear Timeline tab -->
-  <script defer src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
-  <link rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css"/>
+  <script defer src="./timeline.js"></script>
+  <link rel="stylesheet" href="./timeline.css"/>
 </head>
 <body>
 
@@ -56,10 +56,6 @@
 
   <!-- Main content -->
   <main>
-    <!-- Timeline (optional SVG placeholder) -->
-    <section id="timeline" class="view" aria-label="Timeline">
-      <svg id="timelineSvg" width="100%" height="100%"></svg>
-    </section>
 
     <!-- Map (default active) -->
     <section id="map" class="view active" aria-label="Map">
@@ -140,7 +136,15 @@
         <button id="infoClose" class="info-close" aria-label="Close">×</button>
       </header>
       <div class="info-body">
-        <p><strong>Time Measuring Devices</strong> lets you explore artefacts, places, and ideas about measuring time across history. Use the sidebar, switch views on the top-right, and click any node to open a rich card.</p>
+        <ul>
+    <li><strong>Sidebar:</strong> Filter by category, search by keyword, or focus on specific eras using the sidebar controls.</li>
+    <li><strong>Map View:</strong> Explore artefacts and stories by their geographic origins. Click any node to see details.</li>
+    <li><strong>Linear Timeline:</strong> View all items in chronological order with images and eras, powered by KnightLab TimelineJS.</li>
+    <li><strong>Gallery View:</strong> Browse all items as cards. Use the sort dropdown to organize by name or time, and click "Read More" for details.</li>
+  </ul>
+  <p>
+    Switch views using the tabs at the top. Click any card or node for more information, and use the filters to narrow your exploration.
+  </p>
       </div>
       <footer class="info-footer">
         <button class="pill-btn" data-close="1">Got it</button>
@@ -152,8 +156,5 @@
 
   <script src="./app.js"></script>
   <div id="debugBadge">DEBUG</div>
-  <script>
-    window.timeline = new TL.Timeline('klContainer', timelineDataOrUrl);
-  </script>
 </body>
 </html>
