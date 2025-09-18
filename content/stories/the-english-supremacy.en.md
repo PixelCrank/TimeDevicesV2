@@ -1,13 +1,10 @@
+---
+---
 # The English Supremacy
 
 ## DESCRIPTION
-In the 18th century England likely made about half of Europe’s watches while facing rising (often smuggled) Swiss imports.
+At this time, England likely produced half of Europe’s (and therefore the world’s) total watch output, but — like France — it faced a growing flow of imports, mostly from Switzerland and often smuggled.
 
-## FUNCTION
-Dutch and Swiss built industries producing ‘pseudo‑London’ watches, some luxurious and highly decorated.
+In the 18th century, British prestige was high and the market so rich that the Dutch and Swiss developed entire industries making “pseudo-London” timepieces. Some of these pieces were expensive, highly decorated objects.
 
-## HISTORICAL PERSPECTIVE
-By 1764 London’s guild tried to curb Geneva contraband.
-
-## INNOVATION
-Prestige and wealth drew imitators; the struggle presaged later industrial competition.
+By 1764, the London Clockmakers’ Company felt pressured to act against the smuggling of Geneva watches.

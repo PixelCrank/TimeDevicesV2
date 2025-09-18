@@ -1,13 +1,12 @@
 # The Smuggling of Watches
 
 ## DESCRIPTION
-Many ‘Paris’ watches were actually made in Geneva and entered France illegally, often hidden in foul cargo like fish to deter searches.
+For collectors, the typical Parisian timepiece of the second half of the 18th century was almost always made in Geneva, though signed “Paris” and housed in a gold case. Aristocratic women’s wedding baskets were full of them.
 
-## FUNCTION
-Smuggling was an organised trade with insurable risks and large volumes.
+A large portion of these watches entered France illegally: smuggling was not a crime but a trade. Risky, yes — but volumes were so large, and odds of success so well calculated, that shipments could be insured at modest rates against seizure.
 
-## HISTORICAL PERSPECTIVE
-Contributed to the collapse of the French industry in the late 18th century.
+One method used by Geneva houses was to hide watches in dirty, foul-smelling loads — fish in particular — that customs officers were reluctant to search.
 
-## INNOVATION
-Highlights how illicit logistics reshaped market balance and national industries.
+The profits were so high that Geneva’s fishmongers even tried (unsuccessfully) to muscle in and establish themselves as intermediaries.
+
+This trafficking contributed to the collapse of the French watch industry in the second half of the 18th century.

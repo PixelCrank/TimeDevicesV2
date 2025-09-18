@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Time Stories — Map & Timeline</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <!-- KnightLab only if you use the Linear Timeline tab -->
+  <script defer src="./timeline.js"></script>
+  <link rel="stylesheet" href="./timeline.css"/>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header>
+    <h1>Time Measuring Devices</h1>
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="map" type="button">Map</button>
+      <button class="tab-btn" data-view="kl_timeline" type="button">Linear Timeline</button>
+      <button class="tab-btn" data-view="gallery" type="button">Gallery</button>
+      <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
+    </nav>
+  </header>
+ <!-- Style-->
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        #timeline-embed {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- BEGIN Timeline Embed -->
+    <div id="timeline-embed"></div>
+    <!-- Override -->
+        <script type="text/javascript">
+            // Assign group classes to .tl-timemarker elements after TimelineJS renders
+            function addGroupClassesToTimemarkers() {
+                setTimeout(function() {
+                    fetch('./lineartimeline/timeline_knightlab_with_images.json')
+                        .then(response => response.json())
+                        .then(data => {
+                            var events = data.events || [];
+                            var markers = document.querySelectorAll('.tl-timemarker');
+                            // Defensive: skip title slide if present
+                            var markerOffset = markers.length === events.length + 1 ? 1 : 0;
+                            for (let i = 0; i < events.length; i++) {
+                                var group = events[i].group || null;
+                                var marker = markers[i + markerOffset];
+                                if (marker && group) {
+                                    marker.classList.remove('device','person','story');
+                                    marker.classList.add(group);
+                                }
+                            }
+                        });
+                }, 1200); // Wait for timeline to render
+            }
+        </script>
+    <script type="text/javascript">
+        function ready(fn) {
+            if (document.readyState != 'loading') {
+                fn();
+            } else {
+                document.addEventListener('DOMContentLoaded', fn);
+            }
+        }
+
+        function setPageLanguage() {
+            var lang = window.location.href.match(/&lang=([a-zA-Z]*?)&?/);
+
+            if (lang) {
+                document.getElementsByTagName('html')[0].setAttribute('lang', lang[1]);
+            }
+
+        }
+
+        function computeEmbedPath() {
+            var trim_point = window.location.href.indexOf('embed/index.html');
+            if (trim_point > 0) {
+                return window.location.href.substring(0, trim_point); // supports https access via https://s3.amazonaws.com/cdn.knightlab.com/libs/timeline/latest/embed/index.html
+            }
+            return "https://cdn.knightlab.com/libs/timeline3/latest/";
+        }
+
+        function addOembedTag() {
+            // it's not clear that any tools execute this JS to get the URL, but maybe?
+            var oembed_link = document.createElement('link');
+            oembed_link['rel'] = 'alternate';
+            oembed_link['type'] = 'application/json+oembed';
+            oembed_link['href'] = 'https://oembed.knightlab.com/timeline/?url=' + encodeURIComponent(window.location.href);
+            document.head.appendChild(oembed_link);
+        }
+
+        function createEmbedDiv(containerId, width, height) {
+
+            if (typeof(width) != 'string' && typeof(width) != 'number') {
+                width = '100%'
+            }
+
+            if (typeof(height) != 'string' && typeof(height) != 'number') {
+                height = '100%'
+            }
+
+            // default containerId would be 'timeline-embed'
+            t = document.createElement('div');
+            t.style.position = 'relative';
+
+            te = document.getElementById(containerId);
+            te.appendChild(t);
+            te.classList.add("tl-timeline-embed");
+
+            if (width.toString().match("%")) {
+                te.style.width = width.split("%")[0] + "%";
+            } else {
+                width = Number(width) - 2;
+                te.style.width = (width) + 'px';
+            }
+
+            if (height.toString().match("%")) {
+                te.style.height = height;
+                te.classList.add("tl-timeline-full-embed");
+            } else if (width.toString().match("%")) {
+                te.classList.add("tl-timeline-full-embed");
+                height = Number(height) - 16;
+                te.style.height = (height) + 'px';
+            } else {
+                height = height - 16;
+                te.style.height = (height) + 'px';
+            }
+        }
+
+        /**
+         * Parse all URL parameters as possible Timeline options.
+         * Timeline itself will use or ignore these based on actual
+         * supported options.
+         */
+        function optionsFromUrlParams() {
+            var param_str = window.location.href.slice(window.location.href.indexOf('?') + 1);
+
+            if (param_str.match('#')) {
+                param_str = param_str.split('#')[0];
+            }
+
+            param_str = param_str.split('&');
+
+            var url_vars = {}
+
+            for (var i = 0; i < param_str.length; i++) {
+                var uv = param_str[i].split('=');
+                let k = uv[0], v = uv[1];
+                try {
+                    k = decodeURIComponent(k);
+                } catch (e) {} // some legacy values are not properly encoded
+                try {
+                    v = decodeURIComponent(v);
+                } catch (e) {} // some legacy values are not properly encoded esp width=100%
+                url_vars[k] = v;
+            }
+
+            return url_vars;
+        };
+
+        ready(function() {
+            setPageLanguage();
+            var embed_path = computeEmbedPath();
+            addOembedTag();
+
+            var options = optionsFromUrlParams();
+            createEmbedDiv('timeline-embed', options.width, options.height);
+            // ga_property_id is not something we let users override
+            options.ga_measurement_id = 'G-LVEFKMG087';
+            options.soundcite = true;
+
+            // Always use the local JSON file as the timeline data source
+            var localTimelineJson = './lineartimeline/timeline_knightlab_with_images.json';
+            window.options = options;
+            window.timeline = new TL.Timeline('timeline-embed', localTimelineJson, options);
+
+            // Add group classes after timeline renders
+            addGroupClassesToTimemarkers();
+        })
+    </script>
+  
+
+  <!-- Main content -->
+  <main>
+
+  <!-- INFO Modal -->
+  <div id="infoModal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <div class="info-backdrop" data-close="1"></div>
+    <div class="info-dialog glass" role="document" tabindex="-1">
+      <header class="info-header">
+        <h2 id="infoTitle">How to use this site</h2>
+        <button id="infoClose" class="info-close" aria-label="Close">×</button>
+      </header>
+      <div class="info-body">
+        <ul>
+    <li><strong>Sidebar:</strong> Filter by category, search by keyword, or focus on specific eras using the sidebar controls.</li>
+    <li><strong>Map View:</strong> Explore artefacts and stories by their geographic origins. Click any node to see details.</li>
+    <li><strong>Linear Timeline:</strong> View all items in chronological order with images and eras, powered by KnightLab TimelineJS.</li>
+    <li><strong>Gallery View:</strong> Browse all items as cards. Use the sort dropdown to organize by name or time, and click "Read More" for details.</li>
+  </ul>
+  <p>
+    Switch views using the tabs at the top. Click any card or node for more information, and use the filters to narrow your exploration.
+  </p>
+      </div>
+      <footer class="info-footer">
+        <button class="pill-btn" data-close="1">Got it</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="overlapPopup" style="display:none;position:absolute;z-index:1000;background:#fff;border-radius:10px;box-shadow:0 2px 16px #0002;padding:10px 14px;min-width:180px;"></div>
+
+  <script src="./app.js"></script>
+  <div id="debugBadge">DEBUG</div>
+</body>
+</html>

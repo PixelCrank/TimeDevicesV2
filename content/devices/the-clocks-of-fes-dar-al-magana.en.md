@@ -6,7 +6,7 @@
 ## FUNCTION
     It provided a practical way to measure or regulate time for daily life, science, navigation or ritual in Fes, Morocco.
 
-## HISTORICAL PERSPECTIVE
+## PERSPECTIVE
     Dating to c. 1357–1400 CE, it reflects the needs and knowledge of its era and region, and how timekeeping spread from public monuments to personal devices.
 
 ## INNOVATION

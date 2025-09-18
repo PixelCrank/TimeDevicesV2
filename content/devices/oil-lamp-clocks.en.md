@@ -3,10 +3,10 @@
 ## DESCRIPTION
     Oil (Lamp) Clocks is a historical timekeeping device that helped people coordinate work, travel and ritual by making time visible and reliable.
 
- ## FUNCTION
+## FUNCTION
     It provided a practical way to measure or regulate time for daily life, science, navigation or ritual in Europe & Middle East.
 
-## HISTORICAL PERSPECTIVE
+## PERSPECTIVE
     Dating to c. 1000–1800 CE, it reflects the needs and knowledge of its era and region, and how timekeeping spread from public monuments to personal devices.
 
 ## INNOVATION

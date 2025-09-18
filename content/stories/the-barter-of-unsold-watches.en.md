@@ -1,13 +1,14 @@
+---
+---
 # The Barter of Unsold Watches
 
 ## DESCRIPTION
-Merchants often bartered unsold stock after fairs or voyages, trading watches for goods (spices, cloth, toys) rather than hauling them back to Geneva.
+After trade fairs or long journeys, watch merchants who failed to sell all their stock often resorted to bartering. Rather than bringing unsold watches back to Geneva, they exchanged them locally for other goods: spices, cloth, clothing, toys, etc.
 
 ## FUNCTION
-Used to clear inventory; back home, merchants sometimes imposed these goods on poor watchmakers as payment.
+Merchants and dealers used this practice as a last resort to avoid transporting unsold stock back. Once back in Geneva, they resold the goods obtained by barter, sometimes even imposing them directly on watchmakers as a form of payment!
 
-## HISTORICAL PERSPECTIVE
-Reflects risks and imbalances of pre‑industrial market networks dominated by fairs and intermediaries.
+The latter, often poor, thus found themselves forced to accept goods of no use to them.
 
-## INNOVATION
-Shows how market frictions shifted burdens onto workers, exposing the system’s inequities.
+## PERSPECTIVE
+In a still largely pre-industrial economy based on trade-fair networks, sales were uncertain and unsold stock heavily impacted margins. Barter appeared as a pragmatic form of compensation but also revealed the limits of an imbalanced system in which watchmaking workers were the adjustment variable.

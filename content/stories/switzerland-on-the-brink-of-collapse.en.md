@@ -1,13 +1,16 @@
+---
+---
 # Switzerland on the Brink of Collapse
 
 ## DESCRIPTION
-By 1979, amid quartz disruption, Swiss exports plunged (87M units in 1974 to 45M in 1981).
+While the Japanese (Seiko) and Americans (Timex, Bulova) took a decisive lead in electronic and quartz watches, the Swiss persisted in improving mechanical watches — with remarkable technical results but increasingly out of step with the market. 
 
-## FUNCTION
-Persisting in mechanical prestige while delaying electronics led to cascading failures and job losses.
+## WHAT
+Switzerland continued to innovate mechanically but was slow to invest in electronics. This led to a collapse in exports between 1974 (87 million units) and 1981 (45 million), showing the loss of global competitiveness.
+Competitive pressure forced the Swiss industry to standardize and automate production, but these efforts came too late.
 
-## HISTORICAL PERSPECTIVE
-‘Swiss Made’ had to be redefined as foreign components became essential.
+## WHY
+Swiss watchmaking clung to a prestigious but outdated model, betting on refining tradition rather than embracing rupture. Delay in technological transition triggered an unprecedented industrial crisis: exports collapsed, bankruptcies cascaded, and employment plummeted. The Swiss industry had to reinvent itself urgently to survive in a transformed market.
 
-## INNOVATION
-Crisis forced standardisation and automation—changes that came late but proved necessary.
+## STORY+
+In 20 years, the number of Swiss watchmaking houses dropped from more than 2,000 to fewer than 500. The workforce was cut by more than half, falling from 55,320 to 26,228 workers. Amid the crisis, the Swiss Made label had to be redefined, as foreign components became essential to manufacturing.

@@ -1,13 +1,10 @@
 # The Theft of Time in the Factories
 
 ## DESCRIPTION
-With early industrialisation, workers suspected owners of cheating with factory clocks that disagreed with others in the area.
+As industrialization began in rural England, workers often suspected their bosses of cheating them with manipulated factory clocks.
 
-## FUNCTION
-Workers bought cheap ‘onion’ watches to defend themselves; employers disliked this empowerment.
+The difference between the time given by the factory clock and other local clocks seemed, in many cases, to confirm their suspicions.
 
-## HISTORICAL PERSPECTIVE
-Given poor accuracy, disputes were as much social as technical.
+To defend themselves, many workers bought their own watches — usually cheap “onions” costing £2. Employers did not look kindly on their men arming themselves in this way.
 
-## INNOVATION
-Shows time as a contested instrument of workplace power and discipline.
+Given the inaccuracy of these instruments, it is possible that such claims were more a pretext for disputes than a serious basis for disagreement.

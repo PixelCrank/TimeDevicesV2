@@ -1,3 +1,26 @@
+// Add CSS for spider-leg-hover highlight
+if (!document.getElementById('spider-leg-style')) {
+  const style = document.createElement('style');
+  style.id = 'spider-leg-style';
+  style.textContent = `
+    .spider-leg {
+      stroke: #b0b8c9;
+  stroke-width: 0.1;
+      opacity: 0.32;
+  stroke-dasharray: 0.5 .2;
+      filter: drop-shadow(0px 1px 2px #fff8  );
+      transition: stroke 0.2s, opacity 0.2s, stroke-width 0.2s;
+    }
+    .spider-leg-hover {
+      stroke: #ff9800 !important;
+  stroke-width: 0.3 !important;
+      opacity: 0.85 !important;
+      stroke-dasharray: none !important;
+      filter: drop-shadow(0px 2px 4px #ff980055);
+    }
+  `;
+  document.head.appendChild(style);
+}
 /* ===========================
    Time Stories — App JS (stable)
 =========================== */
@@ -19,8 +42,9 @@ const HOVER_SCALE = 1.35; // tweak 1.2–1.5 to taste
 let MAP_YEAR_MIN = -1500, MAP_YEAR_MAX = 2025;
 let mapYearStart = MAP_YEAR_MIN, mapYearEnd = MAP_YEAR_MAX;
 
+
 const ERAS = [
-  { id:'ancient',      label:'Ancient',               start:-1500, end:  500 },
+  { id:'ancient',      label:'Ancient',               start:-3000, end:  500 },
   { id:'medieval',     label:'Medieval',              start:  500, end: 1500 },
   { id:'renaissance',  label:'Renaissance',           start: 1400, end: 1600 },
   { id:'scientific',   label:'Scientific Revolution', start: 1550, end: 1700 },
@@ -32,9 +56,9 @@ let _activeEra = null;
 
 // Outline (ring) colors per category
 const CAT_STROKES = {
-  person: '#7C3AED', // Key People – violet
-  story:  '#0EA5E9', // Stories    – cyan
-  device: '#F59E0B'  // Devices    – amber
+  person: '#2C4F4F', // Key People – violet
+  story:  '#4a88a4ff', // Stories    – cyan
+  device: '#f3b13e72'  // Devices    – amber
 };
 
 // ------- Data stores -------
@@ -131,6 +155,11 @@ function normalizeItem(d){
   // images
   out.thumb = pick('thumb','thumbnail','image');
   out.image = pick('image','hero_image');
+
+  // related_items (always include if present)
+  if ('related_items' in d) {
+    out.related_items = String(d.related_items).trim();
+  }
 
   return out;
 }
@@ -279,29 +308,73 @@ function updateDebugBadge(counts){
 }
 // ------- Overlap separation (small spiral jitter for exact same pixel) -------
 function offsetOverlaps(items, svg){
-  const buckets = new Map();
-  const res = items.map(d => {
-    const [x,y] = projEquirect(+d.lon, +d.lat, svg);
-    const key = `${Math.round(x)}:${Math.round(y)}`; // 1px bucketing
-    let arr = buckets.get(key);
-    if (!arr){ arr = []; buckets.set(key, arr); }
-    arr.push({ d, x, y });
-    return { d, x, y, key };
+  // Group nodes that are within a small pixel radius (not just exact pixel match)
+  const threshold = 1; // px, only cluster nearly exact overlaps
+  const points = items.map(d => {
+    const [x, y] = projEquirect(+d.lon, +d.lat, svg);
+    return { d, x, y, group: null };
   });
 
+  let groupId = 0;
+  for (let i = 0; i < points.length; ++i) {
+    if (points[i].group !== null) continue;
+    points[i].group = groupId;
+    for (let j = i + 1; j < points.length; ++j) {
+      const dx = points[i].x - points[j].x;
+      const dy = points[i].y - points[j].y;
+      if (Math.sqrt(dx*dx + dy*dy) < threshold) {
+        points[j].group = groupId;
+      }
+    }
+    groupId++;
+  }
+
+  // For each group, if >1, spiral them out
   const ga = Math.PI * (3 - Math.sqrt(5)); // golden angle
-  buckets.forEach(list => {
-    if (list.length <= 1) return;
-    const r0 = 6, step = 4; // px
-    list.forEach((it, i) => {
-      const r = r0 + i * step;
-      const a = i * ga;
-      it.x += Math.cos(a) * r;
-      it.y += Math.sin(a) * r;
-    });
+  const groups = {};
+  points.forEach(p => {
+    if (!groups[p.group]) groups[p.group] = [];
+    groups[p.group].push(p);
+  });
+  // Track cluster state globally
+  window._CLUSTER_STATE = window._CLUSTER_STATE || {};
+  Object.values(groups).forEach((list, idx) => {
+    if (list.length > 1) {
+      const cx = list[0].x, cy = list[0].y;
+      // Stable cluster key: sorted slugs joined
+      const sortedSlugs = list.map(p => p.d.slug).sort().join('__');
+      const clusterId = `cluster_${sortedSlugs}`;
+      const expanded = window._CLUSTER_STATE[clusterId] !== false; // default expanded
+      if (expanded) {
+  // Make clusters even tighter
+  const r0 = 1.2, step = 1.1, maxR = 4.5;
+        list.forEach((it, i) => {
+          let r = r0 + step * Math.floor(i / 2);
+          if (r > maxR) r = maxR;
+          const a = i * ga;
+          it.x = cx + Math.cos(a) * r;
+          it.y = cy + Math.sin(a) * r;
+          it._spider_origin = { x: cx, y: cy };
+          it._cluster_id = clusterId;
+          it._cluster_center = { x: cx, y: cy };
+          it._cluster_size = list.length;
+        });
+      } else {
+        // Collapsed: all nodes at center, only first node is visible
+        list.forEach((it, i) => {
+          it.x = cx;
+          it.y = cy;
+          it._spider_origin = { x: cx, y: cy };
+          it._cluster_id = clusterId;
+          it._cluster_center = { x: cx, y: cy };
+          it._cluster_size = list.length;
+          it._collapsed = true;
+        });
+      }
+    }
   });
 
-  return res;
+  return points.map(p => ({ d: p.d, x: p.x, y: p.y, _spider_origin: p._spider_origin }));
 }
 
 // ------- Zoom / pan -------
@@ -350,13 +423,13 @@ function attachZoomPan(svgId, sceneId){
   }
   function zoomAt(cx, cy, factor){
     const old = svg._zoom.k;
-    const next = Math.max(1, Math.min(11.5, old * factor));
+    const next = Math.max(1, Math.min(23.5, old * factor));
     if (next === old) return;
     const scale = next / old;
     svg._zoom.tx = cx - (cx - svg._zoom.tx) * scale;
     svg._zoom.ty = cy - (cy - svg._zoom.ty) * scale;
     svg._zoom.k  = next;
-    clamp();
+    clamp(); // Only clamp and apply transform, do not re-render
   }
 
   apply();
@@ -367,10 +440,7 @@ function attachZoomPan(svgId, sceneId){
     zoomAt(e.offsetX, e.offsetY, e.deltaY < 0 ? 1.2 : 1/1.2);
   }, { passive:false });
 
-  svg.addEventListener('dblclick', e=>{
-    e.preventDefault();
-    zoomAt(e.offsetX, e.offsetY, e.shiftKey ? 1/1.5 : 1.5);
-  });
+  // Removed double-click to zoom: double-click is now reserved for cluster toggle only
 
   let tracking=false, dragging=false, pid=null, sx=0, sy=0, lx=0, ly=0;
   svg.addEventListener('pointerdown', e=>{
@@ -510,14 +580,82 @@ function showCard(d, nodeEl){
   $('#cardMeta').textContent = meta;
   $('#cardCaption').textContent = d.caption || '';
 
+
+  // Remove any existing Related Items section
+  let oldRelated = document.getElementById('cardRelatedItems');
+  if (oldRelated) oldRelated.remove();
+
+  // Show the item's image under the abstract if present
   const url = nodeImageURL(d);
   const imgEl = $('#cardImage');
-  if (url){ imgEl.src = url; imgEl.alt = d.title || ''; imgEl.style.display='block'; }
-  else { imgEl.removeAttribute('src'); imgEl.style.display='none'; }
+  if (url) {
+    imgEl.src = url;
+    imgEl.alt = d.title || '';
+    imgEl.style.display = 'block';
+    // Move the image directly under the abstract
+    const captionEl = document.getElementById('cardCaption');
+    if (captionEl && imgEl.parentNode) {
+      captionEl.insertAdjacentElement('afterend', imgEl);
+    }
+  } else {
+    imgEl.removeAttribute('src');
+    imgEl.style.display = 'none';
+  }
 
-  const thumb = $('#cardThumb');
-  if (url){ thumb.style.backgroundImage = `url('${url}')`; }
-  else { thumb.style.backgroundImage = 'none'; }
+  // Insert Related Items section if any (from normalized d.related_items)
+  let relatedList = [];
+  if (d.related_items) {
+    relatedList = d.related_items.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  if (relatedList.length > 0) {
+    const relatedDiv = document.createElement('div');
+    relatedDiv.id = 'cardRelatedItems';
+    relatedDiv.style.margin = '12px 0 0 0';
+    const label = document.createElement('div');
+    label.textContent = 'Related Items:';
+    label.style.fontWeight = 'bold';
+    label.style.fontSize = '15px';
+    label.style.marginBottom = '4px';
+    relatedDiv.appendChild(label);
+    const ul = document.createElement('ul');
+    ul.style.margin = '0 0 0 12px';
+    ul.style.padding = '0';
+    ul.style.listStyle = 'disc inside';
+    relatedList.forEach(slug => {
+      // Try to find the related item in _ALL_ITEMS for title
+      let item = (_ALL_ITEMS || []).find(x => x.slug === slug);
+      const li = document.createElement('li');
+      if (item) {
+        const a = document.createElement('a');
+        a.textContent = item.title || slug;
+        a.href = `details.html?id=${encodeURIComponent(item.slug)}`;
+        a.style.textDecoration = 'underline';
+        a.style.cursor = 'pointer';
+        li.appendChild(a);
+      } else {
+        li.textContent = slug;
+      }
+      ul.appendChild(li);
+    });
+    relatedDiv.appendChild(ul);
+    // Insert after the image if present, else after the abstract
+    const imgEl2 = document.getElementById('cardImage');
+    if (imgEl2 && imgEl2.style.display !== 'none' && imgEl2.parentNode) {
+      imgEl2.insertAdjacentElement('afterend', relatedDiv);
+    } else {
+      const captionEl = document.getElementById('cardCaption');
+      if (captionEl && captionEl.parentNode) {
+        captionEl.insertAdjacentElement('afterend', relatedDiv);
+      }
+    }
+  }
+
+
+  imgEl.ondblclick = () => {
+    // Use the same logic as the Read More button
+    const mdUrl = d.markdown ? d.markdown : `details.html?id=${encodeURIComponent(d.slug)}`;
+    window.location.href = mdUrl;
+  };
 
   // Remove any existing button
   const oldBtn = $('#cardOpen');
@@ -585,9 +723,13 @@ function filteredItems(all){
 // ------- Sidebar (category) -------
 function makeCategoryList(items){
   const root = $('#f_category_group'); if (!root) return;
-  const catsInData = dedupe(items.map(d => (d.category||'').trim().toLowerCase()));
-  const categories = catsInData.length ? catsInData : ['device','person','story'];
+  // Always use this order:
+  const ORDER = ['device', 'person', 'story'];
   const label = v => ({device:'Devices', person:'Key People', story:'Stories'}[v] || v);
+
+  // Only include categories present in the data, but in the desired order
+  const catsInData = dedupe(items.map(d => (d.category||'').trim().toLowerCase()));
+  const categories = ORDER.filter(v => catsInData.includes(v));
 
   root.innerHTML = '';
   categories.forEach(v=>{
@@ -688,8 +830,54 @@ geo.forEach(d => {
 
 // separate exact overlaps and draw
   const positioned = offsetOverlaps(geo, svg);
-  positioned.forEach(({d, x, y}) => {
-    drawImageNode(scene, x, y, 12, d);
+  // Remove old spider-leg lines
+  $$('.spider-leg', scene).forEach(l => l.remove());
+  // Draw spider-leg lines first
+  positioned.forEach(({d, x, y, _spider_origin}) => {
+    // Use spiderfied position if present
+    const x2 = d._spider_px !== undefined ? d._spider_px : x;
+    const y2 = d._spider_py !== undefined ? d._spider_py : y;
+    if (_spider_origin && (x2 !== _spider_origin.x || y2 !== _spider_origin.y)) {
+      const line = document.createElementNS(NS, 'line');
+      line.setAttribute('class', 'spider-leg');
+      line.setAttribute('x1', _spider_origin.x);
+      line.setAttribute('y1', _spider_origin.y);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      // All visual style is now in CSS
+      scene.insertBefore(line, scene.firstChild);
+    }
+  });
+  // Draw nodes (handle collapsed clusters)
+  const drawnClusters = new Set();
+  positioned.forEach(({d, x, y, _cluster_id, _cluster_size, _collapsed, _cluster_center}) => {
+    if (_collapsed && _cluster_id) {
+      // Only draw one node for collapsed cluster
+      if (drawnClusters.has(_cluster_id)) return;
+      drawnClusters.add(_cluster_id);
+      drawImageNode(scene, x, y, 12, d);
+      // Draw badge
+      const badge = document.createElementNS(NS, 'g');
+      badge.setAttribute('class', 'cluster-badge');
+      const circle = document.createElementNS(NS, 'circle');
+      circle.setAttribute('cx', x+12); circle.setAttribute('cy', y-12);
+      circle.setAttribute('r', 10);
+      circle.setAttribute('fill', '#222');
+      circle.setAttribute('stroke', '#fff');
+      circle.setAttribute('stroke-width', 2);
+      badge.appendChild(circle);
+      const text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', x+12); text.setAttribute('y', y-8);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#fff');
+      text.setAttribute('font-size', '13');
+      text.setAttribute('font-family', 'system-ui,sans-serif');
+      text.textContent = _cluster_size;
+      badge.appendChild(text);
+      scene.appendChild(badge);
+    } else if (!_collapsed) {
+      drawImageNode(scene, x, y, 12, d);
+    }
   });
 
   // badge for off-map items
@@ -705,32 +893,75 @@ geo.forEach(d => {
 
   attachZoomPan('mapSvg','mapScene');
   // Hover enlarge (event delegation on the scene)
-if (!scene._hoverWired){
-  scene._hoverWired = true;
+  if (!scene._hoverWired){
+    scene._hoverWired = true;
 
-  // Use mouseover/mouseout so it bubbles from child <image>/<circle> to .node
-  scene.addEventListener('mouseover', (e)=>{
-    const svgEl = scene.ownerSVGElement;
-    const node = e.target.closest('.node');
-    if (!node || !scene.contains(node)) return;
-    if (!node._hover){
-      node._hover = true;
-      // Move node to end so it renders on top
-      node.parentNode.appendChild(node);
-      rescaleMarkers(svgEl);
-    }
-  });
+    // Use mouseover/mouseout so it bubbles from child <image>/<circle> to .node
+    scene.addEventListener('mouseover', (e)=>{
+      const svgEl = scene.ownerSVGElement;
+      const node = e.target.closest('.node');
+      if (!node || !scene.contains(node)) return;
+      if (!node._hover){
+        node._hover = true;
+        node.parentNode.appendChild(node);
+        // Use spiderfied position if present
+        let d = _VISIBLE.find(d => d.slug === node.dataset.id);
+        const x = d && d._spider_px !== undefined ? d._spider_px : +node.dataset.x;
+        const y = d && d._spider_py !== undefined ? d._spider_py : +node.dataset.y;
+        // Find and highlight matching spider-leg line, and show location label at origin
+        const legs = scene.querySelectorAll('.spider-leg');
+        let labelShown = false;
+        legs.forEach(leg => {
+          const lx = +leg.getAttribute('x2');
+          const ly = +leg.getAttribute('y2');
+          const ox = +leg.getAttribute('x1');
+          const oy = +leg.getAttribute('y1');
+          if (Math.abs(lx - x) < 1 && Math.abs(ly - y) < 1) {
+            leg.classList.add('spider-leg-hover');
+            if (!labelShown) {
+              if (d && d._spider_origin) {
+                // Pin label to the center of the spider-leg
+                const midx = (ox + lx) / 2;
+                const midy = (oy + ly) / 2;
+                let label = document.createElementNS(NS, 'text');
+                label.setAttribute('x', midx);
+                label.setAttribute('y', midy - 10);
+                label.setAttribute('fill', '#222');
+                label.setAttribute('font-size', '15');
+                label.setAttribute('font-family', 'system-ui,sans-serif');
+                label.setAttribute('class', 'spider-leg-label');
+                label.setAttribute('pointer-events', 'none');
+                label.setAttribute('font-weight', 'bold');
+                label.setAttribute('stroke', '#fff');
+                label.setAttribute('stroke-width', '2');
+                label.setAttribute('text-anchor', 'middle');
+                // Fallback if no location
+                label.textContent = d.origin_location || d.location || d.place || d.region || 'Unknown location';
+                scene.appendChild(label);
+                scene.appendChild(label);
+                labelShown = true;
+              }
+            }
+          }
+        });
+        rescaleMarkers(svgEl);
+      }
+    });
 
-  scene.addEventListener('mouseout', (e)=>{
-    const svgEl = scene.ownerSVGElement;
-    const node = e.target.closest('.node');
-    if (!node || !scene.contains(node)) return;
-    if (node._hover){
-      node._hover = false;
-      rescaleMarkers(svgEl);
-    }
-  });
-}
+    scene.addEventListener('mouseout', (e)=>{
+      const svgEl = scene.ownerSVGElement;
+      const node = e.target.closest('.node');
+      if (!node || !scene.contains(node)) return;
+      if (node._hover){
+        node._hover = false;
+        // Remove highlight from all spider-leg lines
+        scene.querySelectorAll('.spider-leg-hover').forEach(leg => leg.classList.remove('spider-leg-hover'));
+        // Remove any spider-leg label
+        scene.querySelectorAll('.spider-leg-label').forEach(lab => lab.remove());
+        rescaleMarkers(svgEl);
+      }
+    });
+  }
 
   // node click → card
   if (!scene._wired){
@@ -749,19 +980,48 @@ if (!scene._hoverWired){
   // Add after your single click event in drawMap
   scene.addEventListener('dblclick', (e) => {
     const svgEl = scene.ownerSVGElement;
+    // Prevent browser zoom on ctrl/cmd + double-click
+    if (e.ctrlKey || e.metaKey) return;
+    // Prevent node double-click from interfering
     const node = e.target.closest('.node');
-    if (!node || !scene.contains(node)) return;
+    if (node) return;
 
-    const x = +node.dataset.x;
-    const y = +node.dataset.y;
+    // Get click position relative to SVG
+    let pt = svgEl.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const svgPt = pt.matrixTransform(svgEl.getScreenCTM().inverse());
+    const clickX = svgPt.x;
+    const clickY = svgPt.y;
 
-    // Use _orig_px/_orig_py for overlap detection
+    // Always find the nearest cluster center within a generous radius
+    let foundCluster = null;
+    let minDist = Infinity;
+    const threshold = 36; // px radius for cluster center (more generous)
+    for (const d of _VISIBLE) {
+      if (d._cluster_id && d._cluster_center) {
+        const cx = d._cluster_center.x;
+        const cy = d._cluster_center.y;
+        const dist = Math.sqrt((clickX - cx) ** 2 + (clickY - cy) ** 2);
+        if (dist < threshold && dist < minDist) {
+          foundCluster = d;
+          minDist = dist;
+        }
+      }
+    }
+    if (foundCluster && foundCluster._cluster_id && foundCluster._cluster_size > 1) {
+      window._CLUSTER_STATE[foundCluster._cluster_id] = !window._CLUSTER_STATE[foundCluster._cluster_id];
+      requestRender();
+      return;
+    }
+
+    // Fallback: old overlap popup
     const overlapNodes = _VISIBLE.filter(d => {
-      return Math.abs(d._orig_px - x) < 2 && Math.abs(d._orig_py - y) < 2;
+      const px = d._orig_px, py = d._orig_py;
+      return Math.abs(px - clickX) < 2 && Math.abs(py - clickY) < 2;
     });
-
     if (overlapNodes.length > 1) {
-      showOverlapPopup(x, y, overlapNodes, svgEl);
+      showOverlapPopup(clickX, clickY, overlapNodes, svgEl);
     }
   });
 
@@ -791,8 +1051,8 @@ function renderGallery() {
   const grid = document.getElementById('galleryGrid');
   if (!grid) return;
 
-  // Use your filtered items function or fallback to all items
-  let items = typeof filteredItems === 'function' ? filteredItems(_ALL_ITEMS) : (_ALL_ITEMS || []);
+  // Always use filtered items
+  let items = filteredItems(_ALL_ITEMS);
 
   // --- SORTING ---
   const sortBy = document.getElementById('sortBySelect')?.value || 'az';
@@ -987,6 +1247,8 @@ if (startSlider && endSlider && startVal && endVal) {
       $$('#eraPills .pill-btn').forEach(p => p.classList.remove('active'));
       requestRender();
     });
+    // sort dropdown
+    document.getElementById('sortBySelect')?.addEventListener('change', ()=> requestRender());
 
     // era pills
     renderEraPills();
@@ -1061,7 +1323,8 @@ function centerMapOn(lat, lon, zoom = 2) {
 // spiderfy: show all overlapping nodes at once
 function spiderfyNodesAt(x, y, nodes) {
   const N = nodes.length;
-  const radius = 36 + 8 * N; // Distance from center
+  // Make the spiderfy radius much smaller so nodes stay close to their true location
+  const radius = 1.5 + 0.22 * N;
   const svg = document.getElementById('mapSvg');
   const scene = document.getElementById('mapScene');
   const k = svg?._zoom?.k || 1;
@@ -1078,3 +1341,36 @@ function spiderfyNodesAt(x, y, nodes) {
     }
   });
 }
+
+// ------- Knight Lab Timeline -------
+function renderKnightlabTimeline() {
+  // Only initialize once
+  if (window._klTimeline) return;
+
+  // You can use a Google Sheets URL, a JSON file, or a JS object.
+  // Example: Use a local JSON file (exported from TimelineJS or hand-crafted)
+var timelineDataOrUrl = "lineartimeline/timeline_knightlab_with_images.json?v=" + Date.now();
+
+  window._klTimeline = new TL.Timeline(
+    'klContainer',
+    timelineDataOrUrl,
+    { height: '600', width: '60%' }
+  );
+}
+
+document.getElementById('infoBtn')?.addEventListener('click', () => {
+  document.getElementById('infoModal')?.classList.remove('hidden');
+  document.querySelector('.info-dialog')?.focus();
+});
+
+// Close modal on close button or backdrop click
+document.getElementById('infoClose')?.addEventListener('click', () => {
+  document.getElementById('infoModal')?.classList.add('hidden');
+});
+document.querySelector('.info-backdrop')?.addEventListener('click', () => {
+  document.getElementById('infoModal')?.classList.add('hidden');
+});
+// Optional: close on "Got it" button
+document.querySelector('.info-footer [data-close]')?.addEventListener('click', () => {
+  document.getElementById('infoModal')?.classList.add('hidden');
+});

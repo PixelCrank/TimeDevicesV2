@@ -164,9 +164,7 @@ main{ margin-left:324px; height:calc(100vh - 58px); position:relative; padding:1
 }
 .card.hidden{ display:none; }
 .card .thumb{
-  width:96px; height:96px; border-radius:50%; margin-bottom:8px;
-  background-size:cover; background-position:center; background-repeat:no-repeat;
-  border:2px solid rgba(255,255,255,.8); box-shadow:0 4px 14px rgba(0,0,0,.08);
+  display: none !important;
 }
 .card-header h2{ margin:6px 0 2px; font-size:18px; }
 .card-header .meta{ color:#475569; font-size:13px; margin:0 0 8px; }
@@ -281,11 +279,11 @@ main{ transition: margin-left .25s ease; }
   transition: border 0.2s;
 }
 .media-gallery img.active, .media-gallery video.active {
-  border: 2px solid #7C3AED;
+  border: 2px solid #2C4F4F;
 }
 
 .node.spiderfied {
-  filter: drop-shadow(0 0 8px #7C3AED88);
+  filter: drop-shadow(0 0 8px #2C4F4F88);
   z-index: 10;
 }
 
@@ -325,8 +323,10 @@ main{ transition: margin-left .25s ease; }
 .gallery-thumb {
   width: 96px;
   height: 96px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center;
   margin-bottom: 12px;
   background: #f3f4f6;
   border: 2px solid rgba(255,255,255,.8);
@@ -368,7 +368,7 @@ main{ transition: margin-left .25s ease; }
   box-shadow: 0 2px 8px rgba(124,58,237,0.08);
   font-family: 'Optician Sans', sans-serif;
   font-size: 14px;
-  color: #7C3AED;
+  color: #2C4F4F;
   text-decoration: none;
   text-align: center;
   transition: background 0.18s, color 0.18s, box-shadow 0.18s;
@@ -376,7 +376,7 @@ main{ transition: margin-left .25s ease; }
   -webkit-backdrop-filter: blur(8px);
 }
 .read-more-btn:hover {
-  background: #7C3AED;
+  background: #2C4F4F;
   color: #fff;
   box-shadow: 0 4px 16px rgba(124,58,237,0.18);
   text-decoration: none;

@@ -1,3 +1,109 @@
+// Set the category badge below the title
+function setCategoryBadge(item) {
+  const badge = document.getElementById('categoryBadge');
+  if (!badge) return;
+  let cat = (item.category || '').toLowerCase().trim();
+  let label = '';
+  let badgeClass = '';
+  if (cat === 'device' || cat === 'devices') {
+    label = 'Device';
+    badgeClass = 'device';
+  } else if (cat === 'person' || cat === 'people' || cat === 'key person' || cat === 'key people') {
+    label = 'Key Person';
+    badgeClass = 'person';
+  } else if (cat === 'story' || cat === 'stories') {
+    label = 'Story';
+    badgeClass = 'story';
+  } else {
+    label = cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : '';
+    badgeClass = '';
+  }
+  badge.textContent = label;
+  badge.className = 'category-badge' + (badgeClass ? ' ' + badgeClass : '');
+  badge.style.display = label ? '' : 'none';
+}
+
+async function renderItemDetails(item, items) {
+  document.getElementById('title').textContent = item.title || '';
+  setCategoryBadge(item);
+  document.getElementById('subtitle').textContent = item.subtitle || '';
+}
+// --- Related Items Component ---
+function renderRelatedItemsSection(item, items) {
+  const relatedSection = document.getElementById('relatedItemsSection');
+  if (!relatedSection) return;
+  let relatedList = [];
+  if (item.related_items) {
+    relatedList = item.related_items.split(/[;,|]/).map(s => s.trim()).filter(Boolean);
+  }
+  if (relatedList.length > 0) {
+  relatedSection.innerHTML = '';
+  // Card-like wrapper
+  const card = document.createElement('div');
+  card.style.background = 'rgba(255,255,255,0.97)';
+  card.style.border = '1.5px solid #e5e7eb';
+  card.style.borderRadius = '16px';
+  card.style.boxShadow = '0 4px 24px rgba(44,79,79,0.07), 0 1.5px 6px rgba(124,58,237,0.04)';
+  card.style.padding = '22px 18px 14px 18px';
+  card.style.margin = '0 0 18px 0';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.gap = '8px';
+
+  const title = document.createElement('h3');
+  title.textContent = 'Related Items';
+  title.style.marginBottom = '10px';
+  title.style.fontSize = '1.08em';
+  title.style.color = '#2C4F4F';
+  title.style.letterSpacing = '.03em';
+  title.style.fontWeight = '600';
+  card.appendChild(title);
+
+  const ul = document.createElement('ul');
+  ul.style.listStyle = 'none';
+  ul.style.padding = '0';
+  ul.style.margin = '0';
+    relatedList.forEach(slug => {
+      let rel = items.find(x => x.slug === slug);
+      let li;
+      if (rel) {
+        li = document.createElement('a');
+        li.textContent = rel.title || slug;
+        li.href = `details.html?id=${encodeURIComponent(rel.slug)}`;
+        li.style.display = 'block';
+        li.style.textDecoration = 'none';
+        li.style.color = '#1a202c';
+        li.style.padding = '10px 14px';
+        li.style.borderRadius = '8px';
+        li.style.marginBottom = '4px';
+        li.style.transition = 'background 0.15s, box-shadow 0.15s';
+        li.style.fontWeight = '500';
+        li.style.fontSize = '1em';
+        li.onmouseover = () => {
+          li.style.background = '#f3f4f6';
+          li.style.boxShadow = '0 2px 8px rgba(44,79,79,0.07)';
+        };
+        li.onmouseout = () => {
+          li.style.background = '';
+          li.style.boxShadow = '';
+        };
+      } else {
+        li = document.createElement('li');
+        li.textContent = slug;
+        li.style.padding = '10px 14px';
+        li.style.color = '#aaa';
+        li.style.fontStyle = 'italic';
+      }
+      ul.appendChild(li);
+    });
+  card.appendChild(ul);
+  relatedSection.appendChild(card);
+  relatedSection.style.display = '';
+  } else {
+    relatedSection.innerHTML = '';
+    relatedSection.style.display = 'none';
+  }
+}
 /* ===================== Config & helpers ===================== */
 const DATA_CSV = 'data/items.csv';
 const $  = (s, r=document) => r.querySelector(s);
@@ -17,9 +123,10 @@ function nodeImageURL(d){
   let p = (d.image || d.thumb || '').trim();
   if (!p) {
     const cat = (d.category || '').toLowerCase();
-    if (cat === 'person') p = 'images/placeholders/person_hero.png';
-    else if (cat === 'story') p = 'images/placeholders/story_hero.png';
+    if (cat === 'people') p = 'images/placeholders/person_hero.png';
+    else if (cat === 'stories') p = 'images/placeholders/story_hero.png';
     else p = 'images/placeholders/device_hero.png';
+
   }
   if (/^https?:\/\//i.test(p)) return p;
   if (!p.startsWith('images/')) p = 'images/' + p;
@@ -71,9 +178,9 @@ function normalizeItem(d){
   out.origin_location = d.origin_location || d.location || '';
 
   let cat = (d.category || '').toLowerCase();
-  if (/device/.test(cat)) cat = 'device';
-  else if (/person/.test(cat)) cat = 'person';
-  else if (/story/.test(cat)) cat = 'story';
+  if (/devices/.test(cat)) cat = 'devices';
+  else if (/people/.test(cat)) cat = 'people';
+  else if (/stories/.test(cat)) cat = 'stories';
   out.category = cat;
 
   const base = (d.slug || d.id || out.title || '').toString();
@@ -113,11 +220,17 @@ function parseFrontMatter(md){
   return { meta, body: md.slice(m[0].length) };
 }
 function mdToHTML(s=''){
-  let h = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Remove YAML front matter (--- ... --- at the top)
+  let h = s.replace(/^---[\s\S]*?---\s*/,'');
+  h = h.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Render # headers as <h1 class="md-title-hidden">
+  h = h.replace(/^#\s+(.+)$/gm, '<h1 class="md-title-hidden">$1</h1>');
+  // Render ## headers as <h2>
+  h = h.replace(/^##\s*(.+)$/gm, '<h2>$1</h2>');
   h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   h = h.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   h = h.replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-  h = h.split(/\n{2,}/).map(p=>`<p>${p}</p>`).join('\n');
+  h = h.split(/\n{2,}/).map(p=>/^(<h2>|<ul>|<ol>|<li>|<p>|<blockquote>|<pre>|<table>|<tr>|<th>|<td>)/.test(p.trim()) ? p : `<p>${p}</p>`).join('\n');
   return h;
 }
 function splitH2Sections(mdBody){
@@ -134,7 +247,7 @@ function splitH2Sections(mdBody){
     else if (/^story\+?$/.test(raw)) key = 'STORY+';
     else if (/^description$/.test(raw)) key = 'DESCRIPTION';
     else if (/function|fonction/.test(raw)) key = 'FUNCTION';
-    else if (/perspective\s*historique/.test(raw)) key = 'PERSPECTIVE';
+    else if (/perspective/.test(raw)) key = 'PERSPECTIVE';
     else if (/innovation/.test(raw)) key = 'INNOVATION';
     else if (/^sources?$/.test(raw)) key = 'SOURCES'; // <-- Add this line
     if (key) out[key] = val;
@@ -145,12 +258,13 @@ function buildMdCandidates(item){
   const s = item.slug || slugify(item.title);
   const tries = [];
   if (item.content_path) tries.push(item.content_path);
-  if (item.category === 'person'){
+  // Use singular category for matching
+  const cat = (item.category || '').replace(/s$/, '');
+  if (cat === 'person') {
     tries.push(`content/people/${s}.en.md`, `content/people/${s}.md`);
-  } else if (item.category === 'story'){
-    tries.push(`content/story/${s}.en.md`, `content/story/${s}.md`);
+  } else if (cat === 'story') {
     tries.push(`content/stories/${s}.en.md`, `content/stories/${s}.md`);
-  } else {
+  } else if (cat === 'device') {
     tries.push(`content/devices/${s}.en.md`, `content/devices/${s}.md`);
   }
   return Array.from(new Set(tries));
@@ -164,53 +278,6 @@ async function loadMarkdownForItem(item){
   return { path:'', md:'', tried: candidates };
 }
 
-/* ===================== mini-map (real projection) ===================== */
-const NS = 'http://www.w3.org/2000/svg';
-const LON_MIN = -180, LON_MAX = 180;
-const LAT_MIN = -95,  LAT_MAX = 85;
-const MAP_ASPECT = 2/1;   // match the world svg aspect
-const MAP_PAD = 8;
-
-function computeMapFrame(svg){
-  // Use real on-screen size for accurate projection
-  const rect = svg.getBoundingClientRect();
-  const w = Math.max(0, rect.width);
-  const h = Math.max(0, rect.height);
-
-  const innerW = Math.max(0, w - MAP_PAD*2);
-  const innerH = Math.max(0, h - MAP_PAD*2);
-  const targetW_byH = innerH * MAP_ASPECT;
-
-  let fw, fh, fx, fy;
-  if (targetW_byH <= innerW){
-    fh = innerH; fw = targetW_byH; fx = MAP_PAD + (innerW - fw)/2; fy = MAP_PAD;
-  } else {
-    fw = innerW; fh = fw / MAP_ASPECT; fx = MAP_PAD; fy = MAP_PAD + (innerH - fh)/2;
-  }
-  return { x: fx, y: fy, w: fw, h: fh };
-}
-function projEquirect(lon, lat, svg){
-  const f = computeMapFrame(svg);
-  const x = f.x + ((+lon - LON_MIN) / (LON_MAX - LON_MIN)) * f.w;
-  const y = f.y + ((LAT_MAX - (+lat)) / (LAT_MAX - LAT_MIN)) * f.h;
-  return [x, y, f];
-}
-function ensureBaseMap(svg){
-  // draw (or update) a world backdrop image sized to the frame
-  let img = svg.querySelector('#miniWorld');
-  if (!img){
-    img = document.createElementNS(NS,'image');
-    img.id = 'miniWorld';
-    img.setAttribute('preserveAspectRatio','none');
-    img.setAttributeNS('http://www.w3.org/1999/xlink','href','assets/world_light.svg');
-    img.setAttribute('href','assets/world_light.svg');
-    img.setAttribute('opacity','0.22');
-    svg.appendChild(img);
-  }
-  const f = computeMapFrame(svg);
-  img.setAttribute('x', f.x); img.setAttribute('y', f.y);
-  img.setAttribute('width', f.w); img.setAttribute('height', f.h);
-}
 
 /* ===================== render ===================== */
 function renderHeaderAndMeta(d){
@@ -221,22 +288,19 @@ function renderHeaderAndMeta(d){
   $('#subtitle').textContent = [fmtRange(d), d.origin_location].filter(Boolean).join(' • ');
 
   const hero = $('#heroImg');
-  const url = nodeImageURL(d);
-  if (url){
+  const url = (d.image || d.thumb || '').trim();
+  if (url) {
     hero.src = url;
     hero.alt = d.title || '';
     hero.style.display = 'block';
-    hero.style.maxHeight = '320px'; // or up to 800px if you want for large screens
-    hero.onerror = () => {
-      const cat = (d.category||'').toLowerCase();
-      hero.src =
-        cat==='person' ? 'images/placeholders/person_hero.png' :
-        cat==='story'  ? 'images/placeholders/story_hero.png'  :
-                         'images/placeholders/device_hero.png';
-    };
+    hero.style.maxHeight = '320px';
+  } else {
+    hero.style.display = 'none';
+    const gallery = document.getElementById('mediaGallery');
+    if (gallery) gallery.style.display = 'none';
   }
 
-  const catLabel = d.category === 'person' ? 'Key People' : (d.category === 'story' ? 'Stories' : 'Time Devices');
+  const catLabel = d.category === 'people' ? 'Key People' : (d.category === 'stories' ? 'Stories' : 'Time Devices');
   $('#crumbCategory').textContent = catLabel;
 
   const viewOnMapBtn = document.getElementById('viewOnMap');
@@ -253,82 +317,9 @@ function renderHeaderAndMeta(d){
     };
   });
 
-  const meta = [];
-  if (fmtRange(d)) meta.push(['Years', fmtRange(d)]);
-  if (d.origin_location) meta.push(['Location', d.origin_location]);
-  if (Number.isFinite(d.lat) && Number.isFinite(d.lon)) meta.push(['Coordinates', `${d.lat.toFixed(3)}, ${d.lon.toFixed(3)}`]);
-  $('#metaList').innerHTML = meta.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
-}
-
-function renderMiniMap(item) {
-  const svg = document.getElementById('detailsMapSvg');
-  if (!svg) return;
-  svg.innerHTML = '';
-
-  // Responsive sizing: use the actual SVG size
-  const rect = svg.getBoundingClientRect();
-  const W = rect.width || 320;
-  const H = rect.height || 160;
-  const aspect = 2 / 1;
-  // Maintain aspect ratio
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-
-  // Draw world map background (stretched to fit)
-  let img = document.createElementNS(NS, 'image');
-  img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'assets/world_light.svg');
-  img.setAttribute('href', 'assets/world_light.svg');
-  img.setAttribute('x', 0);
-  img.setAttribute('y', 0);
-  img.setAttribute('width', W);
-  img.setAttribute('height', H);
-  img.setAttribute('opacity', '0.22');
-  svg.appendChild(img);
-
-  // Project lon/lat to SVG coordinates
-  function proj(lon, lat) {
-    // Equirectangular projection
-    const LON_MIN = -180, LON_MAX = 180;
-    const LAT_MIN = -95, LAT_MAX = 85;
-    const x = ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * W;
-    const y = ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * H;
-    return [x, y];
-  }
-
-  let lat = Number.isFinite(item.lat) ? item.lat : null;
-  let lon = Number.isFinite(item.lon) ? item.lon : null;
-
-  // If lat/lon missing, try to geocode from location string
-  if ((lat === null || lon === null) && item.origin_location) {
-    const coords = geocodePlace(item.origin_location);
-    if (coords) {
-      lat = coords[0];
-      lon = coords[1];
-    }
-  }
-
-  if (lat !== null && lon !== null) {
-    const [x, y] = proj(Number(lon), Number(lat));
-    const marker = document.createElementNS(NS, 'circle');
-    marker.setAttribute('cx', x);
-    marker.setAttribute('cy', y);
-    marker.setAttribute('r', Math.max(10, Math.min(W, H) * 0.06));
-    marker.setAttribute('fill', '#7C3AED');
-    marker.setAttribute('stroke', '#fff');
-    marker.setAttribute('stroke-width', 4);
-    marker.setAttribute('filter', 'drop-shadow(0 2px 6px rgba(0,0,0,0.18))');
-    svg.appendChild(marker);
-  } else {
-    // If still no coordinates, show a faded world map and a message
-    const text = document.createElementNS(NS, 'text');
-    text.setAttribute('x', W/2);
-    text.setAttribute('y', H/2 + 8);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-size', '18');
-    text.setAttribute('fill', '#bbb');
-    text.textContent = 'No coordinates';
-    svg.appendChild(text);
-  }
+  // Hide meta info (Years, Location, Coordinates)
+  const metaList = $('#metaList');
+  if (metaList) metaList.style.display = 'none';
 }
 
 function fillSectionsFromMarkdown(item, md){
@@ -337,28 +328,42 @@ function fillSectionsFromMarkdown(item, md){
 
   // Hide all by default
   hide($('#peopleSections'));
-  hide($('#deviceSections'));
-  hide($('#storySections'));
+  hide($('#devicesSections'));
+  hide($('#storiesSections'));
 
-  let order = [];
-  if (item.category === 'device') {
-    show($('#deviceSections'));
-    order = ['DESCRIPTION','FUNCTION','PERSPECTIVE','INNOVATION'];
-  } else if (item.category === 'person') {
-    show($('#peopleSections'));
-    order = ['BIO','WHAT','WHY'];
-  } else if (item.category === 'story') {
-    show($('#storySections'));
-    order = ['DESCRIPTION', 'FUNCTION', 'PERSPECTIVE', 'INNOVATION', 'STORY+'];
-  }
-
+  // Map of section containers by category
+  const sectionMap = {
+    'devices': $('#devicesSections'),
+    'people': $('#peopleSections'),
+    'stories': $('#storiesSections')
+  };
+  const keyOrder = {
+    'devices': ['DESCRIPTION','FUNCTION','PERSPECTIVE','INNOVATION'],
+    'people': ['BIO','WHAT','WHY'],
+    'stories': ['DESCRIPTION', 'FUNCTION', 'PERSPECTIVE', 'INNOVATION', 'STORY+']
+  };
+  const cat = item.category;
+  const container = sectionMap[cat];
+  const order = keyOrder[cat] || [];
   let filled = 0;
-  for (const key of order){
-    const val = sections[key] || '';
-    const el = document.querySelector(`[data-key="${key}"]`);
-    if (!el) continue;
-    el.innerHTML = val ? mdToHTML(val) : '';
-    if (val) filled++;
+  if (container) {
+    // Hide all section headers by default
+    Array.from(container.querySelectorAll('h3')).forEach(h => h.style.display = 'none');
+    Array.from(container.querySelectorAll('div[data-key]')).forEach(d => { d.innerHTML = ''; d.style.display = 'none'; });
+    // Only show and fill those with content
+    for (const key of order) {
+      const val = sections[key] || '';
+      const h = container.querySelector(`h3 + div[data-key="${key}"]`)?.previousElementSibling;
+      const d = container.querySelector(`div[data-key="${key}"]`);
+      if (val && d && h) {
+        h.style.display = '';
+        d.style.display = '';
+        d.innerHTML = mdToHTML(val);
+        filled++;
+      }
+    }
+    if (filled > 0) show(container);
+    else hide(container);
   }
 
   // Render Sources section if present
@@ -499,26 +504,23 @@ async function main(){
 
   show($('#itemRoot')); hide($('#emptyState'));
   renderHeaderAndMeta(item);
-  renderMiniMap(item);
   renderMediaGallery(item);
 
-// re-render the mini map when its box resizes (fonts/layout/side panels)
-const mm = document.getElementById('detailsMapSvg');
-if ('ResizeObserver' in window && mm) {
-  const ro = new ResizeObserver(() => renderMiniMap(item));
-  ro.observe(mm);
-}
+  // Render Related Items Section as a component
+  renderRelatedItemsSection(item, items);
+
+
 
   const { md, tried } = await loadMarkdownForItem(item);
   if (md){
     const filled = fillSectionsFromMarkdown(item, md);
     if (!filled){
-      hide($('#peopleSections')); hide($('#deviceSections'));
+      hide($('#peopleSections')); hide($('#sSections'));
       show($('#desc'));
       $('#desc').innerHTML = mdToHTML(parseFrontMatter(md).body);
     }
   } else {
-    hide($('#peopleSections')); hide($('#deviceSections'));
+    hide($('#peopleSections')); hide($('#devicesSections'));
     show($('#desc'));
     if (item.caption){
       $('#desc').innerHTML = `<p>${item.caption}</p>`;
@@ -537,92 +539,6 @@ if ('ResizeObserver' in window && mm) {
 
 document.addEventListener('DOMContentLoaded', main);
 
-/* ===================== Geo Lookup ===================== */
-const GEO_LOOKUP = {
-  // ——— Cities / regions
-  'kaifeng':[34.797,114.307], 'athens':[37.984,23.727], 'paris':[48.857,2.352],
-  'geneva':[46.204,6.143], 'la chaux-de-fonds':[47.099,6.825], 'le brassus':[46.611,6.321],
-  'neuchâtel':[46.992,6.931], 'neuchatel':[46.992,6.931], 'padua':[45.407,11.875],
-  'the hague':[52.080,4.311], 'yorkshire':[53.991,-1.541], 'london':[51.507,-0.127],
-  'greenwich':[51.482,0.000], 'washington d.c.':[38.907,-77.037], 'washington dc':[38.907,-77.037],
-  'bern':[46.948,7.447], 'prague':[50.075,14.437], 'florence':[43.769,11.255],
-  'milan':[45.464,9.190], 'montreal':[45.501,-73.567], 'new york':[40.712,-74.006],
-  'cairo':[30.044,31.236], 'basra':[30.509,47.783], 'baghdad':[33.315,44.366],
-  'damascus':[33.513,36.292], 'alexandria':[31.200,29.918], 'istanbul':[41.009,28.966],
-  'nuremberg':[49.454,11.077], 'vienna':[48.208,16.373], 'prague':[50.075,14.437],
-  'venice':[45.440,12.315], 'pisa':[43.717,10.401], 'oxford':[51.752,-1.258],
-  'leiden':[52.160,4.497], 'rotterdam':[51.924,4.479], 'zurich':[47.376,8.541],
-  'basel':[47.559,7.588], 'lyon':[45.764,4.835], 'besançon':[47.238,6.024],
-  'besancon':[47.238,6.024], 'birmingham':[52.486,-1.890], 'bristol':[51.454,-2.587],
-  'lisbon':[38.722,-9.139], 'madrid':[40.416,-3.703], 'cordoba':[37.888,-4.779],
-  'toledo':[39.862,-4.027], 'seville':[37.389,-5.984], 'kyoto':[35.011,135.768],
-  'edo':[35.689,139.692], 'tokyo':[35.689,139.692], 'nagoya':[35.181,136.906],
-  'nagaski':[32.750,129.877], 'nagasaki':[32.750,129.877],
-
-  // ——— Countries / broad regions
-  'china':[35.861,104.195], 'switzerland':[46.818,8.227], 'france':[46.227,2.213],
-  'england':[52.355,-1.174], 'uk':[54.0,-2.0], 'united kingdom':[54.0,-2.0],
-  'italy':[41.871,12.567], 'netherlands':[52.132,5.291], 'denmark':[56.263,9.501],
-  'poland':[51.919,19.145], 'usa':[39.828,-98.579], 'united states':[39.828,-98.579],
-  'japan':[36.204,138.253], 'mediterranean':[35.0,18.0], 'spain':[40.463,-3.749],
-  'portugal':[39.399,-8.224], 'germany':[51.166,10.452], 'austria':[47.516,14.550],
-  'turkey':[38.964,35.243], 'egypt':[26.820,30.802], 'iraq':[33.223,43.679],
-  'syria':[34.802,38.996], 'greece':[39.074,21.824], 'morocco':[31.792,-7.093]
-};
-
-function geocodePlace(place) {
-  if (!place) return null;
-  const key = place.trim().toLowerCase();
-  // Try exact match
-  if (GEO_LOOKUP[key]) return GEO_LOOKUP[key];
-  // Try first word (for "Fes, Morocco" etc)
-  const first = key.split(/[ ,/]/)[0];
-  if (GEO_LOOKUP[first]) return GEO_LOOKUP[first];
-  return null;
-}
-
-/* ===================== Geo JSON ===================== */
-const _VISIBLE = [];
-const _HIDDEN = [];
-
-function updateVisibleItems() {
-  const now = Date.now();
-  const oneHour = 60 * 60 * 1000;
-
-  // Filter items that are not in the visible range
-  _VISIBLE.length = 0;
-  _HIDDEN.length = 0;
-  for (const item of window._ALL_ITEMS) {
-    // Skip if no coordinates
-    if (!item.lat || !item.lon) continue;
-
-    // Check if the item's time range is within the last 24 hours
-    const itemDate = new Date(item.year, 0, 1).getTime();
-    if (now - itemDate <= oneHour) {
-      _VISIBLE.push(item);
-    } else {
-      _HIDDEN.push(item);
-    }
-  }
-
-  // Update the UI or map with the new visible items
-  renderVisibleItems();
-}
-
-function renderVisibleItems() {
-  const features = _VISIBLE.map(d => ({
-    type: "Feature",
-    properties: { ...d },
-    geometry: { type: "Point", coordinates: [d.lon, d.lat] }
-  }));
-
-  // Here you would typically update a map layer with the new features
-  // For example, if using Mapbox GL JS:
-  // map.getSource('your-source-id').setData({
-  //   type: 'FeatureCollection',
-  //   features: features
-  // });
-}
 
 /* ===================== Debugging ===================== */
 function debugVisibleItems() {

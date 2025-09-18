@@ -1,13 +1,8 @@
+---
+---
 # The Établisseur (Watch Assembler)
 
 ## DESCRIPTION
-An esteemed organiser who chose models, distributed materials, advanced wages, coordinated parts, oversaw finishing and sold completed watches.
+The établisseur, usually a respected qualified watchmaker, organized production.
 
-## FUNCTION
-To orchestrate production across a dispersed network and bring finished watches to market directly or via merchants.
-
-## HISTORICAL PERSPECTIVE
-Embodies the managerial pivot from single workshop to coordinated manufacture and distribution.
-
-## INNOVATION
-Professionalises the role linking craft, finance and commerce in the early watch industry.
+He chose the types of watches, distributed raw materials to subcontractors, advanced wages, collected and redistributed parts as work progressed, supervised finishing, and brought completed watches to market — either selling directly to consumers or via merchants for resale in distant cities.

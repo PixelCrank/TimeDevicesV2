@@ -190,7 +190,6 @@
     },
     {
       "start_date": { "year": -2000 },
-      "end_date": { "year": -500 },
       "text": {
         "headline": "Early Solar Indicators — Gnomons",
         "text": "Around 3000 BC, the Egyptians were already using the first solar indicators, consisting of a simple vertical rod called a gnomon planted in the ground. The shadow cast by the sun indicated the time by its length and its position on the ground. From this period onward, the Egyptians could measure time with precision by dividing the day between dawn and dusk into 12 equal periods, thus adapting the measurements to seasonal variations"
@@ -204,7 +203,6 @@
     },
     {
       "start_date": { "year": -1800 },
-      "end_date": { "year": -500 },
       "text": {
         "headline": "Babylonian Gnomons",
         "text": "Between 3000 and 2000 BC, the Sumerians of Mesopotamia, and later the Babylonians, developed a system of hours in which day and night were each divided into twelve hours. Each hour was itself divided into 60 sexagesimal units, a numerical base still used today to measure time. The length of the hours varied according to the season and latitude, since time was measured by observing the sun, particularly with the use of sundials."
@@ -218,7 +216,6 @@
     },
     {
       "start_date": { "year": -1000 },
-      "end_date": { "year": -200 },
       "text": {
         "headline": "Chinese Gnomons",
         "text": "The earliest Chinese astronomical gnomons probably date back to the second millennium BC, although tradition attributes the origin of the Chinese calendar to the Yellow Emperor in 2637 BC. It was under the Xia dynasty (22nd century BC?) that the legendary astronomers Xi and He were mentioned, observing the length of the shadow cast by a gnomon during the summer solstice. Gnomons between 1.6 and 2 meters high were used to carry out precise measurements as early as 1100 BC"
@@ -245,7 +242,6 @@
     },
     {
       "start_date": { "year": -1600 },
-      "end_date": { "year": -300 },
       "text": {
         "headline": "Water Clock (Clepsydra)",
         "text": "Using the steady flow of water, these clocks divided the day into measurable hours long before mechanical gears existed. Found in Egypt, Mesopotamia, and later Greece, they served in temples, courts, and observatories. The water clock was the first truly universal device for tracking continuous time."
@@ -259,7 +255,6 @@
     },
     {
       "start_date": { "year": -1400 },
-      "end_date": { "year": -500 },
       "text": {
         "headline": "Babylonian Water Clock (Clepsydra)",
         "text": "A regulated flow of water measured equal intervals independent of sunlight. Clepsydrae timed rituals, legal proceedings, and astronomical work in ancient Mesopotamia."
@@ -273,7 +268,6 @@
     },
     {
       "start_date": { "year": -500 },
-      "end_date": { "year": -200 },
       "text": {
         "headline": "Greek Clepsydras",
         "text": "These water clocks became central to public life in ancient Athens, where they timed speeches in court and rituals in civic ceremonies. Their name, meaning “water thief,” captured the poetic image of time slipping away drop by drop. By regulating social life, clepsydras brought discipline and fairness to democratic practice."
@@ -286,8 +280,7 @@
       }
     },
     {
-      "start_date": { "year": -270 },
-      "end_date": { "year": -200 },
+      "start_date": { "year": -270 },      
       "text": {
         "headline": "Ctesibius’s Clocks",
         "text": "The Alexandrian engineer Ctesibius transformed the humble clepsydra into an intricate machine with gears, floats, and moving dials. His innovations made water clocks not only practical but spectacular, decorated with artistry and often designed as public attractions. These devices represent the first true step toward mechanized timekeeping."
@@ -300,8 +293,7 @@
       }
     },
     {
-      "start_date": { "year": -300 },
-      "end_date": { "year": -200 },
+      "start_date": { "year": -300 },      
       "text": {
         "headline": "“Archimedes’ Clock” (attributed)",
         "text": "Though partly legendary, this device is credited to Archimedes as an early fusion of mathematics and spectacle. Said to combine flowing water with geared mechanisms, it likely displayed celestial movements while entertaining audiences. Whether myth or reality, the “Archimedes” clock symbolizes the imagination and genius of Greek engineering."
@@ -314,9 +306,7 @@
       }
     },
     {
-      "start_date": { "year": -200 },
-      "end_date": { "year": 300 },
-      "text": {
+      "start_date": { "year": -200 },      "text": {
         "headline": "Roman Sundials",
         "text": "Carved in stone or cast in bronze, sundials spread across the Roman Empire, bringing standardized hours to public squares and private gardens. Romans carried portable versions as luxury items, while monumental dials reinforced imperial control over time. They turned solar time into a shared civic experience."
       },
@@ -356,7 +346,6 @@
     },
     {
       "start_date": { "year": 790 },
-      "end_date": { "year": 810 },
       "text": {
         "headline": "Charlemagne’s Water Clock",
         "text": "Given to the emperor in the 9th century, this clock symbolized the fusion of mechanical craft with imperial authority. It marked time in ways that reinforced Charlemagne’s role as ruler of both earth and heavens. The gift exemplified how clocks could serve as instruments of diplomacy and power."
@@ -370,7 +359,6 @@
     },
     {
       "start_date": { "year": 520 },
-      "end_date": { "year": 1700 },
       "text": {
         "headline": "Candle Clocks",
         "text": "Simple but ingenious, these clocks measured time by burning wax at a steady pace. Marks on the candle’s shaft indicated passing hours, turning firelight into a time scale. They were widely used for nighttime or indoor timing before mechanical alternatives spread."
@@ -384,7 +372,6 @@
     },
     {
       "start_date": { "year": 500 },
-      "end_date": { "year": 600 },
       "text": {
         "headline": "Chinese Fire Clock",
         "text": "Using slow-burning powders or sticks, fire clocks measured time through controlled combustion. Ash and scent revealed the hours, while their steady glow symbolized endurance. They were both functional and ceremonial, embodying the fusion of time, ritual, and sensory experience."
@@ -398,7 +385,6 @@
     },
     {
       "start_date": { "year": 700 },
-      "end_date": { "year": 1200 },
       "text": {
         "headline": "Japanese Incense Clock (Jōban/Jokoban)",
         "text": "Delicate and ritualistic, these clocks measured time through the slow burning of intricate incense trails. Different scents marked different hours, filling spaces with both fragrance and structure. They embodied a uniquely Japanese way of fusing aesthetics, spirituality, and precision in daily life."
@@ -412,7 +398,6 @@
     },
     {
       "start_date": { "year": 1092 },
-      "end_date": { "year": 1094 },
       "text": {
         "headline": "Su Song’s Astronomical Clock Tower",
         "text": "The Chinese scholar Su Song designed a monumental astronomical clock 12 meters high, powered by a waterwheel and composed of about 400 parts. A true cosmic machine, it did more than indicate the time: it represented the movements of the stars, the Earth, and the heavens in a coherent system."
@@ -426,7 +411,6 @@
     },
     {
       "start_date": { "year": 1190 },
-      "end_date": { "year": 1210 },
       "text": {
         "headline": "Al‑Jazari’s Astronomical Clock",
         "text": "Built in the 13th century, Al-Jazari’s clock featured a richly decorated facade where zodiac signs, moons, and mechanical figures animated the heavens. Driven by water and weights, it was both scientific instrument and spectacular showpiece. It reflects the inventive spirit of the Islamic Golden Age, where art and mechanics intertwined."
@@ -440,7 +424,6 @@
     },
     {
       "start_date": { "year": 1200 },
-      "end_date": { "year": 1210 },
       "text": {
         "headline": "Ridwan’s Astronomical Clock",
         "text": "Constructed in 14th-century Damascus, Ridwan’s clock loomed above a mosque entrance, with doors that opened to reveal figures as time passed. Combining religious symbolism with technical sophistication, it structured communal worship and daily life. This monumental device underscored the cultural prestige of public timekeeping."
@@ -454,7 +437,6 @@
     },
     {
       "start_date": { "year": 1300 },
-      "end_date": { "year": 1450 },
       "text": {
         "headline": "Mechanical Foliot Clock",
         "text": "Emerging in medieval Europe, these weight-driven clocks used a foliot bar to regulate time. Though imprecise by modern standards, they marked the birth of true mechanical timekeeping. Their invention transformed monasteries, cities, and daily rhythms forever."
@@ -496,7 +478,6 @@
     },
     {
       "start_date": { "year": 1600 },
-      "end_date": { "year": 1620 },
       "text": {
         "headline": "Jost Bürgi’s Rotating Sphere",
         "text": "Bürgi’s ingenious sphere simulated celestial rotation with unprecedented precision in the 16th century. It was designed to aid astronomical study while dazzling audiences with its craftsmanship. This device bridged the world of scientific instruments and decorative art."
@@ -510,8 +491,7 @@
     },
     {
       "start_date": { "year": 1500 },
-      "end_date": { "year": 1800 },
-      "text": {
+            "text": {
         "headline": "Portable Sundials",
         "text": "Small enough to carry, these personal sundials brought timekeeping into the hands of individuals. Travelers, merchants, and scholars used them to stay aligned with the sun’s rhythm wherever they went. They mark the transition from monumental public devices to intimate, everyday instruments of time."
       },
@@ -524,7 +504,6 @@
     },
     {
       "start_date": { "year": 1602 },
-      "end_date": { "year": 1642 },
       "text": {
         "headline": "Galileo’s ‘Clock’ (Pendulum Insight)",
         "text": "Galileo’s studies of pendulum motion laid the groundwork for a new era of precision timekeeping. Though he never built a functioning clock himself, his designs inspired others to harness the pendulum’s steady swing. This concept revolutionized accuracy and reshaped science, navigation, and daily life."
@@ -538,7 +517,6 @@
     },
     {
       "start_date": { "year": 1656 },
-      "end_date": { "year": 1695 },
       "text": {
         "headline": "Huygens’s Clocks (Pendulum & Spring)",
         "text": "Christiaan Huygens realized Galileo’s vision, constructing the first working pendulum clocks in the 17th century. His inventions improved accuracy tenfold, making precise navigation and astronomical observation possible. Huygens’ work stands as a turning point in humanity’s control over time."
@@ -552,7 +530,6 @@
     },
     {
       "start_date": { "year": 1695 },
-      "end_date": { "year": 1750 },
       "text": {
         "headline": "Cylinder Escapement",
         "text": "This mechanism refined watchmaking by reducing friction and increasing portability. It allowed slimmer, more elegant watches to be made while maintaining reliability. The cylinder escapement reflects the merging of fashion, precision, and innovation."
@@ -566,7 +543,6 @@
     },
     {
       "start_date": { "year": 1750 },
-      "end_date": { "year": 1800 },
       "text": {
         "headline": "Lever Escapement",
         "text": "Revolutionizing watches in the 18th century, the lever escapement offered durability and accuracy on a mass scale. It became the standard for portable timepieces, powering millions of watches worldwide. This breakthrough democratized precise timekeeping beyond elites."
@@ -580,7 +556,6 @@
     },
     {
       "start_date": { "year": 1762 },
-      "end_date": { "year": 1765 },
       "text": {
         "headline": "John Harrison’s H‑4 Chronometer",
         "text": "Built in the 18th century, Harrison’s H-4 solved the centuries-old problem of determining longitude at sea. With remarkable accuracy, it saved countless lives and transformed navigation. The H-4 represents one of the greatest triumphs of human ingenuity over nature’s challenges."
@@ -594,7 +569,6 @@
     },
     {
       "start_date": { "year": 1785 },
-      "end_date": { "year": 1860 },
       "text": {
         "headline": "Swiss Lever Escapement",
         "text": "Invented in the 19th century, this mechanism combined precision with resilience, securing Switzerland’s dominance in watchmaking. Its efficiency and reliability made it the heart of modern wristwatches. The Swiss escapement is still celebrated as a pinnacle of horological engineering."
@@ -608,7 +582,6 @@
     },
     {
       "start_date": { "year": 1600 },
-      "end_date": { "year": 1868 },
       "text": {
         "headline": "Man‑nen Jimeisho — Clock of Temporal Hours",
         "text": "A Japanese masterpiece, this clock adapted to seasonal changes by dividing daylight into variable hours. It reflects a worldview where time flowed with nature rather than rigid uniformity. The Man-Nen Jimeisho embodies cultural ingenuity, blending mechanics with harmony."
@@ -622,7 +595,6 @@
     },
     {
       "start_date": { "year": 1927 },
-      "end_date": { "year": 1960 },
       "text": {
         "headline": "Quartz Clock & Frequency Standard",
         "text": "In the 20th century, quartz oscillations ushered in unprecedented accuracy, transforming both science and daily life. Quartz became the backbone of communications, navigation, and consumer watches alike. It symbolized the leap from mechanical rhythm to electronic precision."
@@ -636,7 +608,6 @@
     },
     {
       "start_date": { "year": 1960 },
-      "end_date": { "year": 1975 },
       "text": {
         "headline": "Tuning Fork Watch",
         "text": "Popular in the mid-20th century, these watches vibrated a tiny fork at high frequency to regulate time. Their humming sound and smooth sweeping hands became iconic. They represented a stylish and technical step between mechanical and quartz eras."
@@ -649,7 +620,6 @@
     },
     {
       "start_date": { "year": 1955 },
-      "end_date": { "year": 2025 },
       "text": {
         "headline": "Atomic Clock",
         "text": "Using vibrations of atoms, these clocks became the ultimate rulers of precision, accurate to billionths of a second. They underpin GPS, global communications, and scientific research. The atomic clock redefined humanity’s mastery of time at a cosmic scale."
@@ -675,7 +645,6 @@
     },
     {
       "start_date": { "year": 1000 },
-      "end_date": { "year": 1800 },
       "text": {
         "headline": "Oil (Lamp) Clocks",
         "text": "These devices combined lamps and timekeeping, measuring hours by the consumption of oil. They lit the night while quietly marking time, serving both practical and symbolic purposes. Oil clocks represent how illumination and time were historically intertwined."
@@ -689,8 +658,7 @@
     },
     {
       "start_date": { "year": -1400 },
-      "end_date": { "year": -500 },
-      "text": {
+            "text": {
         "headline": "The First Ones",
         "text": "TBD"
       },
@@ -1016,7 +984,6 @@
     },
     {
       "start_date": { "year": 1850 },
-      "end_date": { "year": 1930 },
       "text": {
         "headline": "American Watchmaking",
         "text": "TBD"
@@ -1030,7 +997,6 @@
     },
     {
       "start_date": { "year": 1870 },
-      "end_date": { "year": 1910 },
       "text": {
         "headline": "Switzerland Adapts to Competition",
         "text": "TBD"
@@ -1057,7 +1023,6 @@
     },
     {
       "start_date": { "year": 1870 },
-      "end_date": { "year": 1960 },
       "text": {
         "headline": "The World Championships of Precision",
         "text": "TBD"
@@ -1071,7 +1036,6 @@
     },
     {
       "start_date": { "year": 1929 },
-      "end_date": { "year": 1950 },
       "text": {
         "headline": "The Decline of Traditional Watchmaking",
         "text": "TBD"
@@ -1085,7 +1049,6 @@
     },
     {
       "start_date": { "year": 1950 },
-      "end_date": { "year": 1965 },
       "text": {
         "headline": "The Timex Offensive",
         "text": "TBD"
@@ -1099,7 +1062,6 @@
     },
     {
       "start_date": { "year": 1960 },
-      "end_date": { "year": 1969 },
       "text": {
         "headline": "The Tuning Fork – Prelude to Electronics",
         "text": "TBD"
@@ -1113,7 +1075,6 @@
     },
     {
       "start_date": { "year": 1969 },
-      "end_date": { "year": 1985 },
       "text": {
         "headline": "The Advent of Quartz",
         "text": "TBD"
@@ -1126,9 +1087,7 @@
       }
     },
     {
-      "start_date": { "year": 1975 },
-      "end_date": { "year": 1985 },
-      "text": {
+      "start_date": { "year": 1975 },      "text": {
         "headline": "Switzerland on the Brink of Collapse",
         "text": "TBD"
       },
@@ -1141,7 +1100,6 @@
     },
     {
       "start_date": { "year": 1890 },
-      "end_date": { "year": 1910 },
       "text": {
         "headline": "The Beginnings of the Grande Complication",
         "text": "TBD"
@@ -1155,7 +1113,6 @@
     },
     {
       "start_date": { "year": 1500 },
-      "end_date": { "year": 1800 },
       "text": {
         "headline": "The Piguet Family – Among the First Settlers",
         "text": "TBD"
@@ -1169,7 +1126,6 @@
     },
     {
       "start_date": { "year": 1600 },
-      "end_date": { "year": 1800 },
       "text": {
         "headline": "The Audemars Family Facing Adversity",
         "text": "TBD"
@@ -1183,7 +1139,6 @@
     },
     {
       "start_date": { "year": 1600 },
-      "end_date": { "year": 1800 },
       "text": {
         "headline": "The First Watchmakers of the Vallée de Joux",
         "text": "TBD"

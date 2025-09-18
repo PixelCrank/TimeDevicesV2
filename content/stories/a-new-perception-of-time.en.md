@@ -1,3 +1,5 @@
+---
+---
 # A New Perception of Time
 
 ## DESCRIPTION
@@ -6,7 +8,7 @@ With the spread of mechanical clocks in European cities, a new way of measuring 
 ## FUNCTION
 Merchants, artisans and workers embraced this measured time to organize working hours, maximize productivity and structure commercial exchanges. This appropriation of time for economic ends ran counter to the sacred vision of time promoted by the Church, which had previously condemned the selling or “monetization” of time (interest, loans).
 
-## HISTORICAL PERSPECTIVE
+## PERSPECTIVE
 In medieval Christian tradition, time belonged to God, and any attempt to sell it or count it for profit was considered blasphemous. The arrival of fixed time introduced a rupture in this spiritual view. This transformation took place amid the growth of cities, commerce and crafts, where organizing work became paramount.
 
 ## INNOVATION

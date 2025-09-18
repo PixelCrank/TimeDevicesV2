@@ -1,13 +1,15 @@
+---
+---
 # The Advent of Quartz
 
 ## DESCRIPTION
-Late‑1960s miniaturisation put high‑frequency quartz into wristwatches (Seiko 1969), far more precise and cheaper than mechanical.
+By the late 1960s, the Swiss watch industry, strong in its mechanical dominance, was taken by surprise with the arrival of quartz: a high-frequency timekeeping technology that replaced the mechanical movement at the heart of the watch.
 
-## FUNCTION
-Though lab prototypes existed since 1927, only then were they wearable and mass‑producible.
+## WHAT
+Although the first quartz clock was invented in 1927 in the United States, it was not until the late 1960s that the miniaturization of this technology made it possible to integrate it into wristwatches. Quartz watches were infinitely more precise than mechanical ones (±1 minute per year), less expensive, and easier to mass produce. The first quartz model by Seiko was launched in 1969 and paved the way for rapid Japanese domination of the industry.
 
-## HISTORICAL PERSPECTIVE
-Watchmaking became a techno‑industrial sector open to firms from electronics and beyond.
+## WHY
+Watchmaking was no longer the exclusive domain of mechanical precision; it became a techno-industrial sector. The transformation was so profound that new players appeared, coming from electronics or even other industries — such as Gillette, which saw the opportunity to sell watches just as it sold razors.
 
-## INNOVATION
-Swiss research helped, but commercial potential was underestimated—Japan seized the lead.
+## STORY+
+Ironically, as with the tuning fork, the Swiss had participated in the early research on quartz miniaturization but neglected its commercial potential.
