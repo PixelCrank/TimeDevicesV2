@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Time Stories — Map & Timeline</title>
+  <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header>
+    <h1>Time Measuring Devices</h1>
+    <nav class="tabs">
+      <button class="tab-btn" data-view="map" type="button">Map</button>
+      <button class="tab-btn" data-view="kl_timeline" type="button">Linear Timeline</button>
+      <button class="tab-btn active" data-view="custom_timeline" type="button">My Timeline</button>
+      <button class="tab-btn" data-view="gallery" type="button">Gallery</button>
+      <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
+    </nav>
+  </header>
+
+  <!-- ===== COLLAPSIBLE GLASS SIDEBAR ===== -->
+  <aside id="sidebar" class="filters glass" aria-label="Filters">
+    <div class="filters-scroll">
+      <!-- Search -->
+      <div class="filter">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="type to search…" autocomplete="off"/>
+      </div>
+
+      <!-- Category -->
+      <details class="acc" open>
+        <summary>
+          Category
+          <span class="acc-caret" aria-hidden="true">▾</span>
+        </summary>
+        <div id="f_category_group" class="checkbox-list"></div>
+      </details>
+
+      <!-- Eras -->
+      <details class="acc" open>
+        <summary>
+          Eras
+          <span class="acc-caret" aria-hidden="true">▾</span>
+        </summary>
+        <div id="eraPills" class="btn-group"></div>
+        <p class="muted" style="margin-top:6px">Click an era to set the year range. Click again to clear.</p>
+      </details>
+    </div>
+
+    <button id="clearFilters" type="button">Clear filters</button>
+  </aside>
+
+  <!-- Main content -->
+  <main>
+    <section id="custom_timeline" class="view active" aria-label="Custom Timeline">
+  <div id="timelineCardArea"></div>
+  <div id="timelineZoomWidget"></div>
+  <div id="timelineNav" style="width:100%;overflow-x:auto;"></div>
+  <div id="timelineZoomControls" style="margin:10px 0; text-align:center;"></div>
+    </section>
+   
+  <script src="./app.js"></script>
+  <div id="debugBadge">DEBUG</div>
+</body>
+</html>

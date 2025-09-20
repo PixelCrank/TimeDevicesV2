@@ -1,3 +1,93 @@
+// --- On customtimeline.html, always render timeline and restore slug on load ---
+document.addEventListener('DOMContentLoaded', () => {
+  const isCustomTimeline = window.location.pathname.endsWith('customtimeline.html');
+  if (isCustomTimeline) {
+    // Patch renderCustomTimeline to always call restoreTimelineFromHash after rendering
+    const origRenderCustomTimeline = window.renderCustomTimeline;
+    window.renderCustomTimeline = function patchedRenderCustomTimeline() {
+      if (origRenderCustomTimeline) origRenderCustomTimeline.apply(this, arguments);
+      setTimeout(restoreTimelineFromHash, 0);
+    };
+    renderCustomTimeline();
+  }
+});
+// --- Always re-render custom timeline when My Timeline tab is clicked ---
+document.addEventListener('DOMContentLoaded', () => {
+  const myTimelineBtn = document.querySelector('.tab-btn[data-view="custom_timeline"]');
+  if (myTimelineBtn) {
+    myTimelineBtn.addEventListener('click', (e) => {
+      // Always switch to the view and re-render, even if already active
+      switchView('custom_timeline');
+      renderCustomTimeline();
+    });
+  }
+});
+// --- Restore timeline state from hash on load (Back to Timeline) ---
+function restoreTimelineFromHash() {
+  if (window.location.hash && window.location.hash.startsWith('#slug=')) {
+    const slug = decodeURIComponent(window.location.hash.replace('#slug=', ''));
+    let attempts = 0;
+    function tryActivate() {
+      if (window._ALL_ITEMS && typeof activateTimelineItem === 'function') {
+        const item = window._ALL_ITEMS.find(x => x.slug === slug);
+        if (item) {
+          activateTimelineItem(item);
+          return;
+        }
+      }
+      if (++attempts < 20) setTimeout(tryActivate, 100); // retry up to 2s
+    }
+    tryActivate();
+  }
+}
+
+// Patch render() to call restoreTimelineFromHash after rendering
+const _origRender = typeof render === 'function' ? render : null;
+window.render = function patchedRender() {
+  if (_origRender) _origRender.apply(this, arguments);
+  restoreTimelineFromHash();
+};
+if (!_origRender) {
+  // If render() not yet defined, patch after DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof render === 'function') {
+      const orig = render;
+      window.render = function patchedRender() {
+        orig.apply(this, arguments);
+        restoreTimelineFromHash();
+      };
+    }
+    restoreTimelineFromHash();
+  });
+}
+// Activate a timeline item: show card, scroll marker into view, set marker as active
+function activateTimelineItem(item) {
+  if (!item) return;
+  renderTimelineCard(item);
+  const nav = document.getElementById('timelineNav');
+  if (!nav) return;
+  const year = Number(item.year) || 0;
+  const markerX = 40 + ((year - MAP_YEAR_MIN) * 18 * (window.timelineZoom || 1));
+  nav.scrollLeft = Math.max(0, markerX - nav.clientWidth / 2);
+  // Remove .active from all markers, add to this one
+  $$('.timeline-marker').forEach(g => {
+    g.classList.remove('active');
+    // Remove expanded title from all except hovered
+    if (!g.matches(':hover')) {
+      const hoverBg = g.querySelector('rect.card-bg');
+      if (hoverBg) hoverBg.remove();
+      const hoverTitle = g.querySelector('text.card-title');
+      if (hoverTitle) hoverTitle.remove();
+    }
+  });
+  // Find the marker for this item
+  const marker = $(`.timeline-marker[data-slug='${item.slug}']`, nav);
+  if (marker) {
+    marker.classList.add('active');
+    // Show expanded title for the active marker
+    marker.dispatchEvent(new Event('mouseenter'));
+  }
+}
 // Add CSS for spider-leg-hover highlight
 if (!document.getElementById('spider-leg-style')) {
   const style = document.createElement('style');
@@ -38,9 +128,12 @@ const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
 // How much bigger a node gets on hover
 const HOVER_SCALE = 1.35; // tweak 1.2–1.5 to taste
 
+
 // ------- Year domain & eras -------
 let MAP_YEAR_MIN = -1500, MAP_YEAR_MAX = 2025;
 let mapYearStart = MAP_YEAR_MIN, mapYearEnd = MAP_YEAR_MAX;
+
+
 
 
 const ERAS = [
@@ -531,7 +624,7 @@ function drawImageNode(scene, x, y, r, d){
   ring.setAttribute('fill','none');
   const stroke = CAT_STROKES[(d.category || '').toLowerCase()] || '#111827';
   ring.setAttribute('stroke', stroke);
-  ring.setAttribute('stroke-width','2');
+  ring.setAttribute('stroke-width','1');
   ring.classList.add('ring');
   g.appendChild(ring);
 
@@ -1131,20 +1224,973 @@ function switchView(name){
   if (name === 'kl_timeline') {
     renderKnightlabTimeline();
   }
+  if (name === 'custom_timeline') {
+    renderCustomTimeline();
+  }
 }
 
-// Example tab switching logic
-document.querySelectorAll('.tab-btn').forEach (btn => {
-  btn.addEventListener('click', e => {
-    const view = btn.dataset.view;
-    document.querySelectorAll('.view').forEach(v => {
-      v.style.display = (v.id === view) ? '' : 'none';
-    });
-    if (view === 'gallery') renderGallery();
-    // ...other view logic...
-  });
-});
+// =======================
+// Custom Timeline Navigation
+// =======================
 
+let timelineZoom = 1; // 1 = default, >1 = zoomed in
+
+function renderCustomTimeline() {
+
+  // --- Pinch/trackpad zoom support ---
+  // Attach after SVG is created
+
+  // Only set max zoom out on first-ever load, not every render
+  if (typeof renderCustomTimeline._initialized === 'undefined') {
+    timelineZoom = 0.25;
+    renderCustomTimeline._initialized = true;
+  }
+
+  const container = document.getElementById('timelineNav');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // --- Zoom controls as floating widget above timelineNav ---
+  const zoomWidgetContainer = document.getElementById('timelineZoomWidget');
+  zoomWidgetContainer.innerHTML = '';
+  let zoomUi = document.createElement('div');
+  zoomUi.className = 'zoom-ui';
+  zoomUi.style.position = 'relative';
+  zoomUi.style.display = 'flex';
+  zoomUi.style.justifyContent = 'flex-start';
+  zoomUi.style.alignItems = 'center';
+  zoomUi.style.gap = '8px';
+  zoomUi.style.background = 'none';
+  zoomUi.style.borderRadius = '0';
+  zoomUi.style.boxShadow = 'none';
+  zoomUi.style.padding = '0';
+  zoomUi.style.margin = '10px 10px 10px 30px';
+  const zoomInBtn = document.createElement('button');
+  zoomInBtn.textContent = '+';
+  zoomInBtn.className = 'zoom-btn';
+  zoomInBtn.title = 'Zoom in';
+  zoomInBtn.onclick = () => {
+    timelineZoom = Math.min(5, timelineZoom * 1.5);
+    renderCustomTimeline();
+  };
+  const zoomOutBtn = document.createElement('button');
+  zoomOutBtn.textContent = '−';
+  zoomOutBtn.className = 'zoom-btn';
+  zoomOutBtn.title = 'Zoom out';
+  zoomOutBtn.onclick = () => {
+    timelineZoom = Math.max(0.02, timelineZoom / 1.5);
+    renderCustomTimeline();
+  };
+  // Scroll to end button
+  const scrollEndBtn = document.createElement('button');
+  scrollEndBtn.textContent = '⇢';
+  scrollEndBtn.className = 'zoom-btn';
+  scrollEndBtn.title = 'Scroll to end';
+  scrollEndBtn.onclick = () => {
+    const nav = document.getElementById('timelineNav');
+    if (nav) nav.scrollLeft = nav.scrollWidth;
+  };
+
+  const zoomResetBtn = document.createElement('button');
+  zoomResetBtn.textContent = '⤾';
+  zoomResetBtn.className = 'zoom-btn';
+  zoomResetBtn.title = 'Reset zoom';
+  zoomResetBtn.onclick = () => {
+    timelineZoom = 1;
+    renderCustomTimeline();
+  };
+  zoomUi.appendChild(zoomInBtn);
+  zoomUi.appendChild(zoomOutBtn);
+  zoomUi.appendChild(scrollEndBtn);
+  zoomUi.appendChild(zoomResetBtn);
+  zoomWidgetContainer.appendChild(zoomUi);
+
+  // Remove old controls if present
+  const oldZoomControls = document.getElementById('timelineZoomControls');
+  if (oldZoomControls) oldZoomControls.remove();
+
+  // Prepare data: sort by year, stack vertically if same year
+  const items = filteredItems(_ALL_ITEMS).slice().sort((a, b) => {
+    const ay = Number(a.year) || 0, by = Number(b.year) || 0;
+    return ay - by;
+  });
+  // Debug: log items
+  console.log('Custom timeline items:', items);
+  if (!items.length) {
+    container.innerHTML = '<div style="padding:2em;text-align:center;color:#888;">No items to display in the timeline.<br>Try clearing filters or check your data.</div>';
+    return;
+  }
+
+  // --- Do not auto-select a default marker/card on load ---
+  // Selection is now handled by restoreTimelineFromHash (if hash present)
+
+  // Config
+  const margin = { left: 40, right: 40, top: 0, bottom: 30 };
+  const markerRadius = 13; // larger marker for better visibility
+  const markerMargin = .1; // vertical margin between stacked markers (was 5)
+  const minYear = MAP_YEAR_MIN;
+  const maxYear = MAP_YEAR_MAX;
+  const width = Math.max(900, (maxYear - minYear) * 18 * timelineZoom + margin.left + margin.right);
+
+  // Stack: group by year, assign y-offsets
+  const yearMap = new Map();
+  items.forEach(item => {
+    const y = Number(item.year) || 0;
+    if (!yearMap.has(y)) yearMap.set(y, []);
+    yearMap.get(y).push(item);
+  });
+
+  // --- Calculate max stack count for each band (category) ---
+  const catList = ['story', 'person', 'device'];
+  const maxStack = { story: 0, person: 0, device: 0 };
+  yearMap.forEach(group => {
+    const catCounts = { story: 0, person: 0, device: 0 };
+    group.forEach(item => {
+      let cat = (item.category || '').toLowerCase();
+      if (cat.startsWith('dev')) cat = 'device';
+      else if (cat.startsWith('peo')) cat = 'person';
+      else if (cat.startsWith('sto')) cat = 'story';
+      if (catList.includes(cat)) catCounts[cat]++;
+    });
+    catList.forEach(cat => {
+      if (catCounts[cat] > maxStack[cat]) maxStack[cat] = catCounts[cat];
+    });
+  });
+
+  // Calculate band heights and total SVG height
+  // Use fixed, equal band heights for all groups for perfect alignment
+  const fixedBandHeight = 80; // px, adjust as needed
+  const bandGap = 8; // reduced gap between bands for a more compact layout
+  const bandPadding = 32;
+  const height = fixedBandHeight * catList.length + bandGap * (catList.length - 1) + bandPadding * 2;
+
+  // Calculate band center Y positions
+  let bandCenters = [];
+  let yCursor = bandPadding;
+  for (let i = 0; i < catList.length; ++i) {
+    const bandCenter = yCursor + fixedBandHeight / 2;
+    bandCenters.push(bandCenter);
+    yCursor += fixedBandHeight + bandGap;
+  }
+  const categoryY = {
+    story: bandCenters[0],
+    person: bandCenters[1],
+    device: bandCenters[2]
+  };
+
+  // SVG setup
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.style.display = 'block';
+  svg.style.background = '#f8fafc';
+  svg.style.border = '2px solid #e5e7eb';
+
+  // --- Pinch/trackpad zoom handlers ---
+  // --- Drag-to-scroll for timelineNav ---
+  if (container.id === 'timelineNav') {
+    let isDown = false, startX, scrollLeft;
+    container.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      isDown = true;
+      container.classList.add('drag-scroll');
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+      e.preventDefault();
+    });
+    container.addEventListener('mouseleave', () => {
+      isDown = false;
+      container.classList.remove('drag-scroll');
+    });
+    container.addEventListener('mouseup', () => {
+      isDown = false;
+      container.classList.remove('drag-scroll');
+    });
+    container.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.2; // scroll speed
+      container.scrollLeft = scrollLeft - walk;
+    });
+  }
+  let pinchZooming = false;
+  let lastPinchDist = null;
+  let pinchStartZoom = null;
+  svg.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      pinchZooming = true;
+      lastPinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      pinchStartZoom = timelineZoom;
+      e.preventDefault();
+    }
+  }, { passive: false });
+  svg.addEventListener('touchmove', function(e) {
+    if (pinchZooming && e.touches.length === 2) {
+      const newDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      if (lastPinchDist && pinchStartZoom) {
+        let scale = newDist / lastPinchDist;
+        let newZoom = Math.max(0.01, Math.min(5, pinchStartZoom * scale));
+        if (Math.abs(newZoom - timelineZoom) > 0.01) {
+          timelineZoom = newZoom;
+          renderCustomTimeline();
+        }
+      }
+      e.preventDefault();
+    }
+  }, { passive: false });
+  svg.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) {
+      pinchZooming = false;
+      lastPinchDist = null;
+      pinchStartZoom = null;
+    }
+  });
+  // Trackpad pinch (ctrl+wheel)
+  svg.addEventListener('wheel', function(e) {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      let factor = e.deltaY < 0 ? 1.08 : 1/1.08;
+      let newZoom = Math.max(0.01, Math.min(5, timelineZoom * factor));
+      if (Math.abs(newZoom - timelineZoom) > 0.01) {
+        timelineZoom = newZoom;
+        renderCustomTimeline();
+      }
+    }
+  }, { passive: false });
+
+  // X scale: year to X
+  const yearToX = y => margin.left + ((y - minYear) * 18 * timelineZoom);
+
+  // Draw axis
+
+  // Add extra margin for year labels
+  const labelMargin = 18;
+  const axisY = height - margin.bottom - labelMargin;
+
+  // --- Draw colored era bands in background ---
+  // --- Draw dashed horizontal separators between marker groups ---
+  // Calculate Y positions between bands (after bandCenters is set)
+  if (bandCenters && bandCenters.length === 3) {
+    const sepColor = '#b6c2d1';
+    const sepOpacity = 0.38;
+    const sepDash = '6 7';
+    // Y positions: between stories/people and people/devices
+    const sepY1 = (bandCenters[0] + bandCenters[1]) / 2;
+    const sepY2 = (bandCenters[1] + bandCenters[2]) / 2;
+    [sepY1, sepY2].forEach(sepY => {
+      const line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', yearToX(minYear));
+      line.setAttribute('x2', yearToX(maxYear));
+      line.setAttribute('y1', sepY);
+      line.setAttribute('y2', sepY);
+      line.setAttribute('stroke', sepColor);
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-dasharray', sepDash);
+      line.setAttribute('opacity', sepOpacity);
+      line.setAttribute('pointer-events', 'none');
+      svg.appendChild(line);
+    });
+  }
+  // Modern soft-glass style colors and effects
+  // Unique SVG gradients for each era band
+  const eraGradients = {
+    ancient: [
+      { offset: '0%', color: 'rgba(255,111,97,0.5)' },
+      { offset: '100%', color: 'rgba(255,107,74,0.5)' }
+    ],
+    medieval: [
+      { offset: '0%', color: 'rgba(255,201,74,0.5)' },
+      { offset: '100%', color: 'rgba(181,255,90,0.5)' }
+    ],
+    renaissance: [
+      { offset: '0%', color: 'rgba(90,190,255,0.5)' },
+      { offset: '100%', color: 'rgba(93,225,192,0.5)' }
+    ],
+    scientific: [
+      { offset: '0%', color: 'rgba(140,230,200,0.5)' },
+      { offset: '100%', color: 'rgba(120,200,180,0.5)' }
+    ],
+    industrial: [
+      { offset: '0%', color: 'rgba(155,225,93,0.5)' },
+      { offset: '100%', color: 'rgba(155,225,93,0.5)' }
+    ],
+    modern: [
+      { offset: '0%', color: 'rgba(255,111,97,0.5)' },
+      { offset: '33%', color: 'rgba(255,201,74,0.5)' },
+      { offset: '66%', color: 'rgba(90,190,255,0.5)' },
+      { offset: '100%', color: 'rgba(155,225,93,0.5)' }
+    ],
+    contemporary: [
+      { offset: '0%', color: 'rgba(140,255,210,0.5)' },
+      { offset: '100%', color: 'rgba(120,200,180,0.5)' }
+    ]
+  };
+  // Add SVG defs for all gradients if not present
+  let defs = svg.querySelector('defs');
+  if (!defs) {
+    defs = document.createElementNS(svgNS, 'defs');
+    svg.appendChild(defs);
+  }
+  Object.entries(eraGradients).forEach(([eraId, stops]) => {
+    if (!svg.querySelector(`#eraBandGradient_${eraId}`)) {
+      const grad = document.createElementNS(svgNS, 'linearGradient');
+      grad.setAttribute('id', `eraBandGradient_${eraId}`);
+      grad.setAttribute('x1', '0%');
+      grad.setAttribute('y1', '0%');
+      grad.setAttribute('x2', '100%');
+      grad.setAttribute('y2', '0%');
+      stops.forEach(stop => {
+        const stopEl = document.createElementNS(svgNS, 'stop');
+        stopEl.setAttribute('offset', stop.offset);
+        stopEl.setAttribute('stop-color', stop.color);
+        grad.appendChild(stopEl);
+      });
+      defs.appendChild(grad);
+    }
+  });
+  // For border, use a subtle semi-transparent gray
+  const eraBandBorder = 'rgba(180,180,180,0.18)';
+  // Make bands fill the entire timelineNav SVG height
+  const bandY = 0;
+  const bandHeight = height;
+  ERAS.forEach(era => {
+    // Only draw if era is in visible range
+    const startX = yearToX(Math.max(era.start, minYear));
+    const endX = yearToX(Math.min(era.end, maxYear));
+    if (endX > startX) {
+      const rect = document.createElementNS(svgNS, 'rect');
+      rect.setAttribute('x', startX);
+      rect.setAttribute('y', bandY);
+      rect.setAttribute('width', endX - startX);
+      rect.setAttribute('height', bandHeight);
+      rect.setAttribute('fill', `url(#eraBandGradient_${era.id})`);
+      rect.setAttribute('stroke', eraBandBorder);
+      rect.setAttribute('stroke-width', '1');
+      rect.setAttribute('rx', 18); // more rounded corners
+      // Removed glassmorphism filter
+      rect.setAttribute('pointer-events', 'none');
+      svg.appendChild(rect);
+      // Add label centered in band, but only if it fits
+      const label = document.createElementNS(svgNS, 'text');
+      label.setAttribute('x', (startX + endX) / 2);
+      label.setAttribute('y', bandY + 22);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('font-size', '16.5px');
+      label.setAttribute('font-family', '');
+      label.setAttribute('fill', '#222');
+      label.setAttribute('pointer-events', 'none');
+      label.setAttribute('style', 'text-shadow:0 2px 8px rgba(255,255,255,0.25); letter-spacing:0.5px; transition:opacity 0.35s cubic-bezier(.4,0,.2,1);');
+      label.textContent = era.label;
+      svg.appendChild(label);
+      // Estimate label width (SVG text not in DOM yet, so estimate)
+      // Use 0.6em per character as a rough estimate, or try getBBox after appending
+      let estLabelWidth = era.label.length * 10.5 + 24; // fudge factor for font size/padding
+      const bandWidth = endX - startX;
+      // If band is too narrow, fade out label
+      if (bandWidth < estLabelWidth) {
+        label.setAttribute('opacity', '0');
+        label.setAttribute('aria-hidden', 'true');
+      } else {
+        label.setAttribute('opacity', '0.82');
+        label.removeAttribute('aria-hidden');
+      }
+    }
+  });
+  // Removed glassmorphism filter for era bands
+
+  // Draw axis line on top of bands
+  const axis = document.createElementNS(svgNS, 'line');
+  axis.setAttribute('x1', yearToX(minYear));
+  axis.setAttribute('x2', yearToX(maxYear));
+  axis.setAttribute('y1', axisY);
+  axis.setAttribute('y2', axisY);
+  axis.setAttribute('stroke', '#bbb');
+  axis.setAttribute('stroke-width', '2');
+  svg.appendChild(axis);
+
+  // --- Dynamic tics and year labels ---
+  // Calculate visible year range and pixel density
+  const pxPerYear = 6 * timelineZoom;
+  const minTicPx = 60; // minimum px between tics
+  // Calculate visible year range
+  const visibleYears = maxYear - minYear;
+  const axisWidth = (maxYear - minYear) * 18 * timelineZoom;
+  // Aim for 6–12 tics, but always use a "nice" interval
+  function niceNumber(range, round) {
+    // Returns a "nice" number approximately equal to range
+    // round = true for round numbers, false for ceiling
+    const exponent = Math.floor(Math.log10(range));
+    const fraction = range / Math.pow(10, exponent);
+    let niceFraction;
+    if (round) {
+      if (fraction < 1.5) niceFraction = 1;
+      else if (fraction < 3) niceFraction = 2;
+      else if (fraction < 7) niceFraction = 5;
+      else niceFraction = 10;
+    } else {
+      if (fraction <= 1) niceFraction = 1;
+      else if (fraction <= 2) niceFraction = 2;
+      else if (fraction <= 5) niceFraction = 5;
+      else niceFraction = 10;
+    }
+    return niceFraction * Math.pow(10, exponent);
+  }
+
+  // Calculate ideal tic interval
+  // Force tic interval to 100 years
+  const ticInterval = 100;
+  // Find first tic >= minYear
+  let ticStart = Math.ceil(minYear / ticInterval) * ticInterval;
+  for (let y = ticStart; y <= maxYear; y += ticInterval) {
+    const x = yearToX(y);
+    // Draw tic
+    const tic = document.createElementNS(svgNS, 'line');
+    tic.setAttribute('x1', x);
+    tic.setAttribute('x2', x);
+    tic.setAttribute('y1', axisY);
+    tic.setAttribute('y2', axisY + 12);
+    tic.setAttribute('stroke', '#888');
+    tic.setAttribute('stroke-width', '2');
+    svg.appendChild(tic);
+    // Draw label at every tic
+    const label = document.createElementNS(svgNS, 'text');
+    label.setAttribute('x', x);
+    label.setAttribute('y', axisY + 28);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('font-size', '13px');
+    label.setAttribute('fill', '#444');
+    label.setAttribute('dominant-baseline', 'hanging');
+    label.textContent = y;
+    svg.appendChild(label);
+  }
+
+  yearMap.forEach((group, year) => {
+    // For each category, stack within its band
+    const catStacks = { story: 0, person: 0, device: 0 };
+    group.forEach((item, i) => {
+  const x = yearToX(Number(item.year) || minYear);
+  let cat = (item.category || '').toLowerCase();
+  if (cat.startsWith('dev')) cat = 'device';
+  else if (cat.startsWith('peo')) cat = 'person';
+  else if (cat.startsWith('sto')) cat = 'story';
+  const yBase = categoryY[cat] ?? categoryY['person'];
+  const stackIdx = catStacks[cat]++;
+  // Center the marker in the card background vertically
+  const cardHeight = 28; // smaller card height for all markers
+  const y = yBase - stackIdx * (cardHeight + markerMargin);
+
+      // --- Dynamic card width calculation (refined) ---
+      const minCardWidth = 120;
+      const maxCardWidth = 520; // px, max width for very long titles
+      const leftPad = markerRadius * 2 + 18; // space for circle + gap
+      const rightPad = 24;
+      const dateWidth = (item.year_end ? 60 : 0);
+      // Measure full title width
+      const tempText = document.createElementNS(svgNS, 'text');
+      tempText.setAttribute('font-size', '12px');
+      tempText.setAttribute('font-family', 'inherit,sans-serif');
+      tempText.setAttribute('font-weight', '400');
+      tempText.setAttribute('letter-spacing', '0');
+      tempText.textContent = item.title || '';
+      tempText.setAttribute('x', -9999);
+      tempText.setAttribute('y', -9999);
+      svg.appendChild(tempText);
+      const bbox = tempText.getBBox();
+      let textWidth = bbox.width;
+      svg.removeChild(tempText);
+      let cardWidth = Math.max(minCardWidth, Math.min(leftPad + textWidth + rightPad + dateWidth, maxCardWidth));
+      let displayTitle = item.title || '';
+
+      // Marker group
+      const g = document.createElementNS(svgNS, 'g');
+      g.setAttribute('class', 'timeline-marker');
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('cursor', 'pointer');
+      g.setAttribute('data-slug', item.slug);
+      g.setAttribute('transform', `translate(${x},${y})`);
+
+      // Circle (thumb border)
+  const circle = document.createElementNS(svgNS, 'circle');
+  circle.setAttribute('r', markerRadius);
+  circle.setAttribute('cx', 0);
+  circle.setAttribute('cy', 0);
+  circle.setAttribute('fill', CAT_STROKES[item.category] || '#888');
+  circle.setAttribute('stroke', '#fff');
+  circle.setAttribute('stroke-width', '2.5');
+  g.appendChild(circle);
+
+      // Image (circle crop)
+      if (item.image || item.thumb) {
+        const img = document.createElementNS(svgNS, 'image');
+        img.setAttribute('href', nodeImageURL(item));
+        img.setAttribute('x', -markerRadius + 1);
+        img.setAttribute('y', -markerRadius + 1);
+        img.setAttribute('width', (markerRadius - 1) * 2);
+        img.setAttribute('height', (markerRadius - 1) * 2);
+        // No clip-path: show full image, not cropped
+        g.appendChild(img);
+      }
+
+      // Helper to show expanded title (card) if hovered or active
+      function showExpandedTitle() {
+        // Remove any previous year-range bar from SVG (global, not per marker)
+        const prevBar = svg.querySelector('rect.timeline-year-bar');
+        if (prevBar) prevBar.remove();
+        // Remove any previous year label from this marker group
+        const prevYear = g.querySelector('text.marker-year-label');
+        if (prevYear) prevYear.remove();
+
+        // Add year-range bar on the axis for this item
+        const yearBarStart = Number(item.year);
+        let yearBarEnd = Number(item.year_end);
+        if (!isNaN(yearBarStart)) {
+          if (isNaN(yearBarEnd)) yearBarEnd = yearBarStart;
+          // Bar coordinates
+          const barX = yearToX(yearBarStart);
+          const barX2 = yearToX(yearBarEnd);
+          const barY = axisY - 4; // just above axis
+          const barHeight = 8; // thickness of the bar
+          const barColor = '#000000ff';
+          const bar = document.createElementNS(svgNS, 'rect');
+          bar.setAttribute('x', Math.min(barX, barX2));
+          bar.setAttribute('y', barY);
+          bar.setAttribute('width', Math.abs(barX2 - barX) || 8);
+          bar.setAttribute('height', barHeight);
+          bar.setAttribute('fill', barColor);
+          bar.setAttribute('opacity', '0.85');
+          bar.setAttribute('rx', 4);
+          bar.classList.add('timeline-year-bar');
+          // Insert before markers so it doesn't cover them
+          svg.insertBefore(bar, svg.firstChild);
+        }
+
+        // Add year/dates label right under the marker image/circle, centered
+        let yearLabel = '';
+        let yStart = Number(item.year);
+        let yEnd = Number(item.year_end);
+        if (item.year && item.year_end) {
+          yearLabel = `${item.year}–${item.year_end}`;
+        } else if (item.year) {
+          yearLabel = `${item.year}`;
+        }
+        if (yearLabel && !isNaN(yStart)) {
+          // Place label under the marker (circle at 0,0, radius markerRadius)
+          const labelY = markerRadius - 40; // 30px above center of marker
+          const yearText = document.createElementNS(svgNS, 'text');
+          yearText.setAttribute('x', 0 + 50);
+          yearText.setAttribute('y', labelY);
+          yearText.setAttribute('text-anchor', 'middle');
+          yearText.setAttribute('font-size', '10px');
+          yearText.setAttribute('font-family', 'Optician Sans', 'inherit', 'sans-serif');
+          yearText.setAttribute('font-weight', '1000');
+          yearText.setAttribute('fill', '#222');
+          yearText.setAttribute('pointer-events', 'none');
+          yearText.classList.add('marker-year-label');
+          yearText.textContent = yearLabel;
+          g.appendChild(yearText);
+        }
+        // Remove any previous expanded card background and title
+        const prevBg = g.querySelector('rect.card-bg');
+        if (prevBg) prevBg.remove();
+        const prevTitle = g.querySelector('text.card-title');
+        if (prevTitle) prevTitle.remove();
+
+        // Dynamically size card to fit full title (up to a max width)
+        const cardHeight = markerRadius * 2 + 8;
+        const leftPadding = 12;
+        const rightPadding = 16;
+        const imageSpace = markerRadius * 2; // space for image
+        const maxCardWidth = 520; // px, max width for very long titles
+
+        // Measure full title width
+        const tempText = document.createElementNS(svgNS, 'text');
+        tempText.setAttribute('font-size', '14px');
+        tempText.setAttribute('font-family', 'inherit,sans-serif');
+        tempText.setAttribute('font-weight', '400');
+        tempText.setAttribute('letter-spacing', '0');
+        tempText.textContent = displayTitle;
+        svg.appendChild(tempText);
+        const textWidth = tempText.getBBox().width;
+        svg.removeChild(tempText);
+        const cardWidth = Math.min(leftPadding + imageSpace + textWidth + rightPadding, maxCardWidth);
+
+        // Card background (flag: starts at marker, extends right)
+        const hoverBg = document.createElementNS(svgNS, 'rect');
+        hoverBg.setAttribute('x', markerRadius + 2); // 6px gap between marker and flag
+        hoverBg.setAttribute('y', -cardHeight / 2);
+        hoverBg.setAttribute('width', cardWidth - 20);
+        hoverBg.setAttribute('height', cardHeight);
+        hoverBg.setAttribute('rx', 14);
+        hoverBg.setAttribute('fill', '#fff');
+        hoverBg.setAttribute('stroke', CAT_STROKES[item.category] || '#bbb');
+        hoverBg.setAttribute('stroke-width', '1.5');
+        hoverBg.setAttribute('filter', 'drop-shadow(0 2px 8px #0001)');
+        hoverBg.classList.add('card-bg');
+        g.appendChild(hoverBg); // after marker, so flag is behind text
+
+        // Marker image/circle stays at (0,0)
+        circle.setAttribute('cx', 0);
+        circle.setAttribute('cy', 0);
+        // Center image (if present)
+        if (item.image || item.thumb) {
+          const img = g.querySelector('image');
+          if (img) {
+            img.setAttribute('x', -markerRadius + 2);
+            img.setAttribute('y', -markerRadius + 2);
+            img.setAttribute('width', (markerRadius - 2) * 2);
+            img.setAttribute('height', (markerRadius - 2) * 2);
+          }
+        }
+
+        // Text: left-aligned inside flag, vertically centered
+        const hoverTitle = document.createElementNS(svgNS, 'text');
+        hoverTitle.setAttribute('x', markerRadius + 6 + leftPadding );
+        hoverTitle.setAttribute('y', 0);
+        hoverTitle.setAttribute('dominant-baseline', 'middle');
+        hoverTitle.setAttribute('text-anchor', 'start');
+        hoverTitle.setAttribute('font-size', '14px');
+        hoverTitle.setAttribute('font-family', 'inherit,sans-serif');
+        hoverTitle.setAttribute('fill', '#222');
+        hoverTitle.setAttribute('pointer-events', 'none');
+        hoverTitle.classList.add('card-title');
+        hoverTitle.textContent = displayTitle;
+        g.appendChild(hoverTitle);
+      }
+
+
+      // Show expanded title if hovered or active, and move hovered marker to top
+      g.addEventListener('mouseenter', () => {
+        // Move this marker group to the end of the SVG so it renders on top
+        svg.appendChild(g);
+        showExpandedTitle();
+      });
+      g.addEventListener('mouseleave', () => {
+        // Only remove year-range bar if no marker is active or hovered
+        setTimeout(() => {
+          const anyActive = svg.querySelector('.timeline-marker.active:hover, .timeline-marker.active');
+          if (!anyActive) {
+            const prevBar = svg.querySelector('rect.timeline-year-bar');
+            if (prevBar) prevBar.remove();
+          }
+        }, 10);
+  // Remove any previous year-range bar from SVG
+  const prevBar = svg.querySelector('rect.timeline-year-bar');
+  if (prevBar) prevBar.remove();
+        // Only remove if not active
+        if (!g.classList.contains('active')) {
+          const hoverBg = g.querySelector('rect.card-bg');
+          if (hoverBg) hoverBg.remove();
+          const hoverTitle = g.querySelector('text.card-title');
+          if (hoverTitle) hoverTitle.remove();
+          const hoverYear = g.querySelector('text.marker-year-label');
+          if (hoverYear) hoverYear.remove();
+        }
+        // After hover ends, if there is an active marker, move it to top
+        const active = svg.querySelector('.timeline-marker.active');
+        if (active && active !== g) {
+          svg.appendChild(active);
+        }
+      });
+
+      // If active on render, show expanded title and move to top (unless hovered)
+      if (g.classList.contains('active')) {
+        showExpandedTitle();
+        // Only move to top if not hovered
+        if (!g.matches(':hover')) {
+          svg.appendChild(g);
+        }
+      }
+
+      // --- Add click event to marker ---
+      g.addEventListener('click', () => {
+        // If not hovered, move this marker group to the end of the SVG so it renders on top
+        if (!g.matches(':hover')) {
+          svg.appendChild(g);
+        }
+        renderTimelineCard(item);
+        // Remove .active from all markers, add to this one
+        $$('.timeline-marker').forEach(m => {
+          m.classList.remove('active');
+          // Remove expanded title and year label from all except hovered
+          if (!m.matches(':hover')) {
+            const hoverBg = m.querySelector('rect.card-bg');
+            if (hoverBg) hoverBg.remove();
+            const hoverTitle = m.querySelector('text.card-title');
+            if (hoverTitle) hoverTitle.remove();
+            const hoverYear = m.querySelector('text.marker-year-label');
+            if (hoverYear) hoverYear.remove();
+          }
+        });
+        g.classList.add('active');
+  showExpandedTitle();
+      });
+      svg.appendChild(g);
+    });
+  });
+
+  container.appendChild(svg);
+
+  // On initial render, highlight the marker for the currently selected card (if any)
+  const cardArea = document.getElementById('timelineCardArea');
+  if (cardArea && cardArea.firstChild) {
+    const h2 = cardArea.querySelector('h2');
+    if (h2) {
+      const selectedTitle = h2.textContent;
+      $$('.timeline-marker').forEach(g => {
+        const markerTitle = g.querySelector('text');
+        if (markerTitle && markerTitle.textContent === selectedTitle) {
+          g.classList.add('active');
+          // Show expanded title for the active marker
+          const show = g.querySelector('rect.card-bg') && g.querySelector('text.card-title');
+          if (!show) {
+            // Only show if not already present
+            g.dispatchEvent(new Event('mouseenter'));
+          }
+        }
+      });
+    }
+  }
+}
+
+// Render the card above the timeline
+function renderTimelineCard(item) {
+  // Get sorted items array for navigation
+  const itemsSorted = filteredItems(_ALL_ITEMS).slice().sort((a, b) => (Number(a.year) || 0) - (Number(b.year) || 0));
+  const idx = itemsSorted.findIndex(i => i.slug === item.slug);
+  // Card creation and nav arrows (ensure card is in DOM before DOM ops)
+  let cardArea = document.getElementById('timelineCardArea');
+  if (!cardArea) return;
+  cardArea.innerHTML = '';
+  // Card nav container: flex row, center, arrows outside card
+  cardArea.style.display = 'flex';
+  cardArea.style.flexDirection = 'row';
+  cardArea.style.alignItems = 'center';
+  cardArea.style.justifyContent = 'center';
+  cardArea.innerHTML = '';
+
+  // Prev button (outside card)
+  const prevBtn = document.createElement('button');
+  prevBtn.innerHTML = '←';
+  prevBtn.className = 'card-nav-btn card-nav-outer';
+  prevBtn.disabled = idx <= 0;
+  prevBtn.title = 'Previous by year';
+  prevBtn.onclick = () => {
+    if (idx > 0) {
+      renderTimelineCard(itemsSorted[idx - 1]);
+      syncTimelineMarkerToCard(itemsSorted[idx - 1]);
+    }
+  };
+  cardArea.appendChild(prevBtn);
+
+  let card = document.createElement('div');
+  card.className = 'card timeline-horizontal-card';
+  card.style.position = 'static';
+  card.style.margin = '0 18px 18px 18px';
+  card.style.width = '700px';
+  card.style.maxWidth = '98vw';
+  card.style.aspectRatio = '2/1';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'row';
+  card.style.alignItems = 'stretch';
+  card.style.gap = '24px';
+  card.style.padding = '24px 32px';
+  card.style.boxSizing = 'border-box';
+  card.style.background = 'var(--glass-bg, #fff)';
+  card.style.borderRadius = '18px';
+  card.style.boxShadow = 'var(--shadow-soft, 0 2px 16px #0001)';
+  card.style.zIndex = 1;
+  cardArea.appendChild(card);
+
+  // Next button (outside card)
+  const nextBtn = document.createElement('button');
+  nextBtn.innerHTML = '→';
+  nextBtn.className = 'card-nav-btn card-nav-outer';
+  nextBtn.disabled = idx >= itemsSorted.length - 1;
+  nextBtn.title = 'Next by year';
+  nextBtn.onclick = () => {
+    if (idx < itemsSorted.length - 1) {
+      renderTimelineCard(itemsSorted[idx + 1]);
+      syncTimelineMarkerToCard(itemsSorted[idx + 1]);
+    }
+  };
+  cardArea.appendChild(nextBtn);
+
+  // Left: image (if any)
+  const left = document.createElement('div');
+  left.style.flex = '0 0 260px';
+  left.style.display = 'flex';
+  left.style.alignItems = 'center';
+  left.style.justifyContent = 'center';
+  if (item.image || item.thumb) {
+    const img = document.createElement('img');
+    img.src = nodeImageURL(item);
+    img.alt = item.title || '';
+    img.style.width = '240px';
+    img.style.height = 'auto';
+    img.style.maxHeight = '90%';
+    img.style.borderRadius = '14px';
+    img.style.boxShadow = '0 2px 12px #0002';
+    left.appendChild(img);
+  }
+  card.appendChild(left);
+
+  // Right: details (scrollable content)
+  const right = document.createElement('div');
+  right.style.flex = '1 1 0';
+  right.style.display = 'flex';
+  right.style.flexDirection = 'column';
+  right.style.justifyContent = 'flex-start';
+  right.style.overflowY = 'auto';
+  right.style.maxHeight = '100%';
+
+  // Container for right + persistent button
+  const rightWrap = document.createElement('div');
+  rightWrap.style.flex = '1 1 0';
+  rightWrap.style.display = 'flex';
+  rightWrap.style.flexDirection = 'column';
+  rightWrap.style.justifyContent = 'space-between';
+  rightWrap.style.height = '100%';
+
+
+  // Title
+  const h2 = document.createElement('h2');
+  h2.textContent = item.title || '';
+  h2.style.margin = '0 0 6px 0';
+  h2.style.fontSize = '1.5em';
+  right.appendChild(h2);
+
+  // Meta: years, location, category
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.style.color = '#475569';
+  meta.style.fontSize = '1em';
+  meta.style.marginBottom = '8px';
+  meta.innerHTML =
+    `<b>${item.year || ''}${item.year_end ? '–' + item.year_end : ''}</b>` +
+    (item.origin_location ? ` &bull; <span>${item.origin_location}</span>` : '') +
+    (item.category ? ` &bull; <span style="color:#fff;background:#888;padding:2px 8px;border-radius:8px;font-size:0.95em;">${item.category}</span>` : '');
+  right.appendChild(meta);
+
+  // Caption/abstract/description
+  if (item.caption) {
+    const cap = document.createElement('p');
+    cap.className = 'caption';
+    cap.textContent = item.caption;
+    cap.style.margin = '8px 0 12px 0';
+    cap.style.lineHeight = '1.5';
+    right.appendChild(cap);
+  }
+
+  // Related items (if present)
+  if (item.related_items) {
+    const relDiv = document.createElement('div');
+    relDiv.className = 'related-items';
+    relDiv.style.margin = '8px 0 0 0';
+    relDiv.innerHTML = `<span style="font-weight:600;color:#666;">Related:</span> `;
+    // Split, trim, and look up each related item by slug
+    const relatedSlugs = item.related_items.split(',').map(s => s.trim()).filter(Boolean);
+    relatedSlugs.forEach(slug => {
+      // Find the related item in _ALL_ITEMS
+      const related = (_ALL_ITEMS || []).find(i => i.slug === slug);
+      const label = related ? (related.title || slug) : slug;
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'related-pill';
+      pill.textContent = label;
+      pill.title = related ? `Show details for ${label}` : slug;
+      pill.style.background = '#e0e7ef';
+      pill.style.color = '#333';
+      pill.style.padding = '2px 10px';
+      pill.style.borderRadius = '8px';
+      pill.style.marginRight = '6px';
+      pill.style.border = 'none';
+      pill.style.cursor = related ? 'pointer' : 'not-allowed';
+      pill.style.fontSize = '1em';
+      pill.style.fontFamily = 'inherit';
+      pill.style.transition = 'background 0.15s, color 0.15s';
+      pill.onmouseenter = () => { pill.style.background = '#c7d6e7'; };
+      pill.onmouseleave = () => { pill.style.background = '#e0e7ef'; };
+      if (related) {
+        pill.onclick = () => {
+          activateTimelineItem(related);
+        };
+      }
+      relDiv.appendChild(pill);
+    });
+    right.appendChild(relDiv);
+  }
+
+  // Extra fields (show any other non-empty fields not already shown)
+  const shown = ['title','year','year_end','origin_location','category','caption','image','thumb','related_items','markdown','slug','id','lat','lon','latitude','longitude'];
+  const extra = Object.entries(item).filter(([k,v]) => v && !shown.includes(k));
+  if (extra.length) {
+    const extraDiv = document.createElement('div');
+    extraDiv.className = 'extra-fields';
+    extraDiv.style.margin = '12px 0 0 0';
+    extraDiv.style.display = 'flex';
+    extraDiv.style.flexWrap = 'wrap';
+    extraDiv.style.gap = '10px 18px';
+    extra.forEach(([k,v]) => {
+      const row = document.createElement('div');
+      row.innerHTML = `<span style="font-weight:600;color:#888;">${k.replace(/_/g,' ')}:</span> <span style="color:#333;">${v}</span>`;
+      extraDiv.appendChild(row);
+    });
+    right.appendChild(extraDiv);
+  }
+
+  // Read More button (persistent, always at bottom)
+  const readMore = document.createElement('a');
+  readMore.className = 'read-more-btn';
+  readMore.textContent = 'Read More';
+  // If this is the custom timeline view, add from=timeline and slug
+  const isTimelineView = document.getElementById('custom_timeline')?.classList.contains('active');
+  if (isTimelineView) {
+    readMore.href = `details.html?id=${encodeURIComponent(item.slug)}&from=timeline&slug=${encodeURIComponent(item.slug)}`;
+  } else {
+    readMore.href = item.markdown ? item.markdown : `details.html?id=${encodeURIComponent(item.slug)}`;
+  }
+  readMore.style.margin = '18px 0 0 0';
+  readMore.style.alignSelf = 'flex-end';
+
+  rightWrap.appendChild(right);
+  rightWrap.appendChild(readMore);
+  card.appendChild(rightWrap);
+
+  // Helper: scroll timelineNav to marker for item and show expanded title
+  function syncTimelineMarkerToCard(item) {
+    const nav = document.getElementById('timelineNav');
+    if (!nav) return;
+    const year = Number(item.year) || 0;
+    const markerX = 40 + ((year - MAP_YEAR_MIN) * 18 * (window.timelineZoom || 1));
+    nav.scrollLeft = Math.max(0, markerX - nav.clientWidth / 2);
+    // Remove .active from all markers, add to this one
+    $$('.timeline-marker').forEach(g => {
+      g.classList.remove('active');
+      // Remove expanded title from all except hovered
+      if (!g.matches(':hover')) {
+        const hoverBg = g.querySelector('rect.card-bg');
+        if (hoverBg) hoverBg.remove();
+        const hoverTitle = g.querySelector('text.card-title');
+        if (hoverTitle) hoverTitle.remove();
+      }
+    });
+    // Find the marker for this item
+    const marker = $(`.timeline-marker[data-slug='${item.slug}']`, nav);
+    if (marker) {
+      marker.classList.add('active');
+      // Show expanded title for the active marker
+      marker.dispatchEvent(new Event('mouseenter'));
+    }
+  }
+  // (Read More button is now included in the horizontal layout above)
+}
 // ------- Render pipeline -------
 function render(){
   if (!_ALL_ITEMS.length) return;
@@ -1168,6 +2214,9 @@ function render(){
 
   if (document.getElementById('map')?.classList.contains('active')) {
     drawMap(_VISIBLE);
+  }
+  if (document.getElementById('custom_timeline')?.classList.contains('active')) {
+    renderCustomTimeline();
   }
   drawMapAxis();
 
@@ -1239,19 +2288,37 @@ if (startSlider && endSlider && startVal && endVal) {
 
     // sidebar controls
     makeCategoryList(_ALL_ITEMS);
+
     $('#search')?.addEventListener('input', ()=> requestRender());
-    $('#clearFilters')?.addEventListener('click', ()=>{
+
+    // era pills
+    renderEraPills();
+
+    // Move CLEAR FILTERS button directly below era pills
+    let clearBtn = document.getElementById('clearFilters');
+    if (!clearBtn) {
+      clearBtn = document.createElement('button');
+      clearBtn.id = 'clearFilters';
+      clearBtn.textContent = 'CLEAR FILTERS';
+      clearBtn.className = 'clear-filters-btn';
+    }
+    clearBtn.onclick = () => {
       $('#search').value = '';
       $('#f_category_group')?.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
       _activeEra = null; setYearRange(MAP_YEAR_MIN, MAP_YEAR_MAX);
       $$('#eraPills .pill-btn').forEach(p => p.classList.remove('active'));
       requestRender();
-    });
+    };
+    // Insert after era pills
+    const eraPills = document.getElementById('eraPills');
+    if (eraPills && eraPills.parentNode) {
+      if (clearBtn.parentNode !== eraPills.parentNode) {
+        eraPills.parentNode.insertBefore(clearBtn, eraPills.nextSibling);
+      }
+    }
+
     // sort dropdown
     document.getElementById('sortBySelect')?.addEventListener('change', ()=> requestRender());
-
-    // era pills
-    renderEraPills();
 
     // tabs
     $$('.tab-btn[data-view]').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));

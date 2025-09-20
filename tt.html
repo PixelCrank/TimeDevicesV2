@@ -41,29 +41,6 @@
     <!-- BEGIN Timeline Embed -->
     <div id="timeline-embed"></div>
     <!-- Override -->
-        <script type="text/javascript">
-            // Assign group classes to .tl-timemarker elements after TimelineJS renders
-            function addGroupClassesToTimemarkers() {
-                setTimeout(function() {
-                    fetch('./lineartimeline/timeline_knightlab_with_images.json')
-                        .then(response => response.json())
-                        .then(data => {
-                            var events = data.events || [];
-                            var markers = document.querySelectorAll('.tl-timemarker');
-                            // Defensive: skip title slide if present
-                            var markerOffset = markers.length === events.length + 1 ? 1 : 0;
-                            for (let i = 0; i < events.length; i++) {
-                                var group = events[i].group || null;
-                                var marker = markers[i + markerOffset];
-                                if (marker && group) {
-                                    marker.classList.remove('device','person','story');
-                                    marker.classList.add(group);
-                                }
-                            }
-                        });
-                }, 1200); // Wait for timeline to render
-            }
-        </script>
     <script type="text/javascript">
         function ready(fn) {
             if (document.readyState != 'loading') {
@@ -183,9 +160,6 @@
             var localTimelineJson = './lineartimeline/timeline_knightlab_with_images.json';
             window.options = options;
             window.timeline = new TL.Timeline('timeline-embed', localTimelineJson, options);
-
-            // Add group classes after timeline renders
-            addGroupClassesToTimemarkers();
         })
     </script>
   

@@ -13,10 +13,11 @@
 
   <!-- Top bar -->
   <header>
-    <h1>Time Measuring Devices</h1>
+    <h1>Time Stories — Map & Timeline </h1>
     <nav class="tabs">
       <button class="tab-btn active" data-view="map" type="button">Map</button>
-      <button class="tab-btn" data-view="kl_timeline" type="button">Linear Timeline</button>
+      <button class="tab-btn" data-view="kl_timeline" type="button">Story Timeline</button>
+      <button class="tab-btn" data-view="custom_timeline" type="button">Custom Timeline</button>
       <button class="tab-btn" data-view="gallery" type="button">Gallery</button>
       <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
     </nav>
@@ -47,11 +48,16 @@
           <span class="acc-caret" aria-hidden="true">▾</span>
         </summary>
         <div id="eraPills" class="btn-group"></div>
-        <p class="muted" style="margin-top:6px">Click an era to set the year range. Click again to clear.</p>
+        <ul class="muted" style="margin:10px 0 0 0; padding-left:18px; font-size:13px; line-height:1.6; list-style:disc inside;">
+          <li><strong>Category:</strong> Check to filter by type.</li>
+          <li><strong>Eras:</strong> Click to filter by period.</li>
+          <li><strong>Search:</strong> Type to find items.</li>
+          <li><strong>CLEAR FILTERS</strong> shows all results.</li>
+        </ul>
       </details>
     </div>
 
-    <button id="clearFilters" type="button">Clear filters</button>
+  <button id="clearFilters" type="button" style="margin-top:50px;">Clear filters</button>
   </aside>
 
   <!-- Main content -->
@@ -85,17 +91,20 @@
     </section>
 
     <!-- Constellation -->
-    <section id="constellation" class="view" aria-label="Constellation">
-      <svg id="constellationSvg" width="100%" height="100%"></svg>
+   <section id="custom_timeline" class="view" aria-label="Custom Timeline">
+  <div id="timelineCardArea"></div>
+  <div id="timelineZoomWidget"></div>
+  <div id="timelineNav" style="width:100%;overflow-x:auto;"></div>
+  <div id="timelineZoomControls" style="margin:10px 0; text-align:center;"></div>
     </section>
 
-    <!-- KnightLab Linear timeline -->
+  <!-- KnightLab Linear timeline -->
     <section id="kl_timeline" class="view" aria-label="Linear timeline">
       <div id="klContainer" class="kl-wrap"></div>
     </section>
 
     <!-- Gallery -->
-    <section id="gallery" class="view" aria-label="Gallery" style="display:none">
+  <section id="gallery" class="view" aria-label="Gallery">
       <div class="gallery-header">
         <label for="sortBySelect" style="margin-right:8px;font-weight:600;">Sort by:</label>
         <select id="sortBySelect" class="glass sort-dropdown">
@@ -105,6 +114,13 @@
         </select>
       </div>
       <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
+
+    <!-- Custom Timeline Navigation View -->
+    <section id="custom_timeline" class="view" aria-label="Custom Timeline" style="display:none">
+      <div id="timelineCardArea"></div>
+      <div id="timelineNav" style="width:100%;overflow-x:auto;"></div>
+      <div id="timelineZoomControls" style="margin:10px 0; text-align:center;"></div>
     </section>
   </main>
 

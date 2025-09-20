@@ -489,6 +489,20 @@ function findItemByAnyId(items, q){
 }
 
 async function main(){
+  // --- Back Button Logic ---
+  const urlParams = new URL(location.href).searchParams;
+  const from = urlParams.get('from');
+  const slug = urlParams.get('slug');
+  const backNavLink = document.getElementById('backNavLink');
+  if (backNavLink) {
+    if (from === 'timeline' && slug) {
+      backNavLink.textContent = '← Back to Timeline';
+      backNavLink.href = `customtimeline.html#slug=${encodeURIComponent(slug)}`;
+    } else {
+      backNavLink.textContent = '← Back to map';
+      backNavLink.href = 'index.html';
+    }
+  }
   if (location.protocol === 'file:'){
     show($('#mdError'));
     $('#mdError').innerHTML = 'You are opening this page via <code>file://</code>. Please run a local server so fetch() can load CSV/Markdown.';

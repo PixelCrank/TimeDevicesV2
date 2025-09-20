@@ -1,3 +1,127 @@
+/* Highlight for selected timeline marker */
+.timeline-marker.active {
+  filter: drop-shadow(0 0 0px #fff) drop-shadow(0 0 8px #ffd86ecc) !important;
+  /* Optionally, add a thicker border or scale up slightly */
+  /* transform: scale(1.08); */
+  z-index: 20;
+}
+/* Timeline card navigation arrows (outer) */
+.card-nav-outer {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  min-height: 54px;
+  border-radius: 50%;
+  background: var(--glass-bg, rgba(255,255,255,0.85));
+  border: 1.5px solid var(--glass-brd, #e5e7eb);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2em;
+  color: #2f7b4e;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+  margin: 0 0;
+  z-index: 10;
+  position: relative;
+  outline: none;
+}
+.card-nav-outer:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.card-nav-outer:hover:not(:disabled), .card-nav-outer:focus-visible:not(:disabled) {
+  background: rgba(180,200,220,0.18);
+  color: #37ad6e;
+  box-shadow: 0 4px 18px rgba(14,165,233,0.10);
+}
+/* ================= SVG TIMELINE MARKER CARDS ================ */
+.timeline-marker-card-bg {
+  fill: #fff;
+  stroke: #e5e7eb;
+  /* filter: drop-shadow(0 2px 8px #0001); */
+}
+.timeline-marker-card-title {
+  font-size: 14px;
+  font-family: inherit, sans-serif;
+  fill: #2f7b4e;
+  dominant-baseline: middle;
+  alignment-baseline: middle;
+  pointer-events: none;
+}
+.timeline-marker-card {
+  /* For debugging: outline the SVG group */
+  /* outline: 1px dashed #f00; */
+}
+#timelineNav .zoom-ui {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  box-shadow: none;
+  padding: 4px 6px;
+}
+#timelineNav {
+}
+
+#timelineNav.drag-scroll {
+  cursor: grabbing !important;
+  user-select: none;
+  scroll-behavior: auto !important;
+  height: 50vh;
+  max-height: 50vh;
+  overflow-x: auto;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(180,200,220,0.5) rgba(255,255,255,0.2);
+  /* Scroll hint gradients at edges */
+  /* mask-image removed to eliminate feathered edge */
+  /* -webkit-mask-image removed to eliminate feathered edge */
+}
+
+/* Custom horizontal scrollbar for timelineNav */
+#timelineNav::-webkit-scrollbar {
+  height: 14px;
+  background: transparent;
+}
+#timelineNav::-webkit-scrollbar-thumb {
+  background: rgba(180,200,220,0.45);
+  border-radius: 8px;
+  border: 3px solid rgba(255,255,255,0.7);
+  min-width: 36px;
+  transition: background 0.2s;
+}
+#timelineNav::-webkit-scrollbar-thumb:hover {
+  background: rgba(120,160,200,0.7);
+}
+#timelineNav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Scroll hint fade at left/right edges */
+#timelineNav::before, #timelineNav::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 6px;
+  pointer-events: none;
+  z-index: 10;
+}
+#timelineNav::before {
+  left: 0;
+  background: none;
+}
+#timelineNav::after {
+  right: 0;
+  background: none;
+}
 /* ======================= FONTS ======================= */
 @import url('https://fonts.cdnfonts.com/css/optician-sans');
 @import url('https://fonts.cdnfonts.com/css/sft-schrifted-sans');
@@ -151,14 +275,21 @@ main{ margin-left:324px; height:calc(100vh - 58px); position:relative; padding:1
   -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:#fff;
   border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(0,0,0,.15); pointer-events:auto;
 }
-#map .map-range-readout{ margin-top:6px; display:flex; justify-content:space-between; font-size:14px; color:#555; }
+#map .map-range-readout{ margin-top:6px; display:flex; justify-content:space-between; font-size:14px; color:#000000; }
 
 /* ======================= CARD ======================= */
+#timelineCardArea {
+  height: 50vh;
+  max-height: 50vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
 .card{
   position:fixed; left:-9999px; top:-9999px; width:380px; max-width:92vw;
   background:var(--glass-bg); border:1px solid var(--glass-brd);
   -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
-  border-radius:16px; box-shadow:var(--shadow-soft); padding:14px;
+  border-radius:16px; box-shadow:none; padding:14px;
   max-height:72vh; overflow:hidden; display:flex; flex-direction:column;
   z-index:4000; isolation:isolate;
 }
