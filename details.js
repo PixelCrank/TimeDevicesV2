@@ -1,4 +1,3 @@
-// Set the category badge below the title
 function setCategoryBadge(item) {
   const badge = document.getElementById('categoryBadge');
   if (!badge) return;
@@ -37,32 +36,29 @@ function renderRelatedItemsSection(item, items) {
     relatedList = item.related_items.split(/[;,|]/).map(s => s.trim()).filter(Boolean);
   }
   if (relatedList.length > 0) {
-  relatedSection.innerHTML = '';
-  // Card-like wrapper
-  const card = document.createElement('div');
-  card.style.background = 'rgba(255,255,255,0.97)';
-  card.style.border = '1.5px solid #e5e7eb';
-  card.style.borderRadius = '16px';
-  card.style.boxShadow = '0 4px 24px rgba(44,79,79,0.07), 0 1.5px 6px rgba(124,58,237,0.04)';
-  card.style.padding = '22px 18px 14px 18px';
-  card.style.margin = '0 0 18px 0';
-  card.style.display = 'flex';
-  card.style.flexDirection = 'column';
-  card.style.gap = '8px';
+    relatedSection.innerHTML = '';
+    // Styled header for Related Items
+    const header = document.createElement('div');
+    header.className = 'mini-header';
+    header.textContent = 'RELATED ITEMS';
+    relatedSection.appendChild(header);
 
-  const title = document.createElement('h3');
-  title.textContent = 'Related Items';
-  title.style.marginBottom = '10px';
-  title.style.fontSize = '1.08em';
-  title.style.color = '#2C4F4F';
-  title.style.letterSpacing = '.03em';
-  title.style.fontWeight = '600';
-  card.appendChild(title);
+    // Card-like wrapper
+    const card = document.createElement('div');
+    card.style.background = 'rgba(255,255,255,0.97)';
+    card.style.border = '1.5px solid #e5e7eb';
+    card.style.borderRadius = '16px';
+    card.style.boxShadow = '0 4px 24px rgba(44,79,79,0.07), 0 1.5px 6px rgba(124,58,237,0.04)';
+    card.style.padding = '22px 18px 14px 18px';
+    card.style.margin = '0 0 18px 0';
+    card.style.display = 'flex';
+    card.style.flexDirection = 'column';
+    card.style.gap = '8px';
 
-  const ul = document.createElement('ul');
-  ul.style.listStyle = 'none';
-  ul.style.padding = '0';
-  ul.style.margin = '0';
+    const ul = document.createElement('ul');
+    ul.style.listStyle = 'none';
+    ul.style.padding = '0';
+    ul.style.margin = '0';
     relatedList.forEach(slug => {
       let rel = items.find(x => x.slug === slug);
       let li;
@@ -96,16 +92,16 @@ function renderRelatedItemsSection(item, items) {
       }
       ul.appendChild(li);
     });
-  card.appendChild(ul);
-  relatedSection.appendChild(card);
-  relatedSection.style.display = '';
+    card.appendChild(ul);
+    relatedSection.appendChild(card);
+    relatedSection.style.display = '';
   } else {
     relatedSection.innerHTML = '';
     relatedSection.style.display = 'none';
   }
 }
 /* ===================== Config & helpers ===================== */
-const DATA_CSV = 'data/items.csv';
+window.DATA_CSV = 'data/items.csv';
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 const show = el => { if (el){ el.classList.remove('hide'); el.hidden = false; } };
@@ -489,41 +485,64 @@ function findItemByAnyId(items, q){
 }
 
 async function main(){
-  // --- Back Button Logic ---
-  const urlParams = new URL(location.href).searchParams;
-  const from = urlParams.get('from');
-  const slug = urlParams.get('slug');
-  const backNavLink = document.getElementById('backNavLink');
-  if (backNavLink) {
-    if (from === 'timeline' && slug) {
-      backNavLink.textContent = '← Back to Timeline';
-      backNavLink.href = `customtimeline.html#slug=${encodeURIComponent(slug)}`;
-    } else {
-      backNavLink.textContent = '← Back to map';
-      backNavLink.href = 'index.html';
-    }
-  }
+
   if (location.protocol === 'file:'){
     show($('#mdError'));
     $('#mdError').innerHTML = 'You are opening this page via <code>file://</code>. Please run a local server so fetch() can load CSV/Markdown.';
   }
 
-  const rows = await loadCSV(DATA_CSV);
+  const rows = await loadCSV(window.DATA_CSV);
   const items = rows.map(normalizeItem);
 
   const id = new URL(location.href).searchParams.get('id') || '';
   const item = findItemByAnyId(items, id);
 
-  if (!item){ hide($('#itemRoot')); show($('#emptyState')); return; }
+  if (!item) {
+    hide($('#itemRoot'));
+    show($('#emptyState'));
+    return;
+  }
 
-  show($('#itemRoot')); hide($('#emptyState'));
+  show($('#itemRoot'));
+  hide($('#emptyState'));
   renderHeaderAndMeta(item);
   renderMediaGallery(item);
-
-  // Render Related Items Section as a component
   renderRelatedItemsSection(item, items);
 
-
+  // --- Navigation by year (prev/next) ---
+  // Sort items by year (ascending)
+  const itemsSorted = items.slice().sort((a, b) => (Number(a.year) || 0) - (Number(b.year) || 0));
+  const idx = itemsSorted.findIndex(i => i.slug === item.slug);
+  const prev = idx > 0 ? itemsSorted[idx - 1] : null;
+  const next = idx < itemsSorted.length - 1 ? itemsSorted[idx + 1] : null;
+  // Show/hide and set up buttons
+  const prevBtn = document.getElementById('prevItemBtn');
+  const nextBtn = document.getElementById('nextItemBtn');
+  if (prevBtn) {
+    if (prev) {
+      prevBtn.style.display = '';
+      prevBtn.onclick = () => { window.location.href = `details.html?id=${encodeURIComponent(prev.slug)}`; };
+      prevBtn.disabled = false;
+      prevBtn.setAttribute('aria-disabled', 'false');
+    } else {
+      prevBtn.style.display = 'none';
+      prevBtn.disabled = true;
+      prevBtn.setAttribute('aria-disabled', 'true');
+    }
+  }
+  if (nextBtn) {
+    if (next) {
+      nextBtn.style.display = '';
+      nextBtn.onclick = () => { window.location.href = `details.html?id=${encodeURIComponent(next.slug)}`; };
+      nextBtn.disabled = false;
+      nextBtn.setAttribute('aria-disabled', 'false');
+    } else {
+      nextBtn.style.display = 'none';
+      nextBtn.disabled = true;
+      nextBtn.setAttribute('aria-disabled', 'true');
+    }
+  }
+  // ...existing code...
 
   const { md, tried } = await loadMarkdownForItem(item);
   if (md){
@@ -539,16 +558,167 @@ async function main(){
     if (item.caption){
       $('#desc').innerHTML = `<p>${item.caption}</p>`;
     } else {
-      $('#desc').innerHTML = `<div class="muted">No detailed content found for this item.</div>`;
+      $('#desc').innerHTML = `<div class=\"muted\">No detailed content found for this item.</div>`;
     }
     show($('#mdError'));
     $('#mdError').innerHTML = `
       <div><strong>Could not find Markdown for this item.</strong></div>
-      <div style="margin-top:6px">I tried the following paths:</div>
-      <div style="margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; line-height:1.35">
+      <div style=\"margin-top:6px\">I tried the following paths:</div>
+      <div style=\"margin-top:6px;font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px; line-height:1.35\">
         ${tried.map(t => `<div>${t}</div>`).join('')}
       </div>`;
   }
+
+  // Render mini map and mini timeline after description/markdown
+  renderMiniMap(item);
+  renderMiniTimeline(item, items);
+// --- Mini Map ---
+function renderMiniMap(item) {
+  const el = document.getElementById('miniMap');
+  if (!el) {
+    console.warn('MiniMap: #miniMap element not found in DOM');
+    return;
+  }
+  el.innerHTML = '';
+  // Set static zoom
+  let zoom = 1;
+  if (!item.lat || !item.lon || isNaN(item.lat) || isNaN(item.lon)) {
+    console.warn('MiniMap: Missing or invalid lat/lon for item', item);
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = '';
+  // Wrap SVG for layout
+  const wrap = document.createElement('div');
+  wrap.className = 'miniMapWrap';
+  // SVG map background (simple world map outline)
+  const w = 260, h = 160;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.style.background = '#f8fafc';
+  svg.style.borderRadius = '12px';
+  svg.style.boxShadow = '0 2px 8px #0001';
+  svg.style.display = 'block';
+  svg.style.margin = '0 auto';
+  // Use the provided world_light.svg as the background
+  // Use a group for zooming
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('transform', `scale(${zoom}) translate(${(1-zoom)*w/2/zoom}, ${(1-zoom)*h/2/zoom})`);
+  // Add SVG image as background
+  const bgImg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+  bgImg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'assets/world_light.svg');
+  bgImg.setAttribute('x', 0);
+  bgImg.setAttribute('y', 0);
+  bgImg.setAttribute('width', w);
+  bgImg.setAttribute('height', h);
+  bgImg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  bgImg.setAttribute('opacity', '0.15');
+  g.appendChild(bgImg);
+  function project(lat, lon) {
+    const x = ((Number(lon) + 180) / 360) * w;
+    const y = ((90 - Number(lat)) / 180) * h;
+    return [x, y];
+  }
+  const [mx, my] = project(item.lat, item.lon);
+  const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  marker.setAttribute('cx', mx);
+  marker.setAttribute('cy', my);
+  marker.setAttribute('r', 6);
+  marker.setAttribute('fill', '#f48d1eff');
+  marker.setAttribute('stroke', '#fff');
+  marker.setAttribute('stroke-width', '2');
+  marker.setAttribute('opacity', '0.95');
+  g.appendChild(marker);
+  if (item.origin_location) {
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', mx + 14);
+    label.setAttribute('y', my + 4);
+    label.setAttribute('font-size', '13px');
+    label.setAttribute('fill', '#222');
+    label.textContent = item.origin_location;
+    g.appendChild(label);
+  }
+  svg.appendChild(g);
+  wrap.appendChild(svg);
+  el.appendChild(wrap);
+}
+
+// --- Mini Timeline ---
+function renderMiniTimeline(item, items) {
+  const el = document.getElementById('miniTimeline');
+  if (!el) {
+    console.warn('MiniTimeline: #miniTimeline element not found in DOM');
+    return;
+  }
+  el.innerHTML = '';
+  let years = items.map(d => Number(d.year)).filter(x => !isNaN(x));
+  if (!years.length || !item.year || isNaN(Number(item.year))) {
+    console.warn('MiniTimeline: Missing or invalid year data for item', item);
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = '';
+  const wrap = document.createElement('div');
+  wrap.className = 'miniTimelineWrap';
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+  const w = 260, h = 100;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.style.background = '#f8fafc';
+  svg.style.borderRadius = '12px';
+  svg.style.boxShadow = '0 2px 8px #0001';
+  svg.style.display = 'block';
+  svg.style.margin = '0 auto';
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  line.setAttribute('x', 32);
+  line.setAttribute('y', h/2 - 3);
+  line.setAttribute('width', w-64);
+  line.setAttribute('height', 6);
+  line.setAttribute('rx', 3);
+  line.setAttribute('fill', '#cbd5e1');
+  svg.appendChild(line);
+  const year = Number(item.year);
+  const x = 32 + ((year - minYear) / (maxYear - minYear)) * (w-64);
+  const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  marker.setAttribute('cx', x);
+  marker.setAttribute('cy', h/2);
+  marker.setAttribute('r', 8);
+  marker.setAttribute('fill', '#ffa41cff');
+  marker.setAttribute('stroke', '#fff');
+  marker.setAttribute('stroke-width', '3');
+  marker.setAttribute('opacity', '0.97');
+  svg.appendChild(marker);
+  const yearLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  yearLabel.setAttribute('x', x);
+  yearLabel.setAttribute('y', h/2 + 28);
+  yearLabel.setAttribute('text-anchor', 'middle');
+  yearLabel.setAttribute('font-size', '10px');
+  yearLabel.setAttribute('fill', '#222');
+  yearLabel.setAttribute('font-weight', '600');
+  yearLabel.textContent = item.year;
+  svg.appendChild(yearLabel);
+  const minLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  minLabel.setAttribute('x', 32);
+  minLabel.setAttribute('y', h/2 + 28);
+  minLabel.setAttribute('text-anchor', 'middle');
+  minLabel.setAttribute('font-size', '12px');
+  minLabel.setAttribute('fill', '#666');
+  minLabel.textContent = minYear;
+  svg.appendChild(minLabel);
+  const maxLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  maxLabel.setAttribute('x', w-32);
+  maxLabel.setAttribute('y', h/2 + 28);
+  maxLabel.setAttribute('text-anchor', 'middle');
+  maxLabel.setAttribute('font-size', '12px');
+  maxLabel.setAttribute('fill', '#666');
+  maxLabel.textContent = maxYear;
+  svg.appendChild(maxLabel);
+  wrap.appendChild(svg);
+  el.appendChild(wrap);
+}
 }
 
 document.addEventListener('DOMContentLoaded', main);

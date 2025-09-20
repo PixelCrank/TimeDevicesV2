@@ -116,7 +116,7 @@ if (!document.getElementById('spider-leg-style')) {
 =========================== */
 
 const NS       = 'http://www.w3.org/2000/svg';
-const DATA_CSV = 'data/items.csv';
+window.DATA_CSV = 'data/items.csv';
 
 // ------- debug -------
 const DEBUG = false;
@@ -1321,8 +1321,16 @@ function renderCustomTimeline() {
     return;
   }
 
-  // --- Do not auto-select a default marker/card on load ---
-  // Selection is now handled by restoreTimelineFromHash (if hash present)
+  // --- Auto-select the last item by year (atomic clock) unless a hash/slug is present ---
+  // Only do this if not restoring a specific slug from the hash
+  const isCustomTimelineTab = document.getElementById('custom_timeline')?.classList.contains('active');
+  const hash = window.location.hash;
+  const restoringSlug = hash && hash.startsWith('#slug=');
+  if (!restoringSlug && isCustomTimelineTab && items.length) {
+    // Find the last item by year (highest year)
+    const lastItem = items.reduce((a, b) => (Number(a.year) > Number(b.year) ? a : b));
+    setTimeout(() => activateTimelineItem(lastItem), 0);
+  }
 
   // Config
   const margin = { left: 40, right: 40, top: 0, bottom: 30 };
@@ -2129,7 +2137,15 @@ function renderTimelineCard(item) {
 
   // Extra fields (show any other non-empty fields not already shown)
   const shown = ['title','year','year_end','origin_location','category','caption','image','thumb','related_items','markdown','slug','id','lat','lon','latitude','longitude'];
-  const extra = Object.entries(item).filter(([k,v]) => v && !shown.includes(k));
+  // Also filter out internal coordinate properties and any keys starting with _ or containing 'px'/'py'
+  const internalKeys = ['px','py','_orig_px','_orig_py','_px','_py','x','y'];
+  const extra = Object.entries(item).filter(([k,v]) => {
+    if (!v || shown.includes(k)) return false;
+    if (internalKeys.includes(k)) return false;
+    if (k.startsWith('_')) return false;
+    if (/^(orig_)?p[xy]$/i.test(k)) return false;
+    return true;
+  });
   if (extra.length) {
     const extraDiv = document.createElement('div');
     extraDiv.className = 'extra-fields';

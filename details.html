@@ -18,6 +18,10 @@
     We couldn’t find that item. Check the <code>?id=</code> in the URL or the <code>slug</code>/<code>id</code> in your CSV.
   </div>
   <main id="itemRoot" class="details-shell">
+    <div class="details-nav-arrows">
+      <button id="prevItemBtn" class="arrow-btn" aria-label="Previous item" title="Previous item">&#8592;</button>
+      <button id="nextItemBtn" class="arrow-btn" aria-label="Next item" title="Next item">&#8594;</button>
+    </div>
     <section class="details-main-content glass">
       <div class="details-flex-row">
         <div class="details-hero-col">
@@ -33,20 +37,30 @@
           <span id="categoryBadge" class="category-badge"></span>
           <div id="subtitle" class="details-subtitle"></div>
           <div id="desc" class="hide"></div>
+          <!-- miniMap and miniTimeline moved to bottom row for clean layout -->
           <div id="mdError" class="error hide"></div>
         </div>
       </div>
-      <!-- Meta and Map below -->
+        <!-- Mini map, timeline, and related items row (single instance of each) -->
+        <div class="mini-row">
+          <div class="mini-map-block">
+            <div class="mini-header">SEE ON MAP</div>
+            <div id="miniMap" class="mini-map"></div>
+          </div>
+          <div class="mini-timeline-block">
+            <div class="mini-header">SEE ON TIMELINE</div>
+            <div id="miniTimeline" class="mini-timeline"></div>
+          </div>
+          <div id="relatedItemsSection" class="mini-related-block"></div>
+        </div>
+      <!-- Meta below -->
       <div class="details-meta-row">
         <div class="details-meta-block">
           <dl id="metaList" class="details-meta"></dl>
         </div>
-                <div id="relatedItemsSection" class="sidebar-block" style="display:none"></div>
-        <div id="relatedItemsSection" class="sidebar-block" style="display:none"></div>
       </div>
     </section>
     <div id="markdownSections"></div>
   </main>
-  <script src="details.js"></script>
 </body>
 </html>
