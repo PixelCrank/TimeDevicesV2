@@ -708,29 +708,60 @@ function showCard(d, nodeEl){
     label.textContent = 'Related Items:';
     label.style.fontWeight = 'bold';
     label.style.fontSize = '15px';
-    label.style.marginBottom = '4px';
+    label.style.marginBottom = '8px';
     relatedDiv.appendChild(label);
-    const ul = document.createElement('ul');
-    ul.style.margin = '0 0 0 12px';
-    ul.style.padding = '0';
-    ul.style.listStyle = 'disc inside';
+    
+    const pillContainer = document.createElement('div');
+    pillContainer.style.display = 'flex';
+    pillContainer.style.flexWrap = 'wrap';
+    pillContainer.style.gap = '6px';
+    
     relatedList.forEach(slug => {
       // Try to find the related item in _ALL_ITEMS for title
       let item = (_ALL_ITEMS || []).find(x => x.slug === slug);
-      const li = document.createElement('li');
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'related-pill';
+      pill.textContent = item ? (item.title || slug) : slug;
+      pill.title = item ? `Show ${item.title || slug} on map` : slug;
+      pill.style.background = '#e0e7ef';
+      pill.style.color = '#333';
+      pill.style.padding = '6px 12px';
+      pill.style.borderRadius = '8px';
+      pill.style.border = 'none';
+      pill.style.cursor = item ? 'pointer' : 'not-allowed';
+      pill.style.fontSize = '13px';
+      pill.style.fontFamily = 'inherit';
+      pill.style.transition = 'background 0.15s, color 0.15s';
+      pill.style.fontWeight = '500';
+      
+      pill.onmouseenter = () => { 
+        if (item) {
+          pill.style.background = '#c7d6e7'; 
+          pill.style.color = '#1a202c';
+        }
+      };
+      pill.onmouseleave = () => { 
+        pill.style.background = '#e0e7ef';
+        pill.style.color = '#333';
+      };
+      
       if (item) {
-        const a = document.createElement('a');
-        a.textContent = item.title || slug;
-        a.href = `details.html?id=${encodeURIComponent(item.slug)}`;
-        a.style.textDecoration = 'underline';
-        a.style.cursor = 'pointer';
-        li.appendChild(a);
-      } else {
-        li.textContent = slug;
+        pill.onclick = () => {
+          // Close current card
+          closeCard();
+          // Focus on the related item and show its card
+          showCard(item, null);
+          // If the item has coordinates, center the map on it
+          if (item.lat && item.lon && !isNaN(item.lat) && !isNaN(item.lon)) {
+            centerMapOn(item.lat, item.lon, 2);
+          }
+        };
       }
-      ul.appendChild(li);
+      pillContainer.appendChild(pill);
     });
-    relatedDiv.appendChild(ul);
+    relatedDiv.appendChild(pillContainer);
+    
     // Insert after the image if present, else after the abstract
     const imgEl2 = document.getElementById('cardImage');
     if (imgEl2 && imgEl2.style.display !== 'none' && imgEl2.parentNode) {
