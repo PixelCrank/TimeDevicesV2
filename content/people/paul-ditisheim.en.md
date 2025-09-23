@@ -16,5 +16,4 @@ Helped cement Switzerland’s pre‑electronic leadership in precision timekeepi
 His work bridged horology and materials science for reliable precision.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Paul_Ditisheim)

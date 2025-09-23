@@ -15,5 +15,4 @@ Adds cultural depth to timekeeping beyond technique.
 He embedded the pocket‑watch as a bourgeois emblem of discipline and aspiration.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Honor%C3%A9_de_Balzac)

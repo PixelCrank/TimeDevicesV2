@@ -16,5 +16,4 @@ Set a lasting standard marrying engineering with aesthetics; a cornerstone of hi
 Worked for European elites; served as Horloger de la Marine.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Abraham-Louis_Breguet)

@@ -15,5 +15,4 @@ Bridged Edo craft and Meiji modernisation, uniting local time systems with preci
 Reconstructions of his clock remain milestones of Japanese mechanical art.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Hisashige_Tanaka)

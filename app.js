@@ -698,7 +698,7 @@ function showCard(d, nodeEl){
   // Insert Related Items section if any (from normalized d.related_items)
   let relatedList = [];
   if (d.related_items) {
-    relatedList = d.related_items.split(',').map(s => s.trim()).filter(Boolean);
+    relatedList = d.related_items.split(/[,;]/).map(s => s.trim()).filter(Boolean);
   }
   if (relatedList.length > 0) {
     const relatedDiv = document.createElement('div');
@@ -1221,9 +1221,6 @@ function switchView(name){
   if (name === 'layered_timeline') {
     renderVisLayeredTimeline();
   }
-  if (name === 'kl_timeline') {
-    renderKnightlabTimeline();
-  }
   if (name === 'custom_timeline') {
     renderCustomTimeline();
   }
@@ -1579,7 +1576,7 @@ function renderCustomTimeline() {
       rect.setAttribute('width', endX - startX);
       rect.setAttribute('height', bandHeight);
       rect.setAttribute('fill', `url(#eraBandGradient_${era.id})`);
-      rect.setAttribute('stroke', eraBandBorder);
+           rect.setAttribute('stroke', eraBandBorder);
       rect.setAttribute('stroke-width', '1');
       rect.setAttribute('rx', 18); // more rounded corners
       // Removed glassmorphism filter
@@ -2189,12 +2186,14 @@ function renderTimelineCard(item) {
     // Remove .active from all markers, add to this one
     $$('.timeline-marker').forEach(g => {
       g.classList.remove('active');
-      // Remove expanded title from all except hovered
+      // Remove expanded title and year label from all except hovered
       if (!g.matches(':hover')) {
         const hoverBg = g.querySelector('rect.card-bg');
         if (hoverBg) hoverBg.remove();
         const hoverTitle = g.querySelector('text.card-title');
         if (hoverTitle) hoverTitle.remove();
+        const hoverYear = g.querySelector('text.marker-year-label');
+        if (hoverYear) hoverYear.remove();
       }
     });
     // Find the marker for this item
@@ -2424,36 +2423,3 @@ function spiderfyNodesAt(x, y, nodes) {
     }
   });
 }
-
-// ------- Knight Lab Timeline -------
-function renderKnightlabTimeline() {
-  // Only initialize once
-  if (window._klTimeline) return;
-
-  // You can use a Google Sheets URL, a JSON file, or a JS object.
-  // Example: Use a local JSON file (exported from TimelineJS or hand-crafted)
-var timelineDataOrUrl = "lineartimeline/timeline_knightlab_with_images.json?v=" + Date.now();
-
-  window._klTimeline = new TL.Timeline(
-    'klContainer',
-    timelineDataOrUrl,
-    { height: '600', width: '60%' }
-  );
-}
-
-document.getElementById('infoBtn')?.addEventListener('click', () => {
-  document.getElementById('infoModal')?.classList.remove('hidden');
-  document.querySelector('.info-dialog')?.focus();
-});
-
-// Close modal on close button or backdrop click
-document.getElementById('infoClose')?.addEventListener('click', () => {
-  document.getElementById('infoModal')?.classList.add('hidden');
-});
-document.querySelector('.info-backdrop')?.addEventListener('click', () => {
-  document.getElementById('infoModal')?.classList.add('hidden');
-});
-// Optional: close on "Got it" button
-document.querySelector('.info-footer [data-close]')?.addEventListener('click', () => {
-  document.getElementById('infoModal')?.classList.add('hidden');
-});

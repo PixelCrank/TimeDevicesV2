@@ -16,5 +16,4 @@ Foundational for programmable automata and regulated‑flow clocks.
 His designs spread via translations; often compared to Leonardo for technical drawings.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Ismail_al-Jazari)

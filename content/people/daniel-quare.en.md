@@ -16,5 +16,4 @@ Made complications reliable for daily use.
 Had a long priority dispute with Edward Barlow over the repeater.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Daniel_Quare)

@@ -1,6 +1,8 @@
+---
+---
 # Cylinder Escapement
 
- ## DESCRIPTION
+## DESCRIPTION
     A regulating mechanism that releases stored energy in controlled ticks, stabilizing the rate.
 
 ## FUNCTION
@@ -9,5 +11,5 @@
 ## PERSPECTIVE
     Dating to c. 1720–1750 CE, it reflects the needs and knowledge of its era and region, and how timekeeping spread from public monuments to personal devices.
 
- ## INNOVATION
+## INNOVATION
     It introduced or refined a key idea—such as regulated flow, shadow geometry, geared display, a stable oscillator or an electronic/atomic standard—that improved reliability and usability.

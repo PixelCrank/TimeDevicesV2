@@ -15,5 +15,4 @@ Helped the lever become a robust standard for precision.
 Some of his pieces remained in scientific use decades later.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Josiah_Emery)

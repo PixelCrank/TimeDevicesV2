@@ -16,5 +16,4 @@ Introduced a stable regulator that vastly increased accuracy.
 Collaborated and clashed with Isaac Thuret over inventions.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Christiaan_Huygens)

@@ -16,5 +16,4 @@ Early synthesis of astronomy and precision mechanics; describes a regulated esca
 The tower was destroyed after 1127; reconstructions reveal the sophistication of Song engineering.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Su_Song)

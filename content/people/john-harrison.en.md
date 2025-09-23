@@ -16,5 +16,4 @@ Revolutionised navigation by making longitude practical.
 Struggled for full prize recognition from the Board of Longitude.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/John_Harrison)

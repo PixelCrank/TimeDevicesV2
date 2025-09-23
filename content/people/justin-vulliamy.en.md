@@ -16,5 +16,4 @@ Bridged Swiss craft and English innovation.
 Helped found London’s Swiss Church in 1762 and donated a clock.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Vulliamy_(clockmakers))

@@ -16,5 +16,4 @@ Provided the conceptual foundation for pendulum regulators.
 A famous (uncertain) anecdote ties his insight to a swaying cathedral lamp.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Galileo_Galilei)

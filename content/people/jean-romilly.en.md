@@ -15,5 +15,4 @@ Placed the craft within Enlightenment knowledge networks.
 A Genevan in Paris, he helped position the city as a capital of refined technical watches.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Jean_Romilly)

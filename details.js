@@ -36,29 +36,32 @@ function renderRelatedItemsSection(item, items) {
     relatedList = item.related_items.split(/[;,|]/).map(s => s.trim()).filter(Boolean);
   }
   if (relatedList.length > 0) {
-    relatedSection.innerHTML = '';
-    // Styled header for Related Items
-    const header = document.createElement('div');
-    header.className = 'mini-header';
-    header.textContent = 'RELATED ITEMS';
-    relatedSection.appendChild(header);
+  relatedSection.innerHTML = '';
+  // Card-like wrapper
+  const card = document.createElement('div');
+  card.style.background = 'rgba(255,255,255,0.97)';
+  card.style.border = '1px solid #e5e7eb';
+  card.style.borderRadius = '16px';
+  card.style.boxShadow = '0 4px 24px rgba(44,79,79,0.07), 0 1.5px 6px rgba(124,58,237,0.04)';
+  card.style.padding = '22px 18px 14px 18px';
+  card.style.margin = '0 0 18px 0';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.gap = '8px';
 
-    // Card-like wrapper
-    const card = document.createElement('div');
-    card.style.background = 'rgba(255,255,255,0.97)';
-    card.style.border = '1.5px solid #e5e7eb';
-    card.style.borderRadius = '16px';
-    card.style.boxShadow = '0 4px 24px rgba(44,79,79,0.07), 0 1.5px 6px rgba(124,58,237,0.04)';
-    card.style.padding = '22px 18px 14px 18px';
-    card.style.margin = '0 0 18px 0';
-    card.style.display = 'flex';
-    card.style.flexDirection = 'column';
-    card.style.gap = '8px';
+  const title = document.createElement('h3');
+  title.textContent = 'Related Items';
+  title.style.marginBottom = '10px';
+  title.style.fontSize = '1.08em';
+  title.style.color = '#2C4F4F';
+  title.style.letterSpacing = '.03em';
+  title.style.fontWeight = '600';
+  card.appendChild(title);
 
-    const ul = document.createElement('ul');
-    ul.style.listStyle = 'none';
-    ul.style.padding = '0';
-    ul.style.margin = '0';
+  const ul = document.createElement('ul');
+  ul.style.listStyle = 'none';
+  ul.style.padding = '0';
+  ul.style.margin = '0';
     relatedList.forEach(slug => {
       let rel = items.find(x => x.slug === slug);
       let li;
@@ -92,9 +95,9 @@ function renderRelatedItemsSection(item, items) {
       }
       ul.appendChild(li);
     });
-    card.appendChild(ul);
-    relatedSection.appendChild(card);
-    relatedSection.style.display = '';
+  card.appendChild(ul);
+  relatedSection.appendChild(card);
+  relatedSection.style.display = '';
   } else {
     relatedSection.innerHTML = '';
     relatedSection.style.display = 'none';
@@ -507,7 +510,6 @@ async function main(){
   hide($('#emptyState'));
   renderHeaderAndMeta(item);
   renderMediaGallery(item);
-  renderRelatedItemsSection(item, items);
 
   // --- Navigation by year (prev/next) ---
   // Sort items by year (ascending)
@@ -572,6 +574,7 @@ async function main(){
   // Render mini map and mini timeline after description/markdown
   renderMiniMap(item);
   renderMiniTimeline(item, items);
+  renderRelatedItemsSection(item, items);
 // --- Mini Map ---
 function renderMiniMap(item) {
   const el = document.getElementById('miniMap');

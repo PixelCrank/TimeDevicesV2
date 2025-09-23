@@ -1,3 +1,5 @@
+---
+---
 # Timekeeping in the Roman Army
 
 ## DESCRIPTION
@@ -13,5 +15,4 @@ In ancient Rome, time remained mostly a natural (sunlight-based) and civic notio
 The Roman army developed an advanced “time logistics” for its era, without complex instruments. It was one of the first societies to institutionalize time measurement for efficiency, anticipating modern uses in institutions (schools, factories, administrations). This regulated military time forged a culture of hourly discipline, later inherited by Western military and monastic systems.
 
 ## Sources
-
 - [The HourGlass](https://www.thehourglass.com/story/timekeeping-in-the-roman-army)

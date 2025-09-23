@@ -16,5 +16,4 @@ Turned theory into reliable instruments, anchoring Parisian scientific horology.
 His dispute with Huygens foreshadowed modern IP debates.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Isaac_Thuret)

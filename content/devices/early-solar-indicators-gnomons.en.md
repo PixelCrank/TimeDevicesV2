@@ -1,3 +1,5 @@
+---
+---
 # Early Solar Indicators — Gnomons
 
 ## DESCRIPTION

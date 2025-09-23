@@ -16,5 +16,4 @@ Made precision timekeeping reproducible at scale for navigation.
 Thomas Earnshaw disputed his detent‑escapement priority in a famous pamphlet.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/John_Arnold)

@@ -1,3 +1,5 @@
+---
+---
 # Galileo’s ‘Clock’ (Pendulum Insight)
 
 ## DESCRIPTION
@@ -9,5 +11,5 @@ It provided a practical way to measure or regulate time for daily life, science,
 ## PERSPECTIVE
 Dating to 1602–1642 CE, it reflects the needs and knowledge of its era and region, and how timekeeping spread from public monuments to personal devices.
 
- ## INNOVATION
+## INNOVATION
 It introduced or refined a key idea—such as regulated flow, shadow geometry, geared display, a stable oscillator or an electronic/atomic standard—that improved reliability and usability.

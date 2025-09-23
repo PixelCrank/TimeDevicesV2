@@ -1,9 +1,11 @@
+---
+---
 # Mechanical Foliot Clock
 
- ## DESCRIPTION
+## DESCRIPTION
     Mechanical Foliot Clock is a historical timekeeping device that helped people coordinate work, travel and ritual by making time visible and reliable.
 
- ## FUNCTION
+## FUNCTION
     It provided a practical way to measure or regulate time for daily life, science, navigation or ritual in Europe.
 
 ## PERSPECTIVE

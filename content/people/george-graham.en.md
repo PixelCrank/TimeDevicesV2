@@ -16,5 +16,4 @@ A chief architect of 18th‑century precision; essential to astronomy and mappin
 Known as 'Honest George'; financed John Harrison and is buried beside Tompion.
 
 ## Sources
-
 - [FHH Encyclopedia](https://www.hautehorlogerie.org/fr/watches-and-culture/connaissances-horlogeres/encyclopedie/george-graham)

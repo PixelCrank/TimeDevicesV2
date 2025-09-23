@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Time Stories — Map & Timeline</title>
   <link rel="stylesheet" href="./styles.css"/>
-  <!-- KnightLab only if you use the Linear Timeline tab -->
-  <script defer src="./timeline.js"></script>
-  <link rel="stylesheet" href="./timeline.css"/>
 </head>
 <body>
 
@@ -16,7 +13,6 @@
     <h1>Time Stories — Map & Timeline </h1>
     <nav class="tabs">
       <button class="tab-btn active" data-view="map" type="button">Map</button>
-      <button class="tab-btn" data-view="kl_timeline" type="button">Story Timeline</button>
       <button class="tab-btn" data-view="custom_timeline" type="button">Custom Timeline</button>
       <button class="tab-btn" data-view="gallery" type="button">Gallery</button>
       <button id="infoBtn" class="info-btn" type="button" aria-haspopup="dialog" aria-controls="infoModal">Info</button>
@@ -96,11 +92,6 @@
   <div id="timelineZoomWidget"></div>
   <div id="timelineNav" style="width:100%;overflow-x:auto;"></div>
   <div id="timelineZoomControls" style="margin:10px 0; text-align:center;"></div>
-    </section>
-
-  <!-- KnightLab Linear timeline -->
-    <section id="kl_timeline" class="view" aria-label="Linear timeline">
-      <div id="klContainer" class="kl-wrap"></div>
     </section>
 
     <!-- Gallery -->

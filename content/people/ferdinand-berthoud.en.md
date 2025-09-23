@@ -15,5 +15,4 @@ Championed the French effort in marine chronometers with rigorous testing.
 His rivalry with Harrison is legendary; his name survives in a revived maison.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Ferdinand_Berthoud)

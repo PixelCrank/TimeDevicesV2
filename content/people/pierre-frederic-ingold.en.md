@@ -15,5 +15,4 @@ Forerunner of mass production bridging craft and industry.
 His ideas foreshadowed modern watch factories.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Pierre_Fr%C3%A9d%C3%A9ric_Ingold)

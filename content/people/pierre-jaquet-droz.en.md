@@ -15,5 +15,4 @@ United art, mechanics and illusion; pushed miniaturisation and complexity.
 Court demonstrations opened export markets for Swiss luxury craft.
 
 ## Sources
-
 - [Jaquet‑Droz – History](https://www.jaquet-droz.com)

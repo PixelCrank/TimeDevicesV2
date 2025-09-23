@@ -15,5 +15,4 @@ His crown‑winding system became universal, transforming usability.
 After prizes for his invention, he partnered with Antoni Patek to found a benchmark Geneva maison.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Adrien_Philippe)

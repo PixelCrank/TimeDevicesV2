@@ -15,5 +15,4 @@ His escapement defined portable timekeeping for two centuries.
 Faced mixed evaluations by the Board of Longitude despite brilliance.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Thomas_Mudge)

@@ -16,5 +16,4 @@ A landmark in European scientific clockmaking modelling the cosmos.
 Marked Europe’s turn to ‘mechanising the heavens’.
 
 ## Sources
-
 - [Linda Hall Library](https://www.lindahall.org/about/news/scientist-of-the-day/giovanni-dondi/)

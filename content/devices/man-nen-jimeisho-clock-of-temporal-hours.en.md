@@ -1,3 +1,5 @@
+---
+---
 # Man‑nen Jimeisho — Clock of Temporal Hours
 
 ## DESCRIPTION

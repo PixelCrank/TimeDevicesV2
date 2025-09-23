@@ -16,5 +16,4 @@ Set enduring standards of precision and finish supporting British astronomy.
 Buried in Westminster Abbey; his practices shaped English dominance.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Thomas_Tompion)

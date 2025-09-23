@@ -15,5 +15,4 @@ Represents the internationalisation of 19th‑century watchmaking.
 The Jürgensen name long signified understated precision.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Jules_J%C3%BCrgensen)

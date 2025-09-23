@@ -16,5 +16,4 @@ Supplied cultural meaning to timekeeping beyond mechanics.
 His artisan roots linked ideas of order, time, and society.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Jean-Jacques_Rousseau)

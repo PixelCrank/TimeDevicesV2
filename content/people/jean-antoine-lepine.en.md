@@ -15,5 +15,4 @@ Modernised pocket‑watch architecture and aesthetics.
 His layouts set the classical French template for slim watches.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Jean-Antoine_L%C3%A9pine)

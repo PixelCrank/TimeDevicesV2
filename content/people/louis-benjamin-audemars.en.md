@@ -15,5 +15,4 @@ Helped establish the valley as a centre of fine, ultra‑thin, complicated movem
 The family’s networked workshop model powered Swiss complications.
 
 ## Sources
-
 - [Wikipedia](https://en.wikipedia.org/wiki/Louis_Audemars)
